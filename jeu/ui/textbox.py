@@ -27,7 +27,7 @@ class Textbox():
         self.placeholder_text = placeholder_text
         self.placeholder_text_render = self.font.render(
             self.placeholder_text, True, self.placeholder_color)
-        self.rect = self.placeholder_text_render.get_rect(center=self.position)
+        self.rect = self.surface.get_rect(center=self.position)
         self.placeholder_text_rect = self.placeholder_text_render.get_rect(
             center=self.center)
 
