@@ -1,6 +1,7 @@
 import sys
 
 import pygame
+from jeu.login_screen import login_screen
 from jeu.ui.button import Button
 from jeu.utils.font_manager import FontManager
 
@@ -12,7 +13,7 @@ def main_menu(screen: pygame.surface.Surface):
         screen (pygame.surface.Surface): Screen to display the menu on
     """
     clock: pygame.time.Clock = pygame.time.Clock()
-    
+
     pygame.display.set_caption("Menu")
 
     menu_font: FontManager = FontManager("jeu/assets/fonts/Truculenta.ttf")
@@ -22,10 +23,12 @@ def main_menu(screen: pygame.surface.Surface):
         sys.exit()
 
     # Initializing on-screen elements #
-    background: pygame.surface.Surface = pygame.image.load("jeu/assets/images/menu_background.png")
+    background: pygame.surface.Surface = pygame.image.load(
+        "jeu/assets/images/menu_background.png")
 
-    menu_text: pygame.surface.Surface = menu_font.get_font(100).render("MAIN MENU", True, "#EEEEEE")
-    menu_rect: pygame.rect.Rect = menu_text.get_rect(center=(640, 100))
+    menu_text: pygame.surface.Surface = menu_font.get_font(
+        100).render("MAIN MENU", True, "#EEEEEE")
+    menu_rect: pygame.rect.Rect = menu_text.get_rect(center=(640, 75))
 
     play_button = Button(image=pygame.image.load("jeu/assets/images/Play Rect.png"),
                          position=(640, 250),
@@ -52,12 +55,20 @@ def main_menu(screen: pygame.surface.Surface):
                          action=quit
                          )
 
+    account_button = Button(image=pygame.image.load("jeu/assets/images/User.png"),
+                            position=(1280-75, 75),
+                            text=" ",
+                            font=menu_font.get_font(75),
+                            color="#FFFFFF",
+                            hover_color="#FFFFFF",
+                            action=lambda: login_screen(screen)
+                            )
+
+    menu_buttons: tuple[Button, ...] = (play_button, options_button, quit_button, account_button)
+
     while True:
         print(int(clock.get_fps()), end=" FPS    \r")
         screen.blit(background, (0, 0))
-
-        menu_buttons: tuple[Button, ...] = (
-            play_button, options_button, quit_button)
         screen.blit(menu_text, menu_rect)
 
         for event in pygame.event.get():
@@ -65,11 +76,11 @@ def main_menu(screen: pygame.surface.Surface):
                 case pygame.QUIT:
                     quit()
                 case pygame.MOUSEBUTTONDOWN:
-                    print("            ", end="\r")  # Clear FPS counter from console
+                    # Clear FPS counter from console
+                    print("            ", end="\r")
             for button in menu_buttons:
                 button.update(event)
         for button in menu_buttons:
             button.update_render(screen)
-
         pygame.display.update()
         clock.tick()
