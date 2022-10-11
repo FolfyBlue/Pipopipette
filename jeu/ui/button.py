@@ -6,7 +6,7 @@ import pygame
 
 
 class Button():
-    def __init__(self: Button, image: pygame.surface.Surface | None, position: tuple[int, int], text: str, font: pygame.font.Font, color: str, hover_color: str, action: Callable = lambda: None) -> None:
+    def __init__(self: Button, image: pygame.surface.Surface | None, position: tuple[float, float], text: str, font: pygame.font.Font, color: str, hover_color: str, action: Callable = lambda: None) -> None:
         """Button UI elements
 
         Args:
