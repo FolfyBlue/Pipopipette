@@ -4,7 +4,7 @@ import pygame
 
 
 class Textbox():
-    def __init__(self: Textbox, position: tuple[int, int], placeholder_text: str, font: pygame.font.Font, size: tuple[int, int], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4") -> None:
+    def __init__(self: Textbox, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4") -> None:
         """Textbox UI element
 
         Args:
@@ -15,7 +15,7 @@ class Textbox():
         """
         self.focused: bool = False
         self.text: str = ""
-        self.size: tuple[int, int] = size
+        self.size: tuple[float, float] = size
         self.center: tuple[float, float] = tuple(coord/2 for coord in self.size)
         self.surface = pygame.Surface(self.size)
 
@@ -59,8 +59,7 @@ class Textbox():
     def update(self: Textbox, event: pygame.event.Event):
         match (event.type):
             case pygame.MOUSEBUTTONUP:
-                mouse_pos: tuple[int, int] = pygame.mouse.get_pos()
-                if self.rect.collidepoint(mouse_pos):
+                if self.rect.collidepoint(event.pos):
                     self.repeat_settings = pygame.key.get_repeat()
                     pygame.key.set_repeat(500, 50)
                     self.focused = True
