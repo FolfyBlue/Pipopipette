@@ -65,7 +65,10 @@ class Textbox():
                     pygame.key.set_repeat(500, 50)
                     self.focused = True
                 else:
-                    pygame.key.set_repeat(*self.repeat_settings)
+                    try:
+                        pygame.key.set_repeat(*self.repeat_settings)
+                    except:
+                        pass
                     self.focused = False
             case pygame.KEYDOWN:
                 if self.focused:
