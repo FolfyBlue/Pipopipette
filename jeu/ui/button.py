@@ -6,7 +6,7 @@ import pygame
 
 
 class Button():
-    def __init__(self: Button, image: pygame.surface.Surface | None, position: tuple[float, float], text: str, font: pygame.font.Font, color: str, hover_color: str, action: Callable = lambda: None) -> None:
+    def __init__(self: Button, image: pygame.surface.Surface | None, position: tuple[float, float], text: str, font: pygame.font.Font, color: str, hover_color: str, action: Callable = lambda: None, detection_offset: tuple[float, float] = (0, 0)) -> None:
         """Button UI elements
 
         Args:
@@ -25,6 +25,7 @@ class Button():
         self.text = text
         self.text_render = self.font.render(self.text, True, self.color)
         self.action = action
+        self.detection_offset = detection_offset
         if not self.image:
             self.image = self.text_render
         self.rect = self.image.get_rect(center=self.position)
@@ -49,7 +50,7 @@ class Button():
         Returns:
             bool: Weither the button was clicked or not 
         """
-        mouse_pos: tuple[int, int] = pygame.mouse.get_pos()
+        mouse_pos: tuple[float, float] = (pygame.mouse.get_pos()[0]-self.detection_offset[0], pygame.mouse.get_pos()[1]-self.detection_offset[1])
         match (event.type):
             case pygame.MOUSEBUTTONDOWN:
                 if self.rect.collidepoint(mouse_pos):
