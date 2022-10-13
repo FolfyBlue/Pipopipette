@@ -16,6 +16,7 @@ textbox_font: FontManager = FontManager("jeu/assets/fonts/Truculenta.ttf")
 pygame.init()
 
 textbox: Textbox = Textbox(
+    screen,
     (640, 500),
     "Placeholder",
     textbox_font.get_font(50),

@@ -3,6 +3,7 @@ import sys
 import pygame
 from jeu.ui.button import Button
 from jeu.ui.textbox import Textbox
+from jeu.ui.ui import UI
 from jeu.utils.font_manager import FontManager
 
 
@@ -43,12 +44,14 @@ def login_screen(screen: pygame.surface.Surface):
         center=(screen.get_size()[0]//2, 150))
 
     username_textbox = Textbox(
+        screen=screen,
         position=(screen.get_size()[0]//2, 300),
         placeholder_text="Username",
         font=login_font.get_font(75),
         size=(370, 100)
     )
     password_textbox = Textbox(
+        screen=screen,
         position=(screen.get_size()[0]//2, 425),
         placeholder_text="Password",
         font=login_font.get_font(75),
@@ -56,6 +59,7 @@ def login_screen(screen: pygame.surface.Surface):
     )
 
     close_button = Button(
+        screen=screen,
         image=pygame.image.load("jeu/assets/images/close.png"),
         position=(screen.get_size()[0]/1.5, 100),
         text=" ",
@@ -65,25 +69,29 @@ def login_screen(screen: pygame.surface.Surface):
         action=close_login_screen
     )
 
-    login_button = Button(image=pygame.image.load("jeu/assets/images/Login Rect.png"),
-                          position=(520, 550),
-                          text="Login",
-                          font=login_font.get_font(50),
-                          color="#000000",
-                          hover_color="#555555",
-                          action=login_handler
-                          )
-    register_button = Button(image=pygame.image.load("jeu/assets/images/Login Rect.png"),
-                             position=(770, 550),
-                             text="Register",
-                             font=login_font.get_font(50),
-                             color="#000000",
-                             hover_color="#555555",
-                             action=register_handler
-                             )
+    login_button = Button(
+        screen=screen,
+        image=pygame.image.load("jeu/assets/images/Login Rect.png"),
+        position=(520, 550),
+        text="Login",
+        font=login_font.get_font(50),
+        color="#000000",
+        hover_color="#555555",
+        action=login_handler
+    )
+    register_button = Button(
+        screen=screen,
+        image=pygame.image.load("jeu/assets/images/Login Rect.png"),
+        position=(770, 550),
+        text="Register",
+        font=login_font.get_font(50),
+        color="#000000",
+        hover_color="#555555",
+        action=register_handler
+    )
 
-    ui_elements = [username_textbox, password_textbox,
-                   register_button, login_button, close_button]
+    ui_elements: list[UI] = [username_textbox, password_textbox,
+                             register_button, login_button, close_button]
 
     while active:
         print(int(clock.get_fps()), end=" FPS    \r")
@@ -98,10 +106,10 @@ def login_screen(screen: pygame.surface.Surface):
                 case pygame.MOUSEBUTTONDOWN:
                     # Clear FPS counter from console
                     print("            ", end="\r")
-            for textbox in ui_elements:
-                textbox.update(event)
-        for textbox in ui_elements:
-            textbox.update_render(screen)
+            for ui_element in ui_elements:
+                ui_element.update(event)
+        for ui_element in ui_elements:
+            ui_element.update_render()
 
         pygame.display.update()
         clock.tick()
