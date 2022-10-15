@@ -15,7 +15,7 @@ textbox_font: FontManager = FontManager("jeu/assets/fonts/Truculenta.ttf")
 
 pygame.init()
 
-popup: Popup = Popup(screen, "Popup", (500, 500), "green")
+popup: Popup = Popup(screen, "Account", (500, 580), "#0575BB")
 
 while True:
     print(int(clock.get_fps()), end=" FPS    \r")

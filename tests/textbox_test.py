@@ -34,7 +34,7 @@ while True:
             case pygame.MOUSEBUTTONDOWN:
                 print("            ", end="\r")  # Clear FPS counter from console
         textbox.update(event)
-    textbox.update_render(screen)
+    textbox.update_render()
 
     pygame.display.update()
     clock.tick()

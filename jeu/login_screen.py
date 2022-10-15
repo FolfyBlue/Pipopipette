@@ -2,6 +2,7 @@ import sys
 
 import pygame
 from jeu.ui.button import Button
+from jeu.ui.popup import Popup
 from jeu.ui.textbox import Textbox
 from jeu.ui.ui import UI
 from jeu.utils.font_manager import FontManager
@@ -35,13 +36,7 @@ def login_screen(screen: pygame.surface.Surface):
     login_font: FontManager = FontManager("jeu/assets/fonts/Truculenta.ttf")
 
     # Initializing on-screen elements #
-    background: pygame.surface.Surface = pygame.image.load(
-        "jeu/assets/images/login_background.png")
-
-    login_text: pygame.surface.Surface = login_font.get_font(
-        100).render("Account", True, "#EEEEEE")
-    login_text_rect: pygame.rect.Rect = login_text.get_rect(
-        center=(screen.get_size()[0]//2, 150))
+    login_popup: Popup = Popup(screen, "Account", (500, 580), "#0575BB")
 
     username_textbox = Textbox(
         screen=screen,
@@ -56,17 +51,6 @@ def login_screen(screen: pygame.surface.Surface):
         placeholder_text="Password",
         font=login_font.get_font(75),
         size=(370, 100)
-    )
-
-    close_button = Button(
-        screen=screen,
-        image=pygame.image.load("jeu/assets/images/close.png"),
-        position=(screen.get_size()[0]/1.5, 100),
-        text=" ",
-        font=login_font.get_font(50),
-        color="#000000",
-        hover_color="#555555",
-        action=close_login_screen
     )
 
     login_button = Button(
@@ -90,14 +74,11 @@ def login_screen(screen: pygame.surface.Surface):
         action=register_handler
     )
 
-    ui_elements: list[UI] = [username_textbox, password_textbox,
-                             register_button, login_button, close_button]
+    ui_elements: list[UI] = [login_popup, username_textbox, password_textbox,
+                             register_button, login_button]
 
     while active:
         print(int(clock.get_fps()), end=" FPS    \r")
-        screen.blit(background, (0, 0))
-
-        screen.blit(login_text, login_text_rect)
 
         for event in pygame.event.get():
             match (event.type):
