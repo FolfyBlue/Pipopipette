@@ -37,7 +37,7 @@ class Textbox(UI):
         self.placeholder_text_rect = self.placeholder_text_render.get_rect(
             center=self.center)
 
-    def update_render(self: Textbox, screen: pygame.surface.Surface) -> None:
+    def update_render(self: Textbox) -> None:
         """Updates the button
 
         Args:
@@ -51,7 +51,7 @@ class Textbox(UI):
             text_render = self.font.render(self.text, True, self.text_color)
             self.surface.blit(
                 text_render, text_render.get_rect(center=self.center))
-        screen.blit(self.surface, self.rect)
+        self.screen.blit(self.surface, self.rect)
     
     def _process_input(self, event: pygame.event.Event):
         """Processes the keyboard keydown event

@@ -58,6 +58,7 @@ class Popup(UI):
 
         rect = self.background.get_rect(center=self.screen.get_rect().center)
         self.screen.blit(self.background, rect)
+        self.close_button.update_render()
 
     def update(self, event):
         """Updates the popup according to the given event.
@@ -67,4 +68,3 @@ class Popup(UI):
         """
         if not self.active: return
         self.close_button.update(event)
-
