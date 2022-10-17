@@ -42,19 +42,19 @@ class PipopipetteGameplay():
             
     # <----- nextPlayer ----->
     
-    def nextPlayer(self: PipopipetteGameplay) -> None:
+    def next_player(self: PipopipetteGameplay) -> None:
         self.__currentPlayerID += 1
         if self.__currentPlayerID % len(self.__listPlayer) == 0: self.__currentPlayerID = 0
         
     # <----- setPlayerTarget ----->
     
-    def setPlayerTarget(self: PipopipetteGameplay, squareID: int, side: str) -> bool:
-        if self.__pipopipette.validTarget(squareID, side): self.__pipopipette.setSide(squareID, side, self.__currentPlayerID); return True
+    def set_playerTarget(self: PipopipetteGameplay, squareID: int, side: str) -> bool:
+        if self.__pipopipette.valid_target(squareID, side): self.__pipopipette.set_side(squareID, side, self.__currentPlayerID); return True
         else: return False
         
     # <----- scoreCount ----->
     
-    def scoreCount(self: PipopipetteGameplay) -> None:
+    def score_count(self: PipopipetteGameplay) -> None:
         for player in self.__listPlayer:
             player.score = 0
             for square in self.__pipopipette.__listSquare:
@@ -62,7 +62,7 @@ class PipopipetteGameplay():
     
     # <----- gameOver ----->
     
-    def gameOver(self: PipopipetteGameplay) -> bool:
+    def game_over(self: PipopipetteGameplay) -> bool:
         for square in self.__pipopipette.listSquare:
             if square.squareOwner == -1: return False
         return True

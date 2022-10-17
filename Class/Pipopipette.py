@@ -47,14 +47,14 @@ class Pipopipette():
     
      # <----- getSquareByID ----->
     
-    def getSquareByID(self: Pipopipette, id: int) -> Square | None:
+    def get_square_by_ID(self: Pipopipette, id: int) -> Square | None:
         for square in self.__listSquare:
             if square.id == id: return square
         return None
     
     # <----- setSide ----->
     
-    def setSide(self: Pipopipette, squareID: int, side: str, ownerID: int) ->  None:
+    def set_side(self: Pipopipette, squareID: int, side: str, ownerID: int) ->  None:
         if self.getSquareByID(squareID) != None: 
             if side == 'l':
                 self.getSquareByID(squareID).leftOwner = ownerID
@@ -71,7 +71,7 @@ class Pipopipette():
             
     # <----- valideTarget ----->
     
-    def validTarget(self: Pipopipette, squareID: int, side: str) -> bool:
+    def valid_target(self: Pipopipette, squareID: int, side: str) -> bool:
         if self.getSquareByID(squareID) != None:
             if ((side == 'l' and self.getSquareByID(squareID).leftOwner != -1) or
                 (side == 'r' and self.getSquareByID(squareID).rightOwner != -1) or
