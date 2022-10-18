@@ -17,13 +17,12 @@ class Textbox(UI):
             color (str): Color of the text
             detection_offset (tuple[float, float]): Offset for the mouse/textbox interaction
         """
-        super().__init__(screen)
+        super().__init__(screen, detection_offset)
         self.focused: bool = False
         self.text: str = ""
         self.size: tuple[float, float] = size
         self.center: tuple[float, float] = tuple(coord/2 for coord in self.size)
         self.surface = pygame.Surface(self.size)
-        self.detection_offset = detection_offset
 
         self.position = position
         self.font = font
