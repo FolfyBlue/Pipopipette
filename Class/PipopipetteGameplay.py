@@ -50,7 +50,7 @@ class PipopipetteGameplay():
         Will switch to another player.
         """
         self.__currentPlayerID += 1
-        if self.__currentPlayerID % len(self.__listPlayer) == 0: self.__currentPlayerID = 0
+        if self.__currentPlayerID % len(self.__list_player) == 0: self.__currentPlayerID = 0
         
         
     # <----- setPlayerTarget ----->
@@ -67,9 +67,9 @@ class PipopipetteGameplay():
         """
         if self.__pipopipette.valid_target(square_ID, side):
             if self.__pipopipette.set_side(square_ID, side, self.__current_player_ID) != None:
-                self.__list_player[self.__current_player_ID].score += 1
+                self.__list_player[self.__current_player_ID].score += 1  # type: ignore
                 return True
-        else: return False
+        return False
     
     # <----- gameOver ----->
     
