@@ -96,19 +96,23 @@ class Pipopipette():
     # <----- valideTarget ----->
 
     def valid_target(self: Pipopipette, squareID: int, side: str) -> bool:
-        """
-        Can a player place a Segment here ?
+        """Weither or not a player can place a Segment here.
+
         Args:
-            squareID: The square to check
-            side: The side to check. 'l', 'r', 't' or 'd'
+            squareID (int): ID of the square to verify.
+            side (str): 'l', 'r', 't', or 'd'. Side to verify.
 
         Returns:
-            Boolean - True if can edit, False if already owned by a player
-
+            bool: True if a player can place a Segment here, False otherwise.
         """
-        if self.get_square_by_ID(squareID) != None:
-            if ((side == 'l' and self.get_square_by_ID(squareID).left.owner_ID != -1) or
-                (side == 'r' and self.get_square_by_ID(squareID).right.owner_ID != -1) or
-                (side == 't' and self.get_square_by_ID(squareID).top.owner_ID != -1) or
-                (side == 'd' and self.get_square_by_ID(squareID).down.owner_ID != -1)): return True
+        if (square := self.get_square_by_ID(squareID)) != None:
+            match side:
+                case 'l':
+                    return square.left.owner_ID != -1
+                case 'r':
+                    return square.right.owner_ID != -1
+                case 't':
+                    return square.top.owner_ID != -1
+                case 'd':
+                    return square.down.owner_ID != -1
         return False
