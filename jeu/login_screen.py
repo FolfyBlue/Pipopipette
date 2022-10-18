@@ -14,18 +14,20 @@ def login_screen(screen: pygame.surface.Surface):
     Args:
         screen (pygame.surface.Surface): Screen to display the menu on
     """
-    clock: pygame.time.Clock = pygame.time.Clock()
-
     login_font: FontManager = FontManager("jeu/assets/fonts/Truculenta.ttf")
 
     # Initializing on-screen elements #
     login_popup: Popup = Popup(screen, "Account", (500, 580), "#0575BB")
 
     def login_handler():
+        """Action ran when the login button is clicked
+        """
         print("Login!")
         login_popup.active = False
 
     def register_handler():
+        """Action ran when the register button is clicked
+        """
         print("Register!")
         login_popup.active = False
 
