@@ -1,28 +1,22 @@
 # <========== import ==========>
 
 from __future__ import annotations
+from typing import Final
 from Square.Segment import Segment
 
 # <========== class ==========>
 
 class Square:
-    """
-    Create a new Square.
-    """
     
     # <----- init ----->
     
     def __init__(self: Square, id = 0) -> None:
-        """
-        Args:
-            id: The ID of this square.
-        """
         self.__left: Segment = Segment()
         self.__right: Segment = Segment()
         self.__top: Segment = Segment()
         self.__down: Segment = Segment()
-        self.__squareOwner: int = -1
-        self.__id: int = id
+        self.__square_owner: int = -1 
+        self.__id: Final[int] = id
         
     # <----- getter ----->
     
@@ -39,7 +33,7 @@ class Square:
     def down(self: Square) -> Segment: return self.__down
     
     @property
-    def squareOwner(self: Square) -> int: return self.__squareOwner
+    def square_owner(self: Square) -> int: return self.__square_owner
     
     @property
     def id(self: Square) -> int: return self.__id
@@ -47,31 +41,28 @@ class Square:
     # <----- setter ----->
     
     @left.setter
-    def left(self: Square, owner: int) -> None: 
-        self.__left.ownerID = owner
-        if self.__right.ownerID != -1 and self.__top.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def left(self: Square, owner_ID: int) -> bool | None: 
+        self.__left.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: self.__square_owner = owner_ID; return True
     
     @right.setter
-    def right(self: Square, owner: int) -> None: 
-        self.__right.ownerID = owner
-        if self.__left.ownerID != -1 and self.__top.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def right(self: Square, owner_ID: int) -> bool | None: 
+        self.__right.owner_ID = owner_ID
+        if self.__left.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: self.__square_owner = owner_ID; return True
     
     @top.setter
-    def top(self: Square, owner: int) -> None: 
-        self.__top.ownerID = owner
-        if self.__right.ownerID != -1 and self.__left.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def top(self: Square, owner_ID: int) -> bool | None: 
+        self.__top.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__left.owner_ID != -1 and self.__down.owner_ID != -1: self.__square_owner = owner_ID; return True
     
     @down.setter
-    def down(self: Square, owner: int) -> None: 
-        self.__down.ownerID = owner
-        if self.__right.ownerID != -1 and self.__top.ownerID != -1 and self.__left.ownerID != -1: self.__squareOwner.ownerID = owner
+    def down(self: Square, owner_ID: int) -> bool | None: 
+        self.__down.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__left.owner_ID != -1: self.__square_owner = owner_ID; return True
         
-    @squareOwner.setter
-    def squareOwner(self: Square, owner: int) -> None: self.__squareOwner = owner
-    
-    @id.setter
-    def id(self: Square, owner: int) -> None: self.__squareOwner = owner  
+    @square_owner.setter
+    def square_owner(self: Square, owner_ID: int) -> None: self.__square_owner = owner_ID
       
     # <----- str ----->
     
-    def __str__(self: Square) -> str: return f"[id:{self.__id}(l:{self.__left.ownerID},r:{self.__right.ownerID},t{self.__top.ownerID},d{self.__down.ownerID}), owner:{self.__squareOwner}]"   
+    def __str__(self: Square) -> str: return f"[id:{self.__id}(l:{self.__left.owner_ID},r:{self.__right.owner_ID},t{self.__top.owner_ID},d{self.__down.owner_ID}), owner:{self.__square_owner}]"   

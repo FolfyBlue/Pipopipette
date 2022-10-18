@@ -1,6 +1,7 @@
 # <========== Import ==========>
 
 from __future__ import annotations
+from typing import Final
 from Square.Square import Square
 
 # <========== Class ==========>
@@ -19,11 +20,11 @@ class Pipopipette():
             width: The width of the game
             height: The height of the game
         """
-        self.__width: int = width
-        self.__height: int = height
-        self.__listSquare: list[Square] = []
+        self.__width: Final[int] = width
+        self.__height: Final[int] = height
+        self.__list_square: list[Square] = []
         
-        for i in range(width * height): self.__listSquare.append(Square(i))
+        for i in range(width * height): self.__list_square.append(Square(i))
     
     # <----- getter ----->
     
@@ -34,27 +35,21 @@ class Pipopipette():
     def height(self: Pipopipette) -> int: return self.__height
     
     @property
-    def listSquare(self: Pipopipette) -> list[Square]: return self.__listSquare
+    def list_square(self: Pipopipette) -> list[Square]: return self.__list_square
     
     # <----- setter ----->
-    
-    @width.setter
-    def width(self: Pipopipette, newwidth: int) -> None: self.__width = newwidth
-    
-    @height.setter
-    def height(self: Pipopipette, newheight: int) -> None: self.__height = newheight
 
-    @listSquare.setter
-    def listSquare(self: Pipopipette, newlistSquare: list[Square]) -> None: self.__listSquare = newlistSquare.copy()
+    @list_square.setter
+    def list_square(self: Pipopipette, newlist_square: list[Square]) -> None: self.__list_square = newlist_square.copy()
 
     # <----- str ----->
 
     def __str__(self: Pipopipette) -> str:
-        rstr = ""
-        for square in self.__listSquare: rstr += square.__str__() + " "
-        return rstr
+        return_str = ""
+        for square in self.__list_square: return_str += square.__str__() + " "
+        return return_str
     
-     # <----- getSquareByID ----->
+     # <----- get_square_by_ID ----->
     
     def get_square_by_ID(self: Pipopipette, id: int) -> Square | None:
         """
@@ -65,7 +60,7 @@ class Pipopipette():
         Returns:
             The found square, or None
         """
-        for square in self.__listSquare:
+        for square in self.__list_square:
             if square.id == id: return square
         return None
     
@@ -80,19 +75,19 @@ class Pipopipette():
             ownerID: The player who placed this side
 
         """
-        if self.getSquareByID(squareID) != None: 
+        if self.get_square_by_ID(squareID) != None: 
             if side == 'l':
-                self.getSquareByID(squareID).leftOwner = ownerID
-                if self.getSquareByID(squareID-1) != None: self.getSquareByID(squareID-1).rightOwner = ownerID
+                self.get_square_by_ID(squareID).left.ownerID = ownerID
+                if self.get_square_by_ID(squareID-1) != None: self.get_square_by_ID(squareID-1).right.ownerID = ownerID
             elif side == 'r':
-                self.getSquareByID(squareID).rightOwner = ownerID
-                if self.getSquareByID(squareID+1) != None: self.getSquareByID(squareID+1).leftOwner = ownerID
+                self.get_square_by_ID(squareID).right.ownerID = ownerID
+                if self.get_square_by_ID(squareID+1) != None: self.get_square_by_ID(squareID+1).left.ownerID = ownerID
             elif side == 't':
-                self.getSquareByID(squareID).topOwner = ownerID
-                if self.getSquareByID(squareID-self.__height) != None: self.getSquareByID(squareID-self.__height).downOwner = ownerID
+                self.get_square_by_ID(squareID).top.ownerID = ownerID
+                if self.get_square_by_ID(squareID-self.__height) != None: self.get_square_by_ID(squareID-self.__height).down.ownerID = ownerID
             elif side == 'd':
-                self.getSquareByID(squareID).downOwner = ownerID
-                if self.getSquareByID(squareID+self.__height) != None: self.getSquareByID(squareID+self.__height).topOwner = ownerID
+                self.get_square_by_ID(squareID).down.ownerID = ownerID
+                if self.get_square_by_ID(squareID+self.__height) != None: self.get_square_by_ID(squareID+self.__height).top.ownerID = ownerID
             
     # <----- valideTarget ----->
     
@@ -107,9 +102,9 @@ class Pipopipette():
             Boolean - True if can edit, False if already owned by a player
 
         """
-        if self.getSquareByID(squareID) != None:
-            if ((side == 'l' and self.getSquareByID(squareID).leftOwner != -1) or
-                (side == 'r' and self.getSquareByID(squareID).rightOwner != -1) or
-                (side == 't' and self.getSquareByID(squareID).topOwner != -1) or
-                (side == 'd' and self.getSquareByID(squareID).downOwner != -1)): return True
+        if self.get_square_by_ID(squareID) != None:
+            if ((side == 'l' and self.get_square_by_ID(squareID).left.ownerID != -1) or
+                (side == 'r' and self.get_square_by_ID(squareID).right.ownerID != -1) or
+                (side == 't' and self.get_square_by_ID(squareID).top.ownerID != -1) or
+                (side == 'd' and self.get_square_by_ID(squareID).down.ownerID != -1)): return True
         return False 
