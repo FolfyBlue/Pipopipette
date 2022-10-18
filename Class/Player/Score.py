@@ -17,27 +17,17 @@ class Score():
         Args:
             x (int): The number of points = if this player. Defaults to 0.
         """
-        self.__value: int  = value
+        self.__value: int = value
 
     # <----- getter ----->
 
     @property
-    def score(self: Score) -> int: return self.__value
+    def value(self: Score) -> int: return self.__value
 
     # <----- setter ----->
 
-    @score.setter
-    def score(self: Score, new_score: int) -> None: self.__value = new_score
-
-    # <----- operateur ----->
-
-    def __iadd__(self: Score, x: int) -> Score: return Score(self.__value + x)
-
-    def __add__(self: Score, x: int) -> Score: return Score(self.__value + x)
-
-    def __isub__(self: Score, x: int) -> Score: return Score(self.__value - x)
-
-    def __sub__(self: Score, x: int) -> Score: return Score(self.__value - x)
+    @value.setter
+    def value(self: Score, new_score: int) -> None: self.__value = new_score
 
     # <----- comparateur ----->
 

@@ -7,60 +7,55 @@ from Player.Player import Player
 
 # <========== Class ==========>
 
-class Pipopipette_Gameplay():
+class PipopipetteGameplay():
     """
     Class used to manage the players, their score, ect...
     """
     
     # <----- init ----->
     
-    def __init__(self: Pipopipette_Gameplay, list_player: list[Player], pipopipette: Pipopipette = Pipopipette()) -> None:
+    def __init__(self: PipopipetteGameplay, list_player_name: list[str], pipopipette: Pipopipette = Pipopipette()) -> None:
         """
         Args:
             listPlayer: A list of players. Should contain a least two Players
             pipopipette: The playground.
         """
-        self.__list_player: Final[list[Player]] = list_player.copy()
+        self.__list_player: Final[list[Player]] = [Player(list_player_name[i],i) for i in range(len(list_player_name))]
         self.__pipopipette: Pipopipette = pipopipette
         self.__current_player_ID: int = self.__list_player[0].ID
-        
-        for i in range(len(self.__list_player)):
-            self.__list_player[i].id = i
             
     # <----- getter ----->
     
     @property
-    def list_player(self: Pipopipette_Gameplay) -> list[Player]: return self.__list_player
+    def list_player(self: PipopipetteGameplay) -> list[Player]: return self.__list_player
     
     @property
-    def pipopipette(self: Pipopipette_Gameplay) -> Pipopipette: return self.__pipopipette
+    def pipopipette(self: PipopipetteGameplay) -> Pipopipette: return self.__pipopipette
     
     @property
-    def current_player_ID(self: Pipopipette_Gameplay) -> int: return self.__current_player_ID
+    def current_player_ID(self: PipopipetteGameplay) -> int: return self.__current_player_ID
     
     # <----- setter ----->
     
     @pipopipette.setter
-    def pipopipette(self: Pipopipette_Gameplay, pipopipette: Pipopipette) -> None: self.__pipopipette = pipopipette
+    def pipopipette(self: PipopipetteGameplay, pipopipette: Pipopipette) -> None: self.__pipopipette = pipopipette
     
     @current_player_ID.setter
-    def current_player_ID(self: Pipopipette_Gameplay, current_player_ID) -> None: self.__current_player_ID = current_player_ID
+    def current_player_ID(self: PipopipetteGameplay, current_player_ID) -> None: self.__current_player_ID = current_player_ID
             
     # <----- nextPlayer ----->
     
-    def next_player(self: Pipopipette_Gameplay) -> None:
+    def next_player(self: PipopipetteGameplay) -> None:
         """
         Will switch to another player.
         """
-        for i in range(len(self.__list_player)):
-            if self.__list_player[i].ID == self.current_player_ID: index: int = i + 1
-        if index == len(self.__list_player): self.__current_player_ID = self.__list_player[0].ID
-        else: self.__current_player_ID = self.__list_player[index].ID
+        self.__currentPlayerID += 1
+        if self.__currentPlayerID % len(self.__listPlayer) == 0: self.__currentPlayerID = 0
         
         
     # <----- setPlayerTarget ----->
     
-    def set_player_target(self: Pipopipette_Gameplay, square_ID: int, side: str) -> bool:
+    def set_player_target(self: PipopipetteGameplay, square_ID: int, side: str) -> bool:
         """
         Used to take a Segment of a square
         Args:
@@ -78,7 +73,7 @@ class Pipopipette_Gameplay():
     
     # <----- gameOver ----->
     
-    def game_over(self: Pipopipette_Gameplay) -> bool:
+    def game_over(self: PipopipetteGameplay) -> bool:
         """
         Check if there is a Square without an owner to check if the game ended or not.
         Returns:

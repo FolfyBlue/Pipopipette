@@ -66,7 +66,7 @@ class Pipopipette():
     
     # <----- setSide ----->
     
-    def set_side(self: Pipopipette, squareID: int, side: str, ownerID: int) ->  None:
+    def set_side(self: Pipopipette, squareID: int, side: str, owner_ID: int) ->  None:
         """
         Define the side of a Square.
         Args:
@@ -77,17 +77,17 @@ class Pipopipette():
         """
         if self.get_square_by_ID(squareID) != None: 
             if side == 'l':
-                self.get_square_by_ID(squareID).left.ownerID = ownerID
-                if self.get_square_by_ID(squareID-1) != None: self.get_square_by_ID(squareID-1).right.ownerID = ownerID
+                self.get_square_by_ID(squareID).left.owner_ID = owner_ID
+                if self.get_square_by_ID(squareID-1) != None: self.get_square_by_ID(squareID-1).right.owner_ID = owner_ID
             elif side == 'r':
-                self.get_square_by_ID(squareID).right.ownerID = ownerID
-                if self.get_square_by_ID(squareID+1) != None: self.get_square_by_ID(squareID+1).left.ownerID = ownerID
+                self.get_square_by_ID(squareID).right.owner_ID = owner_ID
+                if self.get_square_by_ID(squareID+1) != None: self.get_square_by_ID(squareID+1).left.owner_ID = owner_ID
             elif side == 't':
-                self.get_square_by_ID(squareID).top.ownerID = ownerID
-                if self.get_square_by_ID(squareID-self.__height) != None: self.get_square_by_ID(squareID-self.__height).down.ownerID = ownerID
+                self.get_square_by_ID(squareID).top.owner_ID = owner_ID
+                if self.get_square_by_ID(squareID-self.__height) != None: self.get_square_by_ID(squareID-self.__height).down.owner_ID = owner_ID
             elif side == 'd':
-                self.get_square_by_ID(squareID).down.ownerID = ownerID
-                if self.get_square_by_ID(squareID+self.__height) != None: self.get_square_by_ID(squareID+self.__height).top.ownerID = ownerID
+                self.get_square_by_ID(squareID).down.owner_ID = owner_ID
+                if self.get_square_by_ID(squareID+self.__height) != None: self.get_square_by_ID(squareID+self.__height).top.owner_ID = owner_ID
             
     # <----- valideTarget ----->
     
@@ -103,8 +103,8 @@ class Pipopipette():
 
         """
         if self.get_square_by_ID(squareID) != None:
-            if ((side == 'l' and self.get_square_by_ID(squareID).left.ownerID != -1) or
-                (side == 'r' and self.get_square_by_ID(squareID).right.ownerID != -1) or
-                (side == 't' and self.get_square_by_ID(squareID).top.ownerID != -1) or
-                (side == 'd' and self.get_square_by_ID(squareID).down.ownerID != -1)): return True
+            if ((side == 'l' and self.get_square_by_ID(squareID).left.owner_ID != -1) or
+                (side == 'r' and self.get_square_by_ID(squareID).right.owner_ID != -1) or
+                (side == 't' and self.get_square_by_ID(squareID).top.owner_ID != -1) or
+                (side == 'd' and self.get_square_by_ID(squareID).down.owner_ID != -1)): return True
         return False 
