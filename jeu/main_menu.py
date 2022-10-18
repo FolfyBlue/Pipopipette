@@ -2,6 +2,7 @@ import sys
 
 import pygame
 from jeu.login_screen import login_screen
+from jeu.options_screen import options_screen
 from jeu.ui.button import Button
 from jeu.ui.ui import UI
 from jeu.utils.font_manager import FontManager
@@ -49,7 +50,7 @@ def main_menu(screen: pygame.surface.Surface):
         font=menu_font.get_font(75),
         color="#FFFFFF",
         hover_color="#d7fcd4",
-        action=lambda: print("Options!")
+        action=lambda: options_screen(screen)
     )
     quit_button = Button(
         screen=screen,
