@@ -8,13 +8,14 @@ class UI(ABC):
     """Abstract class for UI elements 
     """
 
-    def __init__(self: Self, screen: pygame.surface.Surface) -> None:
+    def __init__(self: Self, screen: pygame.surface.Surface, detection_offset: tuple[float, float] = (0, 0)) -> None:
         """Button UI elements
 
         Args:
             screen (pygame.surface.Surface): Screen to update the element on
         """
         self.screen = screen
+        self.detection_offset: tuple[float, float] = detection_offset
 
     @abstractmethod
     def update(self: Self, event: pygame.event.Event) -> None:

@@ -20,27 +20,29 @@ class Popup(UI):
         self.active = True  
         self.color = color
         self.font: FontManager = FontManager("jeu/assets/fonts/Truculenta.ttf")
-        self.background = pygame.Surface(size)
+        self.surface = pygame.Surface(size)
         self.title: pygame.surface.Surface = self.font.get_font(100).render(title, True, "#EEEEEE")
-        self.title_rect: pygame.rect.Rect = self.title.get_rect(center=(self.background.get_rect().center[0], 50))
-        self.elements: list = []
+        self.title_rect: pygame.rect.Rect = self.title.get_rect(center=(self.surface.get_rect().center[0], 50))
+        self.elements: list[UI] = []
 
         close_button_img = pygame.image.load("jeu/assets/images/close.png")
-        offset = (
+        self.offset = (
             (screen.get_width()-size[0])/2,
             (screen.get_height()-size[1])/2,
         )
-        self.close_button = Button(
-            screen=self.background,
+        close_button = Button(
+            screen=self.surface,
             image=close_button_img,
-            position=(self.background.get_width()-25, 25),
+            position=(self.surface.get_width()-25, 25),
             text=" ",
             font=self.font.get_font(50),
             color="#000000",
             hover_color="#555555",
             action=self.close,
-            detection_offset=offset
+            detection_offset=self.offset
         )
+
+        self.elements.append(close_button)
 
     def close(self: Popup):
         """Marks the popup as inactive
@@ -51,20 +53,33 @@ class Popup(UI):
         """Updates the popup's render
         """
         if not self.active: return
-        self.background.fill(self.color)
+        self.surface.fill(self.color)
         
-        self.close_button.update_render()
-        self.background.blit(self.title, self.title_rect)
+        for e in self.elements:
+            e.update_render()
+        self.surface.blit(self.title, self.title_rect)
 
-        rect = self.background.get_rect(center=self.screen.get_rect().center)
-        self.screen.blit(self.background, rect)
-        self.close_button.update_render()
+        rect = self.surface.get_rect(center=self.screen.get_rect().center)
+        self.screen.blit(self.surface, rect)
 
-    def update(self, event):
+    def update(self, event: pygame.event.Event):
         """Updates the popup according to the given event.
 
         Args:
             event (pygame.event.Event): Event to check for
         """
         if not self.active: return
-        self.close_button.update(event)
+        for e in self.elements:
+            e.update(event)
+
+    def add_ui_element(self, element: UI):
+        element.detection_offset = self.offset
+        self.elements.append(element)
+    
+    def run(self):
+        self.active = True
+        while self.active:
+            for event in pygame.event.get():
+                self.update(event)
+            self.update_render()
+            pygame.display.update()
