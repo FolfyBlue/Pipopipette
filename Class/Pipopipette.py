@@ -6,10 +6,19 @@ from Square.Square import Square
 # <========== Class ==========>
 
 class Pipopipette():
+    """
+    The class that will manage the playground.
+    """
     
     # <----- init ----->
     
     def __init__(self: Pipopipette, width: int = 5, height: int = 5) -> None:
+        """
+
+        Args:
+            width: The width of the game
+            height: The height of the game
+        """
         self.__width: int = width
         self.__height: int = height
         self.__listSquare: list[Square] = []
@@ -48,6 +57,14 @@ class Pipopipette():
      # <----- getSquareByID ----->
     
     def get_square_by_ID(self: Pipopipette, id: int) -> Square | None:
+        """
+        Used to get a Square by his ID
+        Args:
+            id: A Square's id
+
+        Returns:
+            The found square, or None
+        """
         for square in self.__listSquare:
             if square.id == id: return square
         return None
@@ -55,6 +72,14 @@ class Pipopipette():
     # <----- setSide ----->
     
     def set_side(self: Pipopipette, squareID: int, side: str, ownerID: int) ->  None:
+        """
+        Define the side of a Square.
+        Args:
+            squareID: The ID of the Squre to edit
+            side: 'l'; 'r', 't', or 'd'. Wich side to edit ?
+            ownerID: The player who placed this side
+
+        """
         if self.getSquareByID(squareID) != None: 
             if side == 'l':
                 self.getSquareByID(squareID).leftOwner = ownerID
@@ -72,6 +97,16 @@ class Pipopipette():
     # <----- valideTarget ----->
     
     def valid_target(self: Pipopipette, squareID: int, side: str) -> bool:
+        """
+        Can a player place a Segment here ?
+        Args:
+            squareID: The square to check
+            side: The side to check. 'l', 'r', 't' or 'd'
+
+        Returns:
+            Boolean - True if can edit, False if already owned by a player
+
+        """
         if self.getSquareByID(squareID) != None:
             if ((side == 'l' and self.getSquareByID(squareID).leftOwner != -1) or
                 (side == 'r' and self.getSquareByID(squareID).rightOwner != -1) or

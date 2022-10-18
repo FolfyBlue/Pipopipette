@@ -7,10 +7,18 @@ from Player.Player import Player
 # <========== Class ==========>
 
 class PipopipetteGameplay():
+    """
+    Class used to manage the players, their score, ect...
+    """
     
     # <----- init ----->
     
     def __init__(self: PipopipetteGameplay, listPlayer: list[Player], pipopipette: Pipopipette = Pipopipette()) -> None:
+        """
+        Args:
+            listPlayer: A list of players. Should contain a least two Players
+            pipopipette: The playground.
+        """
         self.__listPlayer: list[Player] = listPlayer.copy()
         self.__pipopipette: Pipopipette = pipopipette
         self.__currentPlayerID: int = 0
@@ -43,18 +51,33 @@ class PipopipetteGameplay():
     # <----- nextPlayer ----->
     
     def next_player(self: PipopipetteGameplay) -> None:
+        """
+        Will switch to another player.
+        """
         self.__currentPlayerID += 1
         if self.__currentPlayerID % len(self.__listPlayer) == 0: self.__currentPlayerID = 0
         
     # <----- setPlayerTarget ----->
     
     def set_playerTarget(self: PipopipetteGameplay, squareID: int, side: str) -> bool:
+        """
+        Used to take a Segment of a square
+        Args:
+            squareID: The Square to edit
+            side: Wich side to manage ? 'l'; 'r', 't', or 'd'.
+
+        Returns:
+            Boolean - True if can be taken, False if not
+        """
         if self.__pipopipette.valid_target(squareID, side): self.__pipopipette.set_side(squareID, side, self.__currentPlayerID); return True
         else: return False
         
     # <----- scoreCount ----->
     
     def score_count(self: PipopipetteGameplay) -> None:
+        """
+        Update a player score by counting the number of square taken by him.
+        """
         for player in self.__listPlayer:
             player.score = 0
             for square in self.__pipopipette.__listSquare:
@@ -63,6 +86,12 @@ class PipopipetteGameplay():
     # <----- gameOver ----->
     
     def game_over(self: PipopipetteGameplay) -> bool:
+        """
+        Check if there is a Square without an owner to check if the game ended or not.
+        Returns:
+            Boolean - True if game finished, False of not
+
+        """
         for square in self.__pipopipette.listSquare:
             if square.squareOwner == -1: return False
         return True

@@ -6,10 +6,17 @@ from Square.Segment import Segment
 # <========== class ==========>
 
 class Square:
+    """
+    Create a new Square.
+    """
     
     # <----- init ----->
     
     def __init__(self: Square, id = 0) -> None:
+        """
+        Args:
+            id: The ID of this square.
+        """
         self.__left: Segment = Segment()
         self.__right: Segment = Segment()
         self.__top: Segment = Segment()
