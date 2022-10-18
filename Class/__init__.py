@@ -1,1 +1,1 @@
-__all__ = ["Pipopipette", "PipopipetteGameplay", "Player", "Square"]
+__all__ = ["Pipopipette", "Pipopipette_Gameplay", "Player", "Square"]
