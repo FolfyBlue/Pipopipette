@@ -73,6 +73,11 @@ class Popup(UI):
             e.update(event)
 
     def add_ui_element(self, element: UI):
+        """Adds an ui element to the popup
+
+        Args:
+            element (UI): Element to be added
+        """
         element.detection_offset = self.offset
         self.elements.append(element)
     
