@@ -2,17 +2,22 @@ from __future__ import annotations
 
 import pygame
 
+from jeu.ui.ui import UI
 
-class Textbox():
-    def __init__(self: Textbox, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4") -> None:
+
+class Textbox(UI):
+    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4", detection_offset: tuple[float, float] = (0, 0)) -> None:
         """Textbox UI element
 
         Args:
+            screen (pygame.surface.Surface): Screen to update the textbox on
             position (tuple[int, int]): X and Y position of the textbox
             placeholder_text (str): Text to display when the textbox is empty
             font (pygame.font.Font): Font to use for the text
             color (str): Color of the text
+            detection_offset (tuple[float, float]): Offset for the mouse/textbox interaction
         """
+        super().__init__(screen, detection_offset)
         self.focused: bool = False
         self.text: str = ""
         self.size: tuple[float, float] = size
@@ -31,7 +36,7 @@ class Textbox():
         self.placeholder_text_rect = self.placeholder_text_render.get_rect(
             center=self.center)
 
-    def update_render(self: Textbox, screen: pygame.surface.Surface) -> None:
+    def update_render(self: Textbox) -> None:
         """Updates the button
 
         Args:
@@ -45,9 +50,14 @@ class Textbox():
             text_render = self.font.render(self.text, True, self.text_color)
             self.surface.blit(
                 text_render, text_render.get_rect(center=self.center))
-        screen.blit(self.surface, self.rect)
+        self.screen.blit(self.surface, self.rect)
     
     def _process_input(self, event: pygame.event.Event):
+        """Processes the keyboard keydown event
+
+        Args:
+            event (pygame.event.Event): Keydown event to process
+        """
         match (event.key):
             case pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
@@ -57,9 +67,15 @@ class Textbox():
                 self.text += event.unicode
 
     def update(self: Textbox, event: pygame.event.Event):
+        """Updates the textbox according to a give event.
+
+        Args:
+            event (pygame.event.Event): Event to process
+        """
+        mouse_pos: tuple[float, float] = (pygame.mouse.get_pos()[0]-self.detection_offset[0], pygame.mouse.get_pos()[1]-self.detection_offset[1])
         match (event.type):
             case pygame.MOUSEBUTTONUP:
-                if self.rect.collidepoint(event.pos):
+                if self.rect.collidepoint(mouse_pos):
                     self.repeat_settings = pygame.key.get_repeat()
                     pygame.key.set_repeat(500, 50)
                     self.focused = True

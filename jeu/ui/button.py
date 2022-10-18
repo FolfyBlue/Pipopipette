@@ -4,12 +4,15 @@ from typing import Callable
 
 import pygame
 
+from jeu.ui.ui import UI
 
-class Button():
-    def __init__(self: Button, image: pygame.surface.Surface | None, position: tuple[float, float], text: str, font: pygame.font.Font, color: str, hover_color: str, action: Callable = lambda: None) -> None:
+
+class Button(UI):
+    def __init__(self: Button, screen: pygame.surface.Surface, image: pygame.surface.Surface | None, position: tuple[float, float], text: str, font: pygame.font.Font, color: str, hover_color: str, action: Callable = lambda: None, detection_offset: tuple[float, float] = (0, 0)) -> None:
         """Button UI elements
 
         Args:
+            screen (pygame.surface.Surface): Screen to update the button on
             image (pygame.surface.Surface | None): Image to use as background
             position (tuple[int, int]): X and Y position of the button
             text (str): Text to display on the button
@@ -17,7 +20,9 @@ class Button():
             color (str): Color of the text
             hover_color (str): Color of the text when hovering
             action (Callable): Function to call upon button click
+            detection_offset (tuple[float, float]): Offset for the mouse/button interaction
         """
+        super().__init__(screen)
         self.image = image
         self.position = position
         self.font = font
@@ -25,31 +30,26 @@ class Button():
         self.text = text
         self.text_render = self.font.render(self.text, True, self.color)
         self.action = action
+        self.detection_offset = detection_offset
         if not self.image:
             self.image = self.text_render
         self.rect = self.image.get_rect(center=self.position)
         self.text_rect = self.text_render.get_rect(center=self.position)
 
-    def update_render(self: Button, screen: pygame.surface.Surface) -> None:
-        """Updates the button
-
-        Args:
-            screen (pygame.surface.Surface): Screen to update the button on
+    def update_render(self: Button) -> None:
+        """Updates the button's render
         """
         if self.image:
-            screen.blit(self.image, self.rect)
-        screen.blit(self.text_render, self.text_rect)
+            self.screen.blit(self.image, self.rect)
+        self.screen.blit(self.text_render, self.text_rect)
 
-    def update(self: Button, event: pygame.event.Event) -> bool:
+    def update(self: Button, event: pygame.event.Event):
         """Updates the button according to the given event.
 
         Args:
             event (pygame.event.Event): Event to check for
-
-        Returns:
-            bool: Weither the button was clicked or not 
         """
-        mouse_pos: tuple[int, int] = pygame.mouse.get_pos()
+        mouse_pos: tuple[float, float] = (pygame.mouse.get_pos()[0]-self.detection_offset[0], pygame.mouse.get_pos()[1]-self.detection_offset[1])
         match (event.type):
             case pygame.MOUSEBUTTONDOWN:
                 if self.rect.collidepoint(mouse_pos):
