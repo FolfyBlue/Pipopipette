@@ -22,13 +22,13 @@ def login_screen(screen: pygame.surface.Surface):
     def login_handler():
         """Action ran when the login button is clicked
         """
-        print(f"Login! User:'{login_popup.elements[1].text}', Password:'{login_popup.elements[2].text}'")
+        print(f"Login! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
         login_popup.active = False
 
     def register_handler():
         """Action ran when the register button is clicked
         """
-        print(f"Register! User:'{login_popup.elements[1].text}', Password:'{login_popup.elements[2].text}'")
+        print(f"Register! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
         login_popup.active = False
 
     username_textbox = Textbox(
