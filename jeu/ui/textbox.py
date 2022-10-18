@@ -6,7 +6,7 @@ from jeu.ui.ui import UI
 
 
 class Textbox(UI):
-    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4", detection_offset: tuple[float, float] = (0, 0)) -> None:
+    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4", replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0)) -> None:
         """Textbox UI element
 
         Args:
@@ -23,6 +23,9 @@ class Textbox(UI):
         self.size: tuple[float, float] = size
         self.center: tuple[float, float] = tuple(coord/2 for coord in self.size)
         self.surface = pygame.Surface(self.size)
+        self.replacement_char = replacement_char
+        if self.replacement_char:
+            self.replacement_char = self.replacement_char[:1]
 
         self.position = position
         self.font = font
@@ -47,7 +50,10 @@ class Textbox(UI):
             self.surface.blit(self.placeholder_text_render,
                               self.placeholder_text_rect)
         else:
-            text_render = self.font.render(self.text, True, self.text_color)
+            if self.replacement_char:
+                text_render = self.font.render(self.replacement_char*len(self.text), True, self.text_color)
+            else:
+                text_render = self.font.render(self.text, True, self.text_color)
             self.surface.blit(
                 text_render, text_render.get_rect(center=self.center))
         self.screen.blit(self.surface, self.rect)
