@@ -52,8 +52,8 @@ class Pipopipette():
      # <----- get_square_by_ID ----->
     
     def get_square_by_ID(self: Pipopipette, id: int) -> Square | None:
-        """
-        Used to get a Square by his ID
+        """Used to get a Square by his ID
+        
         Args:
             id: A Square's id
 
@@ -66,48 +66,48 @@ class Pipopipette():
     
     # <----- set_side ----->
     
-    def set_side(self: Pipopipette, squareID: int, side: str, owner_ID: int) ->  None:
-        """
-        Define the side of a Square.
+    def set_side(self: Pipopipette, square_ID: int, side: str, owner_ID: int) ->  None:
+        """Define the owner of a side.
         
         Args:
-            squareID: The ID of the Squre to edit
-            side: 'l'; 'r', 't', or 'd'. Wich side to edit ?
-            ownerID: The player who placed this side
+            square_ID (int): ID of the Squre to edit.
+            side (str): 'l'; 'r', 't', or 'd'. Side to edit.
+            owner_ID (int): ID of the player who placed this side
 
         """
-        if (square := self.get_square_by_ID(squareID)) != None:
+        if (square := self.get_square_by_ID(square_ID)) != None:
             match side:
                 case 'l':
                     square.left.owner_ID = owner_ID
-                    if (neighbor := self.get_square_by_ID(squareID-1)) != None:
+                    if (neighbor := self.get_square_by_ID(square_ID-1)) != None:
                         neighbor.right.owner_ID = owner_ID
                 case 'r':
                     square.right.owner_ID = owner_ID
-                    if (neighbor := self.get_square_by_ID(squareID+1)) != None:
+                    if (neighbor := self.get_square_by_ID(square_ID+1)) != None:
                         neighbor.left.owner_ID = owner_ID
                 case 't':
                     square.top.owner_ID = owner_ID
-                    if (neighbor := self.get_square_by_ID(squareID-self.__height)) != None:
+                    if (neighbor := self.get_square_by_ID(square_ID-self.__height)) != None:
                         neighbor.down.owner_ID = owner_ID
                 case 'd':
                     square.down.owner_ID = owner_ID
-                    if (neighbor := self.get_square_by_ID(squareID+self.__height)) != None:
+                    if (neighbor := self.get_square_by_ID(square_ID+self.__height)) != None:
                         neighbor.top.owner_ID = owner_ID
             
     # <----- valide_target ----->
     
-    def valid_target(self: Pipopipette, squareID: int, side: str) -> bool:
+    def valid_target(self: Pipopipette, square_ID: int, side: str) -> bool:
         """Weither or not a player can place a Segment here.
+        
         Args:
-            SquareID (int): ID of the square to verify.
+            Square_ID (int): ID of the square to verify.
             side (str): 'l', 'r', 't', or 'd'. Side to verify.
 
         Returns:
             bool: True if a player can place a Segment here, False otherwise.
 
         """
-        if (square := self.get_square_by_ID(squareID)) != None:
+        if (square := self.get_square_by_ID(square_ID)) != None:
             match side:
                 case 'l':
                     return square.left.owner_ID != -1
