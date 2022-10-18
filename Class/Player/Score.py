@@ -5,10 +5,19 @@ from __future__ import annotations
 # <========== Class ==========>
 
 class Score():
+    """"
+    The Player's score
+    """
 
     # <----- init ----->
 
-    def __init__(self: Score, x: int = 0) -> None: self.__value: int  = x
+    def __init__(self: Score, x: int = 0) -> None:
+        """
+        Instanciate a new Score.
+        Args:
+            x (int): The number of points = if this player. Defaults to 0.
+        """
+        self.__value: int  = x
 
     # <----- getter ----->
 
