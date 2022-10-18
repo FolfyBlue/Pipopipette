@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import Final
-from Score import Score
+from Player.Score import Score
 
 # <========== Class ==========>
 
