@@ -20,14 +20,14 @@ class PipopipetteGameplay():
             listPlayer: A list of players. Should contain a least two Players
             pipopipette: The playground.
         """
-        self.__list_player: Final[list[Player]] = [Player(list_player_name[i],i) for i in range(len(list_player_name))]
+        self.__LIST_PLAYER: Final[list[Player]] = [Player(list_player_name[i],i) for i in range(len(list_player_name))]
         self.__pipopipette: Pipopipette = pipopipette
-        self.__current_player_ID: int = self.__list_player[0].ID
+        self.__current_player_ID: int = self.__LIST_PLAYER[0].ID
             
     # <----- getter ----->
     
     @property
-    def list_player(self: PipopipetteGameplay) -> list[Player]: return self.__list_player
+    def LIST_PLAYER(self: PipopipetteGameplay) -> list[Player]: return self.__LIST_PLAYER
     
     @property
     def pipopipette(self: PipopipetteGameplay) -> Pipopipette: return self.__pipopipette
@@ -50,7 +50,7 @@ class PipopipetteGameplay():
         Will switch to another player.
         """
         self.__currentPlayerID += 1
-        if self.__currentPlayerID % len(self.__list_player) == 0: self.__currentPlayerID = 0
+        if self.__currentPlayerID % len(self.__LIST_PLAYER) == 0: self.__currentPlayerID = 0
         
         
     # <----- setPlayerTarget ----->
@@ -67,7 +67,7 @@ class PipopipetteGameplay():
         """
         if self.__pipopipette.valid_target(square_ID, side):
             if self.__pipopipette.set_side(square_ID, side, self.__current_player_ID) != None:
-                self.__list_player[self.__current_player_ID].score += 1  # type: ignore
+                self.__LIST_PLAYER[self.__current_player_ID].score += 1  # type: ignore
                 return True
         return False
     
