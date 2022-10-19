@@ -16,7 +16,7 @@ class Square:
         self.__top: Segment = Segment()
         self.__down: Segment = Segment()
         self.__square_owner: int = -1 
-        self.__id: Final[int] = id
+        self.__ID: Final[int] = id
         
     # <----- getter ----->
     
@@ -36,7 +36,7 @@ class Square:
     def square_owner(self: Square) -> int: return self.__square_owner
     
     @property
-    def id(self: Square) -> int: return self.__id
+    def ID(self: Square) -> int: return self.__ID
     
     # <----- setter ----->
     
@@ -65,4 +65,4 @@ class Square:
       
     # <----- str ----->
     
-    def __str__(self: Square) -> str: return f"[id:{self.__id}(l:{self.__left.owner_ID},r:{self.__right.owner_ID},t{self.__top.owner_ID},d{self.__down.owner_ID}), owner:{self.__square_owner}]"   
+    def __str__(self: Square) -> str: return f"[id:{self.__ID}(l:{self.__left.owner_ID},r:{self.__right.owner_ID},t{self.__top.owner_ID},d{self.__down.owner_ID}), owner:{self.__square_owner}]"   

@@ -20,8 +20,8 @@ class Pipopipette():
             width: The width of the game
             height: The height of the game
         """
-        self.__width: Final[int] = width
-        self.__height: Final[int] = height
+        self.__WIDTH: Final[int] = width
+        self.__HEIGHT: Final[int] = height
         self.__list_square: list[Square] = []
         
         for i in range(width * height): self.__list_square.append(Square(i))
@@ -29,10 +29,10 @@ class Pipopipette():
     # <----- getter ----->
     
     @property
-    def width(self: Pipopipette) -> int: return self.__width
+    def WIDTH(self: Pipopipette) -> int: return self.__WIDTH
     
     @property
-    def height(self: Pipopipette) -> int: return self.__height
+    def HEIGHT(self: Pipopipette) -> int: return self.__HEIGHT
     
     @property
     def list_square(self: Pipopipette) -> list[Square]: return self.__list_square
@@ -61,7 +61,7 @@ class Pipopipette():
             The found square, or None
         """
         for square in self.__list_square:
-            if square.id == id: return square
+            if square.ID == id: return square
         return None
     
     # <----- set_side ----->
@@ -87,11 +87,11 @@ class Pipopipette():
                         neighbor.left.owner_ID = owner_ID
                 case 't':
                     square.top.owner_ID = owner_ID
-                    if (neighbor := self.get_square_by_ID(square_ID-self.__height)) != None:
+                    if (neighbor := self.get_square_by_ID(square_ID-self.__HEIGHT)) != None:
                         neighbor.down.owner_ID = owner_ID
                 case 'd':
                     square.down.owner_ID = owner_ID
-                    if (neighbor := self.get_square_by_ID(square_ID+self.__height)) != None:
+                    if (neighbor := self.get_square_by_ID(square_ID+self.__HEIGHT)) != None:
                         neighbor.top.owner_ID = owner_ID
             
     # <----- valide_target ----->
