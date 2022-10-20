@@ -72,7 +72,7 @@ def main_menu(screen: pygame.surface.Surface):
                             action=lambda: login_screen(screen)
                             )
 
-    menu_buttons: tuple[UI, ...] = (play_button, options_button, quit_button, account_button)
+    menu_buttons: tuple[UI, ...] = (account_button, play_button, options_button, quit_button)
 
     while True:
         print(int(clock.get_fps()), end=" FPS    \r")
