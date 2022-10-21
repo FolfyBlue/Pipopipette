@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>Square API documentation</title>
+<title>jeu.engine.Square.Square API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,7 +19,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>Square</code></h1>
+<h1 class="title">Module <code>jeu.engine.Square.Square</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -29,28 +29,22 @@
 <pre><code class="python"># &lt;========== import ==========&gt;
 
 from __future__ import annotations
-from Segment import Segment
+from typing import Final
+from jeu.engine.Square.Segment import Segment
 
 # &lt;========== class ==========&gt;
 
 class Square:
-    &#34;&#34;&#34;
-    Create a new Square.
-    &#34;&#34;&#34;
     
     # &lt;----- init -----&gt;
     
     def __init__(self: Square, id = 0) -&gt; None:
-        &#34;&#34;&#34;
-        Args:
-            id: The ID of this square.
-        &#34;&#34;&#34;
         self.__left: Segment = Segment()
         self.__right: Segment = Segment()
         self.__top: Segment = Segment()
         self.__down: Segment = Segment()
-        self.__squareOwner: int = -1
-        self.__id: int = id
+        self.__square_owner: int = -1 
+        self.__ID: Final[int] = id
         
     # &lt;----- getter -----&gt;
     
@@ -67,42 +61,43 @@ class Square:
     def down(self: Square) -&gt; Segment: return self.__down
     
     @property
-    def squareOwner(self: Square) -&gt; int: return self.__squareOwner
+    def square_owner(self: Square) -&gt; int: return self.__square_owner
     
     @property
-    def id(self: Square) -&gt; int: return self.__id
+    def ID(self: Square) -&gt; int: return self.__ID
     
     # &lt;----- setter -----&gt;
     
     @left.setter
-    def left(self: Square, owner: int) -&gt; None: 
-        self.__left.ownerID = owner
-        if self.__right.ownerID != -1 and self.__top.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def left(self: Square, owner_ID: int) -&gt; bool | None: 
+        self.__left.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @right.setter
-    def right(self: Square, owner: int) -&gt; None: 
-        self.__right.ownerID = owner
-        if self.__left.ownerID != -1 and self.__top.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def right(self: Square, owner_ID: int) -&gt; bool | None: 
+        self.__right.owner_ID = owner_ID
+        if self.__left.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @top.setter
-    def top(self: Square, owner: int) -&gt; None: 
-        self.__top.ownerID = owner
-        if self.__right.ownerID != -1 and self.__left.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def top(self: Square, owner_ID: int) -&gt; bool | None: 
+        self.__top.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__left.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @down.setter
-    def down(self: Square, owner: int) -&gt; None: 
-        self.__down.ownerID = owner
-        if self.__right.ownerID != -1 and self.__top.ownerID != -1 and self.__left.ownerID != -1: self.__squareOwner.ownerID = owner
+    def down(self: Square, owner_ID: int) -&gt; bool | None: 
+        self.__down.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__left.owner_ID != -1:
+            self.__square_owner = owner_ID
         
-    @squareOwner.setter
-    def squareOwner(self: Square, owner: int) -&gt; None: self.__squareOwner = owner
-    
-    @id.setter
-    def id(self: Square, owner: int) -&gt; None: self.__squareOwner = owner  
+    @square_owner.setter
+    def square_owner(self: Square, owner_ID: int) -&gt; None: self.__square_owner = owner_ID
       
     # &lt;----- str -----&gt;
     
-    def __str__(self: Square) -&gt; str: return f&#34;[id:{self.__id}(l:{self.__left.ownerID},r:{self.__right.ownerID},t{self.__top.ownerID},d{self.__down.ownerID}), owner:{self.__squareOwner}]&#34;   </code></pre>
+    def __str__(self: Square) -&gt; str: return f&#34;[id:{self.__ID}(l:{self.__left.owner_ID},r:{self.__right.owner_ID},t{self.__top.owner_ID},d{self.__down.owner_ID}), owner:{self.__square_owner}]&#34;   </code></pre>
 </details>
 </section>
 <section>
@@ -114,39 +109,27 @@ class Square:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="Square.Square"><code class="flex name class">
+<dt id="jeu.engine.Square.Square.Square"><code class="flex name class">
 <span>class <span class="ident">Square</span></span>
 <span>(</span><span>id=0)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Create a new Square.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>id</code></strong></dt>
-<dd>The ID of this square.</dd>
-</dl></div>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Square:
-    &#34;&#34;&#34;
-    Create a new Square.
-    &#34;&#34;&#34;
     
     # &lt;----- init -----&gt;
     
     def __init__(self: Square, id = 0) -&gt; None:
-        &#34;&#34;&#34;
-        Args:
-            id: The ID of this square.
-        &#34;&#34;&#34;
         self.__left: Segment = Segment()
         self.__right: Segment = Segment()
         self.__top: Segment = Segment()
         self.__down: Segment = Segment()
-        self.__squareOwner: int = -1
-        self.__id: int = id
+        self.__square_owner: int = -1 
+        self.__ID: Final[int] = id
         
     # &lt;----- getter -----&gt;
     
@@ -163,46 +146,58 @@ class Square:
     def down(self: Square) -&gt; Segment: return self.__down
     
     @property
-    def squareOwner(self: Square) -&gt; int: return self.__squareOwner
+    def square_owner(self: Square) -&gt; int: return self.__square_owner
     
     @property
-    def id(self: Square) -&gt; int: return self.__id
+    def ID(self: Square) -&gt; int: return self.__ID
     
     # &lt;----- setter -----&gt;
     
     @left.setter
-    def left(self: Square, owner: int) -&gt; None: 
-        self.__left.ownerID = owner
-        if self.__right.ownerID != -1 and self.__top.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def left(self: Square, owner_ID: int) -&gt; bool | None: 
+        self.__left.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @right.setter
-    def right(self: Square, owner: int) -&gt; None: 
-        self.__right.ownerID = owner
-        if self.__left.ownerID != -1 and self.__top.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def right(self: Square, owner_ID: int) -&gt; bool | None: 
+        self.__right.owner_ID = owner_ID
+        if self.__left.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @top.setter
-    def top(self: Square, owner: int) -&gt; None: 
-        self.__top.ownerID = owner
-        if self.__right.ownerID != -1 and self.__left.ownerID != -1 and self.__down.ownerID != -1: self.__squareOwner.ownerID = owner
+    def top(self: Square, owner_ID: int) -&gt; bool | None: 
+        self.__top.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__left.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @down.setter
-    def down(self: Square, owner: int) -&gt; None: 
-        self.__down.ownerID = owner
-        if self.__right.ownerID != -1 and self.__top.ownerID != -1 and self.__left.ownerID != -1: self.__squareOwner.ownerID = owner
+    def down(self: Square, owner_ID: int) -&gt; bool | None: 
+        self.__down.owner_ID = owner_ID
+        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__left.owner_ID != -1:
+            self.__square_owner = owner_ID
         
-    @squareOwner.setter
-    def squareOwner(self: Square, owner: int) -&gt; None: self.__squareOwner = owner
-    
-    @id.setter
-    def id(self: Square, owner: int) -&gt; None: self.__squareOwner = owner  
+    @square_owner.setter
+    def square_owner(self: Square, owner_ID: int) -&gt; None: self.__square_owner = owner_ID
       
     # &lt;----- str -----&gt;
     
-    def __str__(self: Square) -&gt; str: return f&#34;[id:{self.__id}(l:{self.__left.ownerID},r:{self.__right.ownerID},t{self.__top.ownerID},d{self.__down.ownerID}), owner:{self.__squareOwner}]&#34;   </code></pre>
+    def __str__(self: Square) -&gt; str: return f&#34;[id:{self.__ID}(l:{self.__left.owner_ID},r:{self.__right.owner_ID},t{self.__top.owner_ID},d{self.__down.owner_ID}), owner:{self.__square_owner}]&#34;   </code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="Square.Square.down"><code class="name">var <span class="ident">down</span> : Segment.Segment</code></dt>
+<dt id="jeu.engine.Square.Square.Square.ID"><code class="name">var <span class="ident">ID</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def ID(self: Square) -&gt; int: return self.__ID</code></pre>
+</details>
+</dd>
+<dt id="jeu.engine.Square.Square.Square.down"><code class="name">var <span class="ident">down</span> : <a title="jeu.engine.Square.Segment.Segment" href="Segment.html#jeu.engine.Square.Segment.Segment">Segment</a></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -213,18 +208,7 @@ class Square:
 def down(self: Square) -&gt; Segment: return self.__down</code></pre>
 </details>
 </dd>
-<dt id="Square.Square.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def id(self: Square) -&gt; int: return self.__id</code></pre>
-</details>
-</dd>
-<dt id="Square.Square.left"><code class="name">var <span class="ident">left</span> : Segment.Segment</code></dt>
+<dt id="jeu.engine.Square.Square.Square.left"><code class="name">var <span class="ident">left</span> : <a title="jeu.engine.Square.Segment.Segment" href="Segment.html#jeu.engine.Square.Segment.Segment">Segment</a></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -235,7 +219,7 @@ def id(self: Square) -&gt; int: return self.__id</code></pre>
 def left(self: Square) -&gt; Segment: return self.__left</code></pre>
 </details>
 </dd>
-<dt id="Square.Square.right"><code class="name">var <span class="ident">right</span> : Segment.Segment</code></dt>
+<dt id="jeu.engine.Square.Square.Square.right"><code class="name">var <span class="ident">right</span> : <a title="jeu.engine.Square.Segment.Segment" href="Segment.html#jeu.engine.Square.Segment.Segment">Segment</a></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -246,7 +230,7 @@ def left(self: Square) -&gt; Segment: return self.__left</code></pre>
 def right(self: Square) -&gt; Segment: return self.__right</code></pre>
 </details>
 </dd>
-<dt id="Square.Square.squareOwner"><code class="name">var <span class="ident">squareOwner</span> : int</code></dt>
+<dt id="jeu.engine.Square.Square.Square.square_owner"><code class="name">var <span class="ident">square_owner</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -254,10 +238,10 @@ def right(self: Square) -&gt; Segment: return self.__right</code></pre>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def squareOwner(self: Square) -&gt; int: return self.__squareOwner</code></pre>
+def square_owner(self: Square) -&gt; int: return self.__square_owner</code></pre>
 </details>
 </dd>
-<dt id="Square.Square.top"><code class="name">var <span class="ident">top</span> : Segment.Segment</code></dt>
+<dt id="jeu.engine.Square.Square.Square.top"><code class="name">var <span class="ident">top</span> : <a title="jeu.engine.Square.Segment.Segment" href="Segment.html#jeu.engine.Square.Segment.Segment">Segment</a></code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -279,17 +263,22 @@ def top(self: Square) -&gt; Segment: return self.__top</code></pre>
 <ul></ul>
 </div>
 <ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="jeu.engine.Square" href="index.html">jeu.engine.Square</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="Square.Square" href="#Square.Square">Square</a></code></h4>
+<h4><code><a title="jeu.engine.Square.Square.Square" href="#jeu.engine.Square.Square.Square">Square</a></code></h4>
 <ul class="two-column">
-<li><code><a title="Square.Square.down" href="#Square.Square.down">down</a></code></li>
-<li><code><a title="Square.Square.id" href="#Square.Square.id">id</a></code></li>
-<li><code><a title="Square.Square.left" href="#Square.Square.left">left</a></code></li>
-<li><code><a title="Square.Square.right" href="#Square.Square.right">right</a></code></li>
-<li><code><a title="Square.Square.squareOwner" href="#Square.Square.squareOwner">squareOwner</a></code></li>
-<li><code><a title="Square.Square.top" href="#Square.Square.top">top</a></code></li>
+<li><code><a title="jeu.engine.Square.Square.Square.ID" href="#jeu.engine.Square.Square.Square.ID">ID</a></code></li>
+<li><code><a title="jeu.engine.Square.Square.Square.down" href="#jeu.engine.Square.Square.Square.down">down</a></code></li>
+<li><code><a title="jeu.engine.Square.Square.Square.left" href="#jeu.engine.Square.Square.Square.left">left</a></code></li>
+<li><code><a title="jeu.engine.Square.Square.Square.right" href="#jeu.engine.Square.Square.Square.right">right</a></code></li>
+<li><code><a title="jeu.engine.Square.Square.Square.square_owner" href="#jeu.engine.Square.Square.Square.square_owner">square_owner</a></code></li>
+<li><code><a title="jeu.engine.Square.Square.Square.top" href="#jeu.engine.Square.Square.Square.top">top</a></code></li>
 </ul>
 </li>
 </ul>
