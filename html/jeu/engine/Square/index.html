@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>Player API documentation</title>
+<title>jeu.engine.Square API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,189 +19,28 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>Player</code></h1>
+<h1 class="title">Module <code>jeu.engine.Square</code></h1>
 </header>
 <section id="section-intro">
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># &lt;========== Import ==========&gt;
-
-from __future__ import annotations
-from Score import Score
-
-# &lt;========== Class ==========&gt;
-
-class Player():
-    &#34;&#34;&#34;
-    Represent the player. This class holds all the methods that allow the player to interact with the game.
-    &#34;&#34;&#34;
-    
-    # &lt;----- init -----&gt;
-    
-    def __init__(self: Player, name: str, id: int) -&gt; None:
-        &#34;&#34;&#34;&#34;
-        Create a new player.
-        Args:
-            name (str): The name of this user.
-            id (int): An unique identifier for this user.
-        &#34;&#34;&#34;
-        self.__name: str = name
-        self.__id = id
-        self.__score: Score = Score()
-    
-    # &lt;----- getter -----&gt; 
-    
-    @property
-    def name(self: Player) -&gt; str:
-        &#34;&#34;&#34;
-            Define the name of this player
-        &#34;&#34;&#34;
-        return self.__name
-
-
-    @property
-    def id(self: Player) -&gt; int: return self.__id
-    
-    @property
-    def score(self: Player) -&gt; Score: return self.__score
-    
-    # &lt;----- setter -----&gt;
-    
-    @name.setter
-    def name(self: Player, newName: str) -&gt; None: self.__name = newName
-
-    @id.setter
-    def id(self: Player, newID: int) -&gt; None: self.__id = newID
-    
-    @score.setter
-    def score(self: Player, newScore: int) -&gt; None: self.__score = Score(newScore)
-    
-    # &lt;----- str -----&gt;
-    
-    def __str__(self: Player) -&gt; str: return f&#34;{self.__name} {self.__score}&#34;</code></pre>
-</details>
 </section>
 <section>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-classes">Classes</h2>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt id="Player.Player"><code class="flex name class">
-<span>class <span class="ident">Player</span></span>
-<span>(</span><span>name: str, id: int)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Represent the player. This class holds all the methods that allow the player to interact with the game.</p>
-<p>"
-Create a new player.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
-<dd>The name of this user.</dd>
-<dt><strong><code>id</code></strong> :&ensp;<code>int</code></dt>
-<dd>An unique identifier for this user.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Player():
-    &#34;&#34;&#34;
-    Represent the player. This class holds all the methods that allow the player to interact with the game.
-    &#34;&#34;&#34;
-    
-    # &lt;----- init -----&gt;
-    
-    def __init__(self: Player, name: str, id: int) -&gt; None:
-        &#34;&#34;&#34;&#34;
-        Create a new player.
-        Args:
-            name (str): The name of this user.
-            id (int): An unique identifier for this user.
-        &#34;&#34;&#34;
-        self.__name: str = name
-        self.__id = id
-        self.__score: Score = Score()
-    
-    # &lt;----- getter -----&gt; 
-    
-    @property
-    def name(self: Player) -&gt; str:
-        &#34;&#34;&#34;
-            Define the name of this player
-        &#34;&#34;&#34;
-        return self.__name
-
-
-    @property
-    def id(self: Player) -&gt; int: return self.__id
-    
-    @property
-    def score(self: Player) -&gt; Score: return self.__score
-    
-    # &lt;----- setter -----&gt;
-    
-    @name.setter
-    def name(self: Player, newName: str) -&gt; None: self.__name = newName
-
-    @id.setter
-    def id(self: Player, newID: int) -&gt; None: self.__id = newID
-    
-    @score.setter
-    def score(self: Player, newScore: int) -&gt; None: self.__score = Score(newScore)
-    
-    # &lt;----- str -----&gt;
-    
-    def __str__(self: Player) -&gt; str: return f&#34;{self.__name} {self.__score}&#34;</code></pre>
-</details>
-<h3>Instance variables</h3>
-<dl>
-<dt id="Player.Player.id"><code class="name">var <span class="ident">id</span> : int</code></dt>
+<dt><code class="name"><a title="jeu.engine.Square.Segment" href="Segment.html">jeu.engine.Square.Segment</a></code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def id(self: Player) -&gt; int: return self.__id</code></pre>
-</details>
 </dd>
-<dt id="Player.Player.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
-<dd>
-<div class="desc"><p>Define the name of this player</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def name(self: Player) -&gt; str:
-    &#34;&#34;&#34;
-        Define the name of this player
-    &#34;&#34;&#34;
-    return self.__name</code></pre>
-</details>
-</dd>
-<dt id="Player.Player.score"><code class="name">var <span class="ident">score</span> : Score.Score</code></dt>
+<dt><code class="name"><a title="jeu.engine.Square.Square" href="Square.html">jeu.engine.Square.Square</a></code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def score(self: Player) -&gt; Score: return self.__score</code></pre>
-</details>
 </dd>
 </dl>
-</dd>
-</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
 </section>
 </article>
 <nav id="sidebar">
@@ -210,16 +49,15 @@ def score(self: Player) -&gt; Score: return self.__score</code></pre>
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-classes">Classes</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li>
-<h4><code><a title="Player.Player" href="#Player.Player">Player</a></code></h4>
-<ul class="">
-<li><code><a title="Player.Player.id" href="#Player.Player.id">id</a></code></li>
-<li><code><a title="Player.Player.name" href="#Player.Player.name">name</a></code></li>
-<li><code><a title="Player.Player.score" href="#Player.Player.score">score</a></code></li>
+<li><code><a title="jeu.engine" href="../index.html">jeu.engine</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="jeu.engine.Square.Segment" href="Segment.html">jeu.engine.Square.Segment</a></code></li>
+<li><code><a title="jeu.engine.Square.Square" href="Square.html">jeu.engine.Square.Square</a></code></li>
 </ul>
 </li>
 </ul>
