@@ -5,8 +5,8 @@ parentdir = os.path.realpath(os.path.join(os.path.dirname(__file__),os.pardir))
 if parentdir not in sys.path:
     sys.path.insert(1, parentdir) # insert ../ just after ./
     
-from Class.Player.Player import Player
-from Class.Player.Score import Score
+from jeu.engine.Player.Player import Player
+from jeu.engine.Player.Score import Score
 
 # <========== test ==========>
 
@@ -23,7 +23,7 @@ def test_init_getter() -> None:
     
     >>> player: Player = Player('player',1)
     >>> type(player.score)
-    <class 'Class.Player.Score.Score'>
+    <class 'jeu.engine.Player.Score.Score'>
     """
     pass
 

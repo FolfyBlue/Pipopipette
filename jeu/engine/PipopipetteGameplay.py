@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 from typing import Final
-from Class.Pipopipette import Pipopipette
-from Class.Player.Player import Player
+from jeu.engine.Pipopipette import Pipopipette
+from jeu.engine.Player.Player import Player
 
 # <========== Class ==========>
 

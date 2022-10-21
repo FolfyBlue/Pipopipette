@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import Final
-from Class.Player.Score import Score
+from jeu.engine.Player.Score import Score
 
 # <========== Class ==========>
 

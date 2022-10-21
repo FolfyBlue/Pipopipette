@@ -5,8 +5,8 @@ parentdir = os.path.realpath(os.path.join(os.path.dirname(__file__),os.pardir))
 if parentdir not in sys.path:
     sys.path.insert(1, parentdir) # insert ../ just after ./
     
-from Class.Square.Square import Square
-from Class.Square.Segment import Segment
+from jeu.engine.Square.Square import Square
+from jeu.engine.Square.Segment import Segment
 
 # <========== test ==========>
 
@@ -23,19 +23,19 @@ def test_init_getter() -> None:
     
     >>> square: Square = Square()
     >>> type(square.left)
-    <class 'Class.Square.Segment.Segment'>
+    <class 'jeu.engine.Square.Segment.Segment'>
     
     >>> square: Square = Square()
     >>> type(square.right)
-    <class 'Class.Square.Segment.Segment'>
+    <class 'jeu.engine.Square.Segment.Segment'>
     
     >>> square: Square = Square()
     >>> type(square.top)
-    <class 'Class.Square.Segment.Segment'>
+    <class 'jeu.engine.Square.Segment.Segment'>
     
     >>> square: Square = Square()
     >>> type(square.down)
-    <class 'Class.Square.Segment.Segment'>
+    <class 'jeu.engine.Square.Segment.Segment'>
     """
     pass
     

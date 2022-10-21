@@ -5,7 +5,7 @@ parentdir = os.path.realpath(os.path.join(os.path.dirname(__file__),os.pardir))
 if parentdir not in sys.path:
     sys.path.insert(1, parentdir) # insert ../ just after ./
     
-from Class.Square.Segment import Segment
+from jeu.engine.Square.Segment import Segment
 
 # <========== test ==========>
 
