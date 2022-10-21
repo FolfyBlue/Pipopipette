@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import Final
-from Player.Score import Score
+from Class.Player.Score import Score
 
 # <========== Class ==========>
 
@@ -13,7 +13,7 @@ class Player():
     
     # <----- init ----->
     
-    def __init__(self: Player, name: str, id: int) -> None:
+    def __init__(self: Player, name: str, id: int, score_value: int = 0) -> None:
         """"
         Create a new player.
         Args:
@@ -22,7 +22,7 @@ class Player():
         """
         self.__NAME: Final[str] = name
         self.__ID: Final[int] = id
-        self.__score: Score = Score()
+        self.__score: Score = Score(score_value)
     
     # <----- getter -----> 
     
@@ -41,7 +41,7 @@ class Player():
     # <----- setter ----->
     
     @score.setter
-    def score(self: Player, newScore: int) -> None: self.__score = Score(newScore)
+    def score(self: Player, new_score: Score) -> None: self.__score = new_score 
     
     # <----- str ----->
     

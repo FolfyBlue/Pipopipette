@@ -29,6 +29,8 @@ class Score():
     @value.setter
     def value(self: Score, new_score: int) -> None: self.__value = new_score
     
+    # <----- operateur ----->
+    
     def __iadd__(self: Score, x: int) -> None: return Score(self.__value + x)  # type: ignore
     
     def __add__(self: Score, x: int) -> None: return Score(self.__value + x)  # type: ignore
