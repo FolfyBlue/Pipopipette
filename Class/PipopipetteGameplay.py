@@ -64,7 +64,7 @@ class PipopipetteGameplay():
         """
         if self.__pipopipette.valid_target(square_ID, side):
             self.__pipopipette.set_side(square_ID ,side, self.current_player_ID)
-            if self.__pipopipette.get_square_by_ID(square_ID).square_owner == self.current_player_ID:
+            if (square := self.__pipopipette.get_square_by_ID(square_ID)) and (square.square_owner == self.current_player_ID):
                 self.__LIST_PLAYER[self.__current_player_ID].score += 1  # type: ignore
     
     # <----- gameOver ----->
