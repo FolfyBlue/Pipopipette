@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import Final
-from Class.Square.Segment import Segment
+from jeu.engine.Square.Segment import Segment
 
 # <========== class ==========>
 

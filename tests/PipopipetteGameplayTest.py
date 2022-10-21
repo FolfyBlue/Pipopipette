@@ -5,9 +5,9 @@ parentdir = os.path.realpath(os.path.join(os.path.dirname(__file__),os.pardir))
 if parentdir not in sys.path:
     sys.path.insert(1, parentdir) # insert ../ just after ./
     
-from Class.Player.Player import Player
-from Class.Pipopipette import Pipopipette
-from Class.PipopipetteGameplay import PipopipetteGameplay
+from jeu.engine.Player.Player import Player
+from jeu.engine.Pipopipette import Pipopipette
+from jeu.engine.PipopipetteGameplay import PipopipetteGameplay
 
 # <========== test ==========>
 
@@ -16,7 +16,7 @@ def test_init_getter() -> None:
     
     >>> pipoG: PipopipetteGameplay = PipopipetteGameplay(["player_name"])
     >>> type(pipoG.LIST_PLAYER[0])
-    <class 'Class.Player.Player.Player'>
+    <class 'jeu.engine.Player.Player.Player'>
     
     >>> pipoG: PipopipetteGameplay = PipopipetteGameplay(["player_name"])
     >>> pipoG.LIST_PLAYER[0].NAME
@@ -24,7 +24,7 @@ def test_init_getter() -> None:
     
     >>> pipoG: PipopipetteGameplay = PipopipetteGameplay(["player_name"])
     >>> type(pipoG.pipopipette)
-    <class 'Class.Pipopipette.Pipopipette'>
+    <class 'jeu.engine.Pipopipette.Pipopipette'>
     
     >>> pipoG: PipopipetteGameplay = PipopipetteGameplay(["player_name"])
     >>> pipoG.current_player_ID

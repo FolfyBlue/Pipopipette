@@ -5,8 +5,8 @@ parentdir = os.path.realpath(os.path.join(os.path.dirname(__file__),os.pardir))
 if parentdir not in sys.path:
     sys.path.insert(1, parentdir) # insert ../ just after ./
     
-from Class.Square.Square import Square
-from Class.Pipopipette import Pipopipette
+from jeu.engine.Square.Square import Square
+from jeu.engine.Pipopipette import Pipopipette
 
 # <========== test ==========>
 
@@ -31,7 +31,7 @@ def test_init_getter() -> None:
     
     >>> pipo: Pipopipette = Pipopipette()
     >>> type(pipo.list_square[0])
-    <class 'Class.Square.Square.Square'>
+    <class 'jeu.engine.Square.Square.Square'>
     """
     pass
 

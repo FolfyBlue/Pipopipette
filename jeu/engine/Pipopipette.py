@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import Final
-from Class.Square.Square import Square
+from jeu.engine.Square.Square import Square
 
 # <========== Class ==========>
 
