@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import Final
-from Square.Segment import Segment
+from Class.Square.Segment import Segment
 
 # <========== class ==========>
 
@@ -43,22 +43,26 @@ class Square:
     @left.setter
     def left(self: Square, owner_ID: int) -> bool | None: 
         self.__left.owner_ID = owner_ID
-        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: self.__square_owner = owner_ID; return True
+        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @right.setter
     def right(self: Square, owner_ID: int) -> bool | None: 
         self.__right.owner_ID = owner_ID
-        if self.__left.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: self.__square_owner = owner_ID; return True
+        if self.__left.owner_ID != -1 and self.__top.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @top.setter
     def top(self: Square, owner_ID: int) -> bool | None: 
         self.__top.owner_ID = owner_ID
-        if self.__right.owner_ID != -1 and self.__left.owner_ID != -1 and self.__down.owner_ID != -1: self.__square_owner = owner_ID; return True
+        if self.__right.owner_ID != -1 and self.__left.owner_ID != -1 and self.__down.owner_ID != -1: 
+            self.__square_owner = owner_ID
     
     @down.setter
     def down(self: Square, owner_ID: int) -> bool | None: 
         self.__down.owner_ID = owner_ID
-        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__left.owner_ID != -1: self.__square_owner = owner_ID; return True
+        if self.__right.owner_ID != -1 and self.__top.owner_ID != -1 and self.__left.owner_ID != -1:
+            self.__square_owner = owner_ID
         
     @square_owner.setter
     def square_owner(self: Square, owner_ID: int) -> None: self.__square_owner = owner_ID

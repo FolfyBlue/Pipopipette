@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import Final
-from Square.Square import Square
+from Class.Square.Square import Square
 
 # <========== Class ==========>
 
@@ -22,9 +22,7 @@ class Pipopipette():
         """
         self.__WIDTH: Final[int] = width
         self.__HEIGHT: Final[int] = height
-        self.__list_square: list[Square] = []
-        
-        for i in range(width * height): self.__list_square.append(Square(i))
+        self.__list_square: list[Square] = [Square(i) for i in range(width * height)]
     
     # <----- getter ----->
     
@@ -78,21 +76,21 @@ class Pipopipette():
         if (square := self.get_square_by_ID(square_ID)) != None:
             match side:
                 case 'l':
-                    square.left.owner_ID = owner_ID
+                    square.left = owner_ID
                     if (neighbor := self.get_square_by_ID(square_ID-1)) != None:
-                        neighbor.right.owner_ID = owner_ID
+                        neighbor.right = owner_ID
                 case 'r':
-                    square.right.owner_ID = owner_ID
+                    square.right = owner_ID
                     if (neighbor := self.get_square_by_ID(square_ID+1)) != None:
-                        neighbor.left.owner_ID = owner_ID
+                        neighbor.left = owner_ID
                 case 't':
-                    square.top.owner_ID = owner_ID
+                    square.top = owner_ID
                     if (neighbor := self.get_square_by_ID(square_ID-self.__HEIGHT)) != None:
-                        neighbor.down.owner_ID = owner_ID
+                        neighbor.down = owner_ID
                 case 'd':
-                    square.down.owner_ID = owner_ID
+                    square.down = owner_ID
                     if (neighbor := self.get_square_by_ID(square_ID+self.__HEIGHT)) != None:
-                        neighbor.top.owner_ID = owner_ID
+                        neighbor.top = owner_ID
             
     # <----- valide_target ----->
     
@@ -110,11 +108,11 @@ class Pipopipette():
         if (square := self.get_square_by_ID(square_ID)) != None:
             match side:
                 case 'l':
-                    return square.left.owner_ID != -1
+                    return square.left.owner_ID == -1
                 case 'r':
-                    return square.right.owner_ID != -1
+                    return square.right.owner_ID == -1
                 case 't':
-                    return square.top.owner_ID != -1
+                    return square.top.owner_ID == -1
                 case 'd':
-                    return square.down.owner_ID != -1
-        return False 
+                    return square.down.owner_ID == -1
+        return False

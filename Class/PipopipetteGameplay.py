@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 from typing import Final
-from Pipopipette import Pipopipette
-from Player.Player import Player
+from Class.Pipopipette import Pipopipette
+from Class.Player.Player import Player
 
 # <========== Class ==========>
 
@@ -49,27 +49,23 @@ class PipopipetteGameplay():
         """
         Will switch to another player.
         """
-        self.__currentPlayerID += 1
-        if self.__currentPlayerID % len(self.__LIST_PLAYER) == 0: self.__currentPlayerID = 0
+        self.__current_player_ID += 1
+        if self.__current_player_ID % len(self.__LIST_PLAYER) == 0: self.__current_player_ID = 0
         
         
     # <----- setPlayerTarget ----->
     
-    def set_player_target(self: PipopipetteGameplay, square_ID: int, side: str) -> bool:
+    def set_player_target(self: PipopipetteGameplay, square_ID: int, side: str) -> None:
         """
         Used to take a Segment of a square
         Args:
             squareID: The Square to edit
             side: Wich side to manage ? 'l'; 'r', 't', or 'd'.
-
-        Returns:
-            Boolean - True if can be taken, False if not
         """
         if self.__pipopipette.valid_target(square_ID, side):
-            if self.__pipopipette.set_side(square_ID, side, self.__current_player_ID) != None:
+            self.__pipopipette.set_side(square_ID ,side, self.current_player_ID)
+            if self.__pipopipette.get_square_by_ID(square_ID).square_owner == self.current_player_ID:
                 self.__LIST_PLAYER[self.__current_player_ID].score += 1  # type: ignore
-                return True
-        return False
     
     # <----- gameOver ----->
     
