@@ -1,3 +1,7 @@
+import json
+import bcrypt
+
+SAVE_FILE_PATH = "../gameData/players.json"
 class Player():  # TODO : Used just to avoid errors on compilation. Delete this when the real Plater class is ready !
     def get_username(self):
         pass
@@ -10,13 +14,6 @@ class Player():  # TODO : Used just to avoid errors on compilation. Delete this 
 
     def get_points(self):
         pass
-
-
-import json
-import bcrypt
-
-SAVE_FILE_PATH = "../gameData/players.json"
-
 
 class SaveSystem():
     """
@@ -33,23 +30,23 @@ class SaveSystem():
         Args:
             player: The Player to save
         """
-        with open(SAVE_FILE_PATH) as json_file:#File loaded
+        with open(SAVE_FILE_PATH) as json_file:  # File loaded
             json_object = json.load(json_file)
             json_file.close()
 
-        new_entry = {}#I create a new entry that will replace the old one
-        new_entry['username'] = "Replace me" # TODO
-        new_entry['password'] = "1234" # TODO : get password and hash it
+        new_entry = {}  # I create a new entry that will replace the old one
+        new_entry['username'] = "Replace me"  # TODO
+        new_entry['password'] = "1234"  # TODO : get password and hash it
         new_entry['id'] = "987123"
         new_entry['points'] = 20
 
-        for i in range(len(json_object)):#Loop to get the right entry for this user
+        for i in range(len(json_object)):  # Loop to get the right entry for this user
             if json_object[i]['username'] == player.get_username():
                 if bcrypt.checkpw(str.encode(player.get_password()), str.encode(json_object[i]['password'])):
                     # Found user to edit
-                    json_object[i] = new_entry#Old entry replaced
+                    json_object[i] = new_entry  # Old entry replaced
 
-        with open(SAVE_FILE_PATH, "w") as file:#The new file with data is written
+        with open(SAVE_FILE_PATH, "w") as file:  # The new file with data is written
             json.dump(json_object, file)
             file.close()
 
@@ -72,7 +69,7 @@ class SaveSystem():
             if element['username'] == username:
                 if bcrypt.checkpw(str.encode(password), str.encode(element['password'])):
                     print("FOUND")
-                    raise Exception("We need to implement a Player class to return a Player here")
+                    raise NotImplementedError("We need to implement a Player class to return a Player here")
                     # TODO : Add Player class and create a player here
                 else:
                     # User found, but wrong password. We don't need to continue looking for the right user
@@ -95,10 +92,12 @@ class SaveSystem():
             json_object = json.load(json_file)
             json_file.close()
 
-        new_entry = {'username': username,
-                    'password': bcrypt.hashpw(str.encode(password), bcrypt.gensalt()).decode("utf-8"),
-                    'id': id,
-                    'points': points}
+        new_entry = {
+            'username': username,
+            'password': bcrypt.hashpw(str.encode(password), bcrypt.gensalt()).decode("utf-8"),
+            'id': id,
+            'points': points
+        }
 
         json_object.append(new_entry)
 
@@ -115,5 +114,5 @@ if __name__ == '__main__':
     # print(bcrypt.checkpw(b'1234', b'$2b$12$Fz6ZG4GIm0jRkN35acYaXeoDMPlPQGcclnChced.W.ivZnI5YWv16'))
 
     #SaveSystem.loadPlayer('test', '1234')
-    #SaveSystem.savePlayer(None)
+    # SaveSystem.savePlayer(None)
     SaveSystem.create_user("TEST1234", "9876", 7326576, 8)
