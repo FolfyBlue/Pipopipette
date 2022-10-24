@@ -76,6 +76,11 @@ class PipopipetteGameplay():
             Boolean - True if game finished, False of not
 
         """
-        for square in self.__pipopipette.list_square:
-            if square.square_owner == -1: return False
+        total_score: int = 0
+    
+        for player in self.LIST_PLAYER:
+            total_score += player.score.value
+            
+        if total_score < self.pipopipette.HEIGHT * self.pipopipette.WIDTH: return False
         return True
+        
