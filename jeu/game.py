@@ -6,6 +6,7 @@ For now, we are just implementing their potential look and functionality.
 
 import pygame
 from jeu.utils.font_manager import FontManager
+from jeu.utils.assets_import import resource_path
 import time
 
 def formatted_score(score: int) -> str:
@@ -42,9 +43,9 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 10)):
     clock: pygame.time.Clock = pygame.time.Clock()
     pygame.display.set_caption("Pipopipette")
 
-    game_font: FontManager = FontManager("jeu/assets/fonts/Truculenta.ttf")
+    game_font: FontManager = FontManager(resource_path("jeu/assets/fonts/Truculenta.ttf"))
 
-    background: pygame.surface.Surface = pygame.image.load("jeu/assets/images/game_background.png")
+    background: pygame.surface.Surface = pygame.image.load(resource_path("jeu/assets/images/game_background.png"))
 
     labels: dict[str, tuple[pygame.surface.Surface, pygame.rect.Rect]] = {}
     start_time_in_seconds: float = time.time()
