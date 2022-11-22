@@ -7,6 +7,7 @@ from jeu.game import game
 from jeu.ui.button import Button
 from jeu.ui.ui import UI
 from jeu.utils.font_manager import FontManager
+from jeu.utils.assets_import import resource_path
 
 
 def main_menu(screen: pygame.surface.Surface):
@@ -19,15 +20,14 @@ def main_menu(screen: pygame.surface.Surface):
 
     pygame.display.set_caption("Menu")
 
-    menu_font: FontManager = FontManager("jeu/assets/fonts/Truculenta.ttf")
+    menu_font: FontManager = FontManager(resource_path("jeu/assets/fonts/Truculenta.ttf"))
 
     def quit():
         pygame.quit()
         sys.exit()
 
     # Initializing on-screen elements #
-    background: pygame.surface.Surface = pygame.image.load(
-        "jeu/assets/images/menu_background.png")
+    background: pygame.surface.Surface = pygame.image.load(resource_path("jeu/assets/images/menu_background.png"))
 
     menu_text: pygame.surface.Surface = menu_font.get_font(
         100).render("MAIN MENU", True, "#EEEEEE")
@@ -35,7 +35,7 @@ def main_menu(screen: pygame.surface.Surface):
 
     play_button = Button(
         screen=screen,
-        image=pygame.image.load("jeu/assets/images/Play Rect.png"),
+        image=pygame.image.load(resource_path("jeu/assets/images/Play Rect.png")),
         position=(640, 250),
         text="PLAY",
         font=menu_font.get_font(75),
@@ -45,7 +45,7 @@ def main_menu(screen: pygame.surface.Surface):
     )
     options_button = Button(
         screen=screen,
-        image=pygame.image.load("jeu/assets/images/Options Rect.png"),
+        image=pygame.image.load(resource_path("jeu/assets/images/Options Rect.png")),
         position=(640, 400),
         text="OPTIONS",
         font=menu_font.get_font(75),
@@ -55,7 +55,7 @@ def main_menu(screen: pygame.surface.Surface):
     )
     quit_button = Button(
         screen=screen,
-        image=pygame.image.load("jeu/assets/images/Quit Rect.png"),
+        image=pygame.image.load(resource_path("jeu/assets/images/Quit Rect.png")),
         position=(640, 550),
         text="QUIT",
         font=menu_font.get_font(75),
@@ -64,7 +64,7 @@ def main_menu(screen: pygame.surface.Surface):
         action=quit
     )
 
-    account_button = Button(screen=screen, image=pygame.image.load("jeu/assets/images/User.png"),
+    account_button = Button(screen=screen, image=pygame.image.load(resource_path("jeu/assets/images/User.png")),
                             position=(1280-75, 75),
                             text=" ",
                             font=menu_font.get_font(75),
