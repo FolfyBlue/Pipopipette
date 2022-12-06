@@ -3,7 +3,7 @@ import sys, os
 
 parentdir = os.path.realpath(os.path.join(os.path.dirname(__file__),os.pardir))
 if parentdir not in sys.path:
-    sys.path.insert(1, parentdir) # insert ../ just after ./
+    sys.path.insert(1, parentdir)
     
 from jeu.engine.Player.Score import Score
 
