@@ -79,7 +79,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 10)):
     started = False
 
     grid_height = 1280-200
-    grid_width = 720-200
+    grid_width = 720-175
     segments_heigh = grid_height//size[0]
     segments_width = grid_width//size[1]
 
@@ -88,20 +88,35 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 10)):
     def update_board():
         board_elements = []
         for i in range(size[0]):
-            x_position: int = segments_heigh*i+segments_heigh
-            segment: Button = Button(
-                screen=screen,
-                image=pygame.image.load(resource_path(
-                    "jeu/assets/images/square.png")),
-                position=(x_position, 200),
-                text="",
-                font=game_font.get_font(75),
-                color="BLACK",
-                hover_color="BLACK",
-                action=lambda: print("click"),
-                enforced_size=(segments_heigh-1, 10)
-            )
-            board_elements.append(segment)
+            for j in range(size[1]):
+                x_position: int = segments_heigh*i+segments_heigh
+                y_position: int = segments_width*j+segments_width
+                x_segment: Button = Button(
+                    screen=screen,
+                    image=pygame.image.load(resource_path(
+                        "jeu/assets/images/square.png")),
+                    position=(x_position, y_position),
+                    text="",
+                    font=game_font.get_font(75),
+                    color="BLACK",
+                    hover_color="BLACK",
+                    action=lambda: print("click"),
+                    enforced_size=(segments_heigh-1, 10)
+                )
+                y_segment: Button = Button(
+                    screen=screen,
+                    image=pygame.image.load(resource_path(
+                        "jeu/assets/images/square.png")),
+                    position=(x_position, y_position),
+                    text="",
+                    font=game_font.get_font(75),
+                    color="BLACK",
+                    hover_color="BLACK",
+                    action=lambda: print("click"),
+                    enforced_size=(10, segments_width-1)
+                )
+                board_elements.append(x_segment)
+                board_elements.append(y_segment)
         return board_elements
 
     board_elements = update_board()
