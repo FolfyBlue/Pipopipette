@@ -80,31 +80,31 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 10)):
 
     grid_height = 1280-200
     grid_width = 720-200
-    segments_heigh_count = grid_height//size[0]
-    segments_width_count = grid_width//size[1]
+    segments_heigh = grid_height//size[0]
+    segments_width = grid_width//size[1]
 
     board_elements: list[UI] = []
 
-    def draw_board():
+    def update_board():
         board_elements = []
-        cur_height = 0
-        for i in range(segments_width_count):
+        for i in range(size[0]):
+            x_position: int = segments_heigh*i+segments_heigh
             segment: Button = Button(
                 screen=screen,
                 image=pygame.image.load(resource_path(
                     "jeu/assets/images/square.png")),
-                position=(250, i*120),
+                position=(x_position, 200),
                 text="",
                 font=game_font.get_font(75),
                 color="BLACK",
                 hover_color="BLACK",
                 action=lambda: print("click"),
-                enforced_size=(100, 50)
+                enforced_size=(segments_heigh-1, 10)
             )
-            print(segment)
             board_elements.append(segment)
+        return board_elements
 
-    draw_board()
+    board_elements = update_board()
     while True:
         if started:
             labels["timer"] = get_timer_label(start_time_in_seconds, game_font)
