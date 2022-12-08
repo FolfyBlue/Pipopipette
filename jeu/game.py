@@ -1,15 +1,11 @@
-"""
-TODO None of this is final, \
-UI Elements are to be moved accordingly with what will be decided in the future; \
-For now, we are just implementing their potential look and functionality.
-"""
+import time
 
 import pygame
-from jeu.utils.font_manager import FontManager
-from jeu.utils.assets_import import resource_path
+
 from jeu.ui.button import Button
 from jeu.ui.ui import UI
-import time
+from jeu.utils.assets_import import resource_path
+from jeu.utils.font_manager import FontManager
 
 
 def formatted_score(score: int) -> str:
@@ -96,8 +92,10 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (15, 5)):
             for j in range(size[1]+1):
                 x_position: int = segments_heigh*i+height_offset//1.75  # type: ignore
                 y_position: int = segments_width*j+width_offset//1.75  # type: ignore
-                filler = pygame.Rect(x_position, y_position, line_width, line_width)
-                filler.center = (x_position-line_width*2.3, y_position-line_width*2.3)  # type: ignore
+                filler = pygame.Rect(x_position, y_position,
+                                     line_width, line_width)
+                filler.center = (x_position-line_width*2.3,  # type: ignore
+                                 y_position-line_width*2.3)
                 fillers.append(filler)
                 if i != size[0]:
                     x_segment: Button = Button(
