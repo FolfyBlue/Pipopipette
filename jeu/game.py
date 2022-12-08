@@ -94,10 +94,10 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (15, 5)):
         fillers: list[pygame.Rect] = []
         for i in range(size[0]+1):
             for j in range(size[1]+1):
-                x_position: int = segments_heigh*i+height_offset//1.75
-                y_position: int = segments_width*j+width_offset//1.75
+                x_position: int = segments_heigh*i+height_offset//1.75  # type: ignore
+                y_position: int = segments_width*j+width_offset//1.75  # type: ignore
                 filler = pygame.Rect(x_position, y_position, line_width, line_width)
-                filler.center = (x_position-line_width*2.3, y_position-line_width*2.3)
+                filler.center = (x_position-line_width*2.3, y_position-line_width*2.3)  # type: ignore
                 fillers.append(filler)
                 if i != size[0]:
                     x_segment: Button = Button(
