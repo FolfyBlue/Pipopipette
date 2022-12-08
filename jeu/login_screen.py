@@ -4,6 +4,8 @@ from jeu.ui.popup import Popup
 from jeu.ui.textbox import Textbox
 from jeu.utils.font_manager import FontManager
 from jeu.utils.assets_import import resource_path
+from SaveSystem.SaveSystem import SaveSystem
+import random
 
 def login_screen(screen: pygame.surface.Surface):
     """Login screen
@@ -26,6 +28,7 @@ def login_screen(screen: pygame.surface.Surface):
         """Action ran when the register button is clicked
         """
         print(f"Register! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
+        SaveSystem.create_user(username_textbox.text, password_textbox.text, random.randint(0, 100000))# TODO : change the way we generate an unique ID
         login_popup.active = False
 
     username_textbox = Textbox(

@@ -2,8 +2,9 @@ from jeu.engine.Player.Player import Player
 
 import json
 import bcrypt
+import os
 
-SAVE_FILE_PATH = "../gameData/players.json"
+SAVE_FILE_PATH = os.path.dirname(__file__)+"/../gameData/players.json"
 
 class SaveSystem():
     """
