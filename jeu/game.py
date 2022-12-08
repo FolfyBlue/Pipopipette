@@ -44,7 +44,7 @@ def get_score_label(score: int, font: FontManager, player1: bool):
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 10)):
+def game(screen: pygame.surface.Surface, size: tuple[int, int] = (15, 5)):
     """Game screen
 
     Args:
@@ -78,48 +78,58 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 10)):
 
     started = False
 
-    grid_height = 1280-200
-    grid_width = 720-175
+    line_width = 9
+    height_offset = 250
+    width_offset = 200
+    grid_height = 1280-width_offset
+    grid_width = 720-height_offset
     segments_heigh = grid_height//size[0]
     segments_width = grid_width//size[1]
 
     board_elements: list[UI] = []
+    fillers: list[pygame.Rect] = []
 
     def update_board():
         board_elements = []
-        for i in range(size[0]):
-            for j in range(size[1]):
-                x_position: int = segments_heigh*i+segments_heigh
-                y_position: int = segments_width*j+segments_width
-                x_segment: Button = Button(
-                    screen=screen,
-                    image=pygame.image.load(resource_path(
-                        "jeu/assets/images/square.png")),
-                    position=(x_position, y_position),
-                    text="",
-                    font=game_font.get_font(75),
-                    color="BLACK",
-                    hover_color="BLACK",
-                    action=lambda: print("click"),
-                    enforced_size=(segments_heigh-1, 10)
-                )
-                y_segment: Button = Button(
-                    screen=screen,
-                    image=pygame.image.load(resource_path(
-                        "jeu/assets/images/square.png")),
-                    position=(x_position, y_position),
-                    text="",
-                    font=game_font.get_font(75),
-                    color="BLACK",
-                    hover_color="BLACK",
-                    action=lambda: print("click"),
-                    enforced_size=(10, segments_width-1)
-                )
-                board_elements.append(x_segment)
-                board_elements.append(y_segment)
-        return board_elements
+        fillers: list[pygame.Rect] = []
+        for i in range(size[0]+1):
+            for j in range(size[1]+1):
+                x_position: int = segments_heigh*i+height_offset//1.75
+                y_position: int = segments_width*j+width_offset//1.75
+                filler = pygame.Rect(x_position, y_position, line_width, line_width)
+                filler.center = (x_position-line_width*2.3, y_position-line_width*2.3)
+                fillers.append(filler)
+                if i != size[0]:
+                    x_segment: Button = Button(
+                        screen=screen,
+                        image=pygame.image.load(resource_path(
+                            "jeu/assets/images/square.png")),
+                        position=(x_position+line_width, y_position),
+                        text="",
+                        font=game_font.get_font(10),
+                        color="WHITE",
+                        hover_color="BLACK",
+                        action=lambda: print("clickH"),
+                        enforced_size=(segments_heigh-line_width, line_width)
+                    )
+                    board_elements.append(x_segment)
+                if j != size[1]:
+                    y_segment: Button = Button(
+                        screen=screen,
+                        image=pygame.image.load(resource_path(
+                            "jeu/assets/images/square.png")),
+                        position=(x_position, y_position+line_width),
+                        text="",
+                        font=game_font.get_font(10),
+                        color="WHITE",
+                        hover_color="BLACK",
+                        action=lambda: print("clickW"),
+                        enforced_size=(line_width, segments_width-line_width)
+                    )
+                    board_elements.append(y_segment)
+        return board_elements, fillers
 
-    board_elements = update_board()
+    board_elements, fillers = update_board()
     while True:
         if started:
             labels["timer"] = get_timer_label(start_time_in_seconds, game_font)
@@ -142,6 +152,8 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 10)):
                         start_time_in_seconds = time.time()
                     # Clear FPS counter from console
                     print("            ", end="\r")
+        for filler in fillers:
+            pygame.draw.rect(screen, "#EEEEEE", filler)
         for element in board_elements:
             element.update_render()
         pygame.display.update()
