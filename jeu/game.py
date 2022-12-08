@@ -7,6 +7,11 @@ from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
 
+LINE_WIDTH = 9
+HEIGHT_OFFSET = 250
+WIDTH_OFFSET = 200
+PLAYER1_COLOR = "#0000FF"
+PLAYER2_COLOR = "#FF0000"
 
 def formatted_score(score: int) -> str:
     return f"{score:03d}"
@@ -29,10 +34,10 @@ def get_timer_label(start_time_in_seconds: float, font: FontManager):
 def get_score_label(score: int, font: FontManager, player1: bool):
     if player1:
         xpos: int = 100
-        color: str = "#0000FF"
+        color: str = PLAYER1_COLOR
     else:
         xpos: int = 1280-100
-        color: str = "#FF0000"
+        color: str = PLAYER2_COLOR
     player_score_label: pygame.surface.Surface = font.get_font(
         75).render(f"{score:03d}", True, color)
     player_score_rect: pygame.rect.Rect = player_score_label.get_rect(
@@ -40,7 +45,7 @@ def get_score_label(score: int, font: FontManager, player1: bool):
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (15, 5)):
+def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5)):
     """Game screen
 
     Args:
@@ -74,12 +79,9 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (15, 5)):
 
     started = False
 
-    line_width = 9
-    height_offset = 250
-    width_offset = 200
-    grid_height = 1280-width_offset
-    grid_width = 720-height_offset
-    segments_heigh = grid_height//size[0]
+    grid_height = 1280-WIDTH_OFFSET
+    grid_width = 720-HEIGHT_OFFSET
+    segments_height = grid_height//size[0]
     segments_width = grid_width//size[1]
 
     board_elements: list[UI] = []
@@ -90,25 +92,25 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (15, 5)):
         fillers: list[pygame.Rect] = []
         for i in range(size[0]+1):
             for j in range(size[1]+1):
-                x_position: int = segments_heigh*i+height_offset//1.75  # type: ignore
-                y_position: int = segments_width*j+width_offset//1.75  # type: ignore
+                x_position: int = segments_height*i+HEIGHT_OFFSET//1.75-22  # type: ignore
+                y_position: int = segments_width*j+WIDTH_OFFSET//1.75  # type: ignore
                 filler = pygame.Rect(x_position, y_position,
-                                     line_width, line_width)
-                filler.center = (x_position-line_width*2.3,  # type: ignore
-                                 y_position-line_width*2.3)
+                                     LINE_WIDTH, LINE_WIDTH)
+                filler.center = (x_position-LINE_WIDTH*2.3,  # type: ignore
+                                 y_position-LINE_WIDTH*2.3)
                 fillers.append(filler)
                 if i != size[0]:
                     x_segment: Button = Button(
                         screen=screen,
                         image=pygame.image.load(resource_path(
                             "jeu/assets/images/square.png")),
-                        position=(x_position+line_width, y_position),
+                        position=(x_position+LINE_WIDTH, y_position),
                         text="",
                         font=game_font.get_font(10),
                         color="WHITE",
                         hover_color="BLACK",
                         action=lambda: print("clickH"),
-                        enforced_size=(segments_heigh-line_width, line_width)
+                        enforced_size=(segments_height-LINE_WIDTH, LINE_WIDTH)
                     )
                     board_elements.append(x_segment)
                 if j != size[1]:
@@ -116,13 +118,13 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (15, 5)):
                         screen=screen,
                         image=pygame.image.load(resource_path(
                             "jeu/assets/images/square.png")),
-                        position=(x_position, y_position+line_width),
+                        position=(x_position, y_position+LINE_WIDTH),
                         text="",
                         font=game_font.get_font(10),
                         color="WHITE",
                         hover_color="BLACK",
                         action=lambda: print("clickW"),
-                        enforced_size=(line_width, segments_width-line_width)
+                        enforced_size=(LINE_WIDTH, segments_width-LINE_WIDTH)
                     )
                     board_elements.append(y_segment)
         return board_elements, fillers
