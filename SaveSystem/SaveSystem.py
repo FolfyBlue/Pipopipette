@@ -2,20 +2,9 @@ from jeu.engine.Player.Player import Player
 
 import json
 import bcrypt
+import os
 
-SAVE_FILE_PATH = "../gameData/players.json"
-class Player():  # TODO : Used just to avoid errors on compilation. Delete this when the real Plater class is ready !
-    def get_username(self):
-        pass
-
-    def get_password(self):
-        pass
-
-    def get_id(self):
-        pass
-
-    def get_points(self):
-        pass
+SAVE_FILE_PATH = os.path.dirname(__file__)+"/../gameData/players.json"
 
 class SaveSystem():
     """
