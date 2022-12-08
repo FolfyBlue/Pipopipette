@@ -6,6 +6,7 @@ from jeu.ui.button import Button
 from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
+from jeu.engine.Pipopipette import Pipopipette
 
 LINE_WIDTH = 9
 HEIGHT_OFFSET = 250
@@ -45,12 +46,17 @@ def get_score_label(score: int, font: FontManager, player1: bool):
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5)):
+def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
     """Game screen
 
     Args:
         screen (pygame.surface.Surface): Screen to display the game on
     """
+
+    pipo: Pipopipette = Pipopipette(*size)
+
+    [print(str(x)) for x in pipo.list_square]
+
     clock: pygame.time.Clock = pygame.time.Clock()
     pygame.display.set_caption("Pipopipette")
 
@@ -87,6 +93,9 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5)):
     board_elements: list[UI] = []
     fillers: list[pygame.Rect] = []
 
+    def get_segment_id(i: int, j: int):
+        return i+size[0]*j
+
     def update_board():
         board_elements = []
         fillers: list[pygame.Rect] = []
@@ -100,6 +109,9 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5)):
                                  y_position-LINE_WIDTH*2.3)
                 fillers.append(filler)
                 if i != size[0]:
+                    def segment_handler(id):
+                        print("Seg ID: ",id)
+
                     x_segment: Button = Button(
                         screen=screen,
                         image=pygame.image.load(resource_path(
@@ -109,11 +121,13 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5)):
                         font=game_font.get_font(10),
                         color="WHITE",
                         hover_color="BLACK",
-                        action=lambda: print("clickH"),
+                        action=lambda i=i, j=j: segment_handler(get_segment_id(i, j)),
                         enforced_size=(segments_height-LINE_WIDTH, LINE_WIDTH)
                     )
                     board_elements.append(x_segment)
                 if j != size[1]:
+                    # def segment_handler():
+                    #     pass
                     y_segment: Button = Button(
                         screen=screen,
                         image=pygame.image.load(resource_path(
