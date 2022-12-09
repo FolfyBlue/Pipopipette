@@ -13,6 +13,10 @@ HEIGHT_OFFSET = 250
 WIDTH_OFFSET = 200
 PLAYER1_COLOR = "#0000FF"
 PLAYER2_COLOR = "#FF0000"
+PLAYER_COUNT = 2
+
+current_player = 0
+
 
 def formatted_score(score: int) -> str:
     return f"{score:03d}"
@@ -55,8 +59,6 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
 
     pipo: Pipopipette = Pipopipette(*size)
 
-    [print(str(x)) for x in pipo.list_square]
-
     clock: pygame.time.Clock = pygame.time.Clock()
     pygame.display.set_caption("Pipopipette")
 
@@ -93,8 +95,9 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
     board_elements: list[UI] = []
     fillers: list[pygame.Rect] = []
 
-    def get_segment_id(i: int, j: int):
-        return i+size[0]*j
+    def switch_players():
+        global current_player
+        current_player += 1 % PLAYER_COUNT
 
     def update_board():
         board_elements = []
@@ -109,8 +112,17 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
                                  y_position-LINE_WIDTH*2.3)
                 fillers.append(filler)
                 if i != size[0]:
-                    def segment_handler(id):
-                        print("Seg ID: ",id)
+                    def vertical_segment_handler(i: int, j: int):
+                        square_id = i+size[0]*j
+                        side: str = 't'
+                        if square_id > len(pipo.list_square)-1:
+                            side = 'd'
+                            square_id = square_id-size[0]
+                        if pipo.valid_target(square_id, side):
+                            pipo.set_side(square_id, side, current_player)
+                            switch_players()
+
+                        print(f"Square {square_id}, side {side}")
 
                     x_segment: Button = Button(
                         screen=screen,
@@ -121,13 +133,23 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
                         font=game_font.get_font(10),
                         color="WHITE",
                         hover_color="BLACK",
-                        action=lambda i=i, j=j: segment_handler(get_segment_id(i, j)),
+                        action=lambda i=i, j=j: vertical_segment_handler(i, j),
                         enforced_size=(segments_height-LINE_WIDTH, LINE_WIDTH)
                     )
                     board_elements.append(x_segment)
                 if j != size[1]:
-                    # def segment_handler():
-                    #     pass
+                    def horizontal_segment_handler(i: int, j: int):
+                        newi: int = i-(i//size[0])
+                        side: str = 'l'
+                        print(i, newi)
+                        if i % size[0] == 0 and i != newi:
+                            side = "r"
+                        square_id = newi+size[0]*j
+                        if pipo.valid_target(square_id, side):
+                            pipo.set_side(square_id, side, current_player)
+                            switch_players()
+
+                        print(f"Square {square_id}, side {side}")
                     y_segment: Button = Button(
                         screen=screen,
                         image=pygame.image.load(resource_path(
@@ -137,7 +159,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
                         font=game_font.get_font(10),
                         color="WHITE",
                         hover_color="BLACK",
-                        action=lambda: print("clickW"),
+                        action=lambda i=i, j=j: horizontal_segment_handler(i, j),
                         enforced_size=(LINE_WIDTH, segments_width-LINE_WIDTH)
                     )
                     board_elements.append(y_segment)
