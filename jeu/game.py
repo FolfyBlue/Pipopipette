@@ -96,9 +96,11 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
 
     board_elements: list[UI] = []
     fillers: list[pygame.Rect] = []
-    owned_segments: dict[tuple[int, int], int]
+    owned_segments: dict[tuple[int, int], int] = {}
 
     def segment_handler(square_id: int, side: str, i: int, j: int):
+        print(square_id, side, i, j)
+        nonlocal owned_segments
         if pipo.valid_target(square_id, side):
             pipo.set_side(square_id, side, gameplay.current_player_ID)
             if (segment := pipo.get_side(square_id, side, gameplay.current_player_ID)):
@@ -144,7 +146,6 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
                     def horizontal_segment_handler(i: int, j: int):
                         newi: int = i-(i//size[0])
                         side: str = 'l'
-                        print(i, newi)
                         if i % size[0] == 0 and i != newi:
                             side = "r"
                         square_id = newi+size[0]*j
