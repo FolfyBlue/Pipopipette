@@ -2,11 +2,12 @@ import time
 
 import pygame
 
+from jeu.engine.Pipopipette import Pipopipette
+from jeu.engine.PipopipetteGameplay import PipopipetteGameplay
 from jeu.ui.button import Button
 from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
-from jeu.engine.Pipopipette import Pipopipette
 
 LINE_WIDTH = 9
 HEIGHT_OFFSET = 250
@@ -14,8 +15,6 @@ WIDTH_OFFSET = 200
 PLAYER1_COLOR = "#0000FF"
 PLAYER2_COLOR = "#FF0000"
 PLAYER_COUNT = 2
-
-current_player = 0
 
 
 def formatted_score(score: int) -> str:
@@ -50,14 +49,17 @@ def get_score_label(score: int, font: FontManager, player1: bool):
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
+def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), players: tuple[str, str]=("Playername00", "Playername01")):
     """Game screen
 
     Args:
         screen (pygame.surface.Surface): Screen to display the game on
+        size (tuple[int, int]): Size of the grid to play on
+        players (tuple[str, str]): List of usernames for the players
     """
 
     pipo: Pipopipette = Pipopipette(*size)
+    gameplay: PipopipetteGameplay = PipopipetteGameplay(list_player_name=list(players), pipopipette=pipo)
 
     clock: pygame.time.Clock = pygame.time.Clock()
     pygame.display.set_caption("Pipopipette")
@@ -94,13 +96,17 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
 
     board_elements: list[UI] = []
     fillers: list[pygame.Rect] = []
+    owned_segments: dict[tuple[int, int], int]
 
-    def switch_players():
-        global current_player
-        current_player += 1 % PLAYER_COUNT
+    def segment_handler(square_id: int, side: str, i: int, j: int):
+        if pipo.valid_target(square_id, side):
+            pipo.set_side(square_id, side, gameplay.current_player_ID)
+            if (segment := pipo.get_side(square_id, side, gameplay.current_player_ID)):
+                owned_segments[(i, j)] = segment.owner_ID
+            gameplay.next_player()
 
     def update_board():
-        board_elements = []
+        board_elements: list[UI] = []
         fillers: list[pygame.Rect] = []
         for i in range(size[0]+1):
             for j in range(size[1]+1):
@@ -118,11 +124,8 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
                         if square_id > len(pipo.list_square)-1:
                             side = 'd'
                             square_id = square_id-size[0]
-                        if pipo.valid_target(square_id, side):
-                            pipo.set_side(square_id, side, current_player)
-                            switch_players()
 
-                        print(f"Square {square_id}, side {side}")
+                        segment_handler(square_id, side, i, j)         
 
                     x_segment: Button = Button(
                         screen=screen,
@@ -145,11 +148,9 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5)):
                         if i % size[0] == 0 and i != newi:
                             side = "r"
                         square_id = newi+size[0]*j
-                        if pipo.valid_target(square_id, side):
-                            pipo.set_side(square_id, side, current_player)
-                            switch_players()
 
-                        print(f"Square {square_id}, side {side}")
+                        segment_handler(square_id, side, i, j)
+                        
                     y_segment: Button = Button(
                         screen=screen,
                         image=pygame.image.load(resource_path(
