@@ -3,6 +3,10 @@
 from __future__ import annotations
 from typing import Final
 from jeu.engine.Square.Square import Square
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from jeu.engine.Square.Segment import Segment
 
 # <========== Class ==========>
 
@@ -91,7 +95,27 @@ class Pipopipette():
                     square.down = owner_ID
                     if (neighbor := self.get_square_by_ID(square_ID+self.__HEIGHT)) != None:
                         neighbor.top = owner_ID
-            
+
+    def get_side(self: Pipopipette, square_ID: int, side: str, owner_ID: int) ->  Segment|None:
+        """Gets the owner of a side.
+        
+        Args:
+            square_ID (int): ID of the Squre to edit.
+            side (str): 'l'; 'r', 't', or 'd'. Side to edit.
+            owner_ID (int): ID of the player who placed this side
+
+        """
+        if (square := self.get_square_by_ID(square_ID)) != None:
+            match side:
+                case 'l':
+                    return square.left
+                case 'r':
+                    return square.right
+                case 't':
+                    return square.top
+                case 'd':
+                    return square.down
+
     # <----- valide_target ----->
     
     def valid_target(self: Pipopipette, square_ID: int, side: str) -> bool:
