@@ -66,6 +66,27 @@ class SaveSystem():
         return None  # Don't found this user
 
     @staticmethod
+    def is_login_already_taken(username: str) -> bool:
+        """
+        Check if a login is still available
+        Args:
+            username: The username of this user
+
+        Returns: True of False. False = Login can be registered
+
+        """
+        with open(SAVE_FILE_PATH) as json_file:
+            json_object = json.load(json_file)
+            json_file.close()
+
+        taken = False
+
+        for element in json_object:
+            if element['username'] == username:
+                taken = True
+        return taken  # Don't found this username
+
+    @staticmethod
     def create_user(username: str, password: str, id: int, points: int = 0) -> Player:
         """
         Register a new user in the save system
