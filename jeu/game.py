@@ -12,8 +12,9 @@ from jeu.utils.font_manager import FontManager
 LINE_WIDTH = 9
 HEIGHT_OFFSET = 250
 WIDTH_OFFSET = 200
-PLAYER1_COLOR = "#0000FF"
-PLAYER2_COLOR = "#FF0000"
+PLAYER1_COLOR = "blue"
+PLAYER2_COLOR = "red"
+PLAYER_COLORS = (PLAYER1_COLOR, PLAYER2_COLOR)
 PLAYER_COUNT = 2
 
 
@@ -96,7 +97,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
 
     board_elements: list[UI] = []
     fillers: list[pygame.Rect] = []
-    owned_segments: dict[tuple[int, int], int] = {}
+    owned_segments: dict[tuple[int, int, str], int] = {}
 
     def segment_handler(square_id: int, side: str, i: int, j: int):
         print(square_id, side, i, j)
@@ -104,7 +105,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
         if pipo.valid_target(square_id, side):
             pipo.set_side(square_id, side, gameplay.current_player_ID)
             if (segment := pipo.get_side(square_id, side, gameplay.current_player_ID)):
-                owned_segments[(i, j)] = segment.owner_ID
+                owned_segments[(i, j, side)] = segment.owner_ID
             gameplay.next_player()
 
     def update_board():
@@ -119,7 +120,14 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
                 filler.center = (x_position-LINE_WIDTH*2.3,  # type: ignore
                                  y_position-LINE_WIDTH*2.3)
                 fillers.append(filler)
+                
                 if i != size[0]:
+                    if (i, j, 't') in owned_segments:
+                        color: str = PLAYER_COLORS[owned_segments[(i, j,'t')]]
+                    elif (i, j, 'd') in owned_segments:
+                        color: str = PLAYER_COLORS[owned_segments[(i, j,'d')]]
+                    else:
+                        color: str = "white"
                     def vertical_segment_handler(i: int, j: int):
                         square_id = i+size[0]*j
                         side: str = 't'
@@ -132,7 +140,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
                     x_segment: Button = Button(
                         screen=screen,
                         image=pygame.image.load(resource_path(
-                            "jeu/assets/images/square.png")),
+                            f"jeu/assets/images/{color}.png")),
                         position=(x_position+LINE_WIDTH, y_position),
                         text="",
                         font=game_font.get_font(10),
@@ -143,6 +151,12 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
                     )
                     board_elements.append(x_segment)
                 if j != size[1]:
+                    if (i, j, 'l') in owned_segments:
+                        color: str = PLAYER_COLORS[owned_segments[(i, j,'l')]]
+                    elif (i, j, 'r') in owned_segments:
+                        color: str = PLAYER_COLORS[owned_segments[(i, j,'r')]]
+                    else:
+                        color: str = "white"
                     def horizontal_segment_handler(i: int, j: int):
                         newi: int = i-(i//size[0])
                         side: str = 'l'
@@ -155,7 +169,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
                     y_segment: Button = Button(
                         screen=screen,
                         image=pygame.image.load(resource_path(
-                            "jeu/assets/images/square.png")),
+                            f"jeu/assets/images/{color}.png")),
                         position=(x_position, y_position+LINE_WIDTH),
                         text="",
                         font=game_font.get_font(10),
@@ -170,6 +184,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
     board_elements, fillers = update_board()
     while True:
         if started:
+            board_elements, fillers = update_board()
             labels["timer"] = get_timer_label(start_time_in_seconds, game_font)
             labels["player1_score"] = get_score_label(0, game_font, True)
             labels["player2_score"] = get_score_label(5, game_font, False)
