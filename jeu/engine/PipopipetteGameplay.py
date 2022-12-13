@@ -64,9 +64,14 @@ class PipopipetteGameplay():
         """
         if self.__pipopipette.valid_target(square_ID, side):
             self.__pipopipette.set_side(square_ID ,side, self.current_player_ID)
-            if (square := self.__pipopipette.get_square_by_ID(square_ID)) and (square.square_owner == self.current_player_ID):
-                self.__LIST_PLAYER[self.__current_player_ID].score += 1  # type: ignore
     
+    def get_score(self: PipopipetteGameplay) -> list[int]:
+        result: list[int] = [0]*len(self.__LIST_PLAYER)
+        for square in self.__pipopipette.list_square:
+            if square.square_owner >= 0:
+                result[square.square_owner] += 1
+        return result
+
     # <----- gameOver ----->
     
     def game_over(self: PipopipetteGameplay) -> bool:
@@ -76,10 +81,7 @@ class PipopipetteGameplay():
             Boolean - True if game finished, False of not
 
         """
-        total_score: int = 0
-    
-        for player in self.LIST_PLAYER:
-            total_score += player.score.value
+        total_score: int = sum(self.get_score())
             
         if total_score < self.pipopipette.HEIGHT * self.pipopipette.WIDTH: return False
         return True
