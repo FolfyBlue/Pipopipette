@@ -26,14 +26,20 @@ def login_screen(screen: pygame.surface.Surface):
         if(player):
             # Send this player to game
             login_popup.active = False
-        # else : Incorrect password
+        else:
+            # Error : Wrong login/password
+            pass
 
     def register_handler():
         """Action ran when the register button is clicked
         """
         print(f"Register! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
-        SaveSystem.create_user(username_textbox.text, password_textbox.text, random.randint(0, 100000))# TODO : change the way we generate an unique ID
-        login_popup.active = False
+        if(not SaveSystem.is_login_already_taken(username_textbox.text)):
+         SaveSystem.create_user(username_textbox.text, password_textbox.text, random.randint(0, 100000))# TODO : change the way we generate an unique ID
+         login_popup.active = False
+        else:
+            # Error : Login already registered !
+            pass
 
     username_textbox = Textbox(
         screen=login_popup.surface,
