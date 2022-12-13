@@ -102,11 +102,12 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
     def segment_handler(square_id: int, side: str, i: int, j: int):
         print(square_id, side, i, j)
         nonlocal owned_segments
-        if pipo.valid_target(square_id, side):
-            pipo.set_side(square_id, side, gameplay.current_player_ID)
-            if (segment := pipo.get_side(square_id, side, gameplay.current_player_ID)):
-                owned_segments[(i, j, side)] = segment.owner_ID
+        if gameplay.pipopipette.valid_target(square_id, side):
+            gameplay.set_player_target(square_id, side)
+            owned_segments[(i, j, side)] = gameplay.current_player_ID
             gameplay.next_player()
+        else:
+            print(square_id, side, (i, j), "is not a valid target!")
 
     def update_board():
         board_elements: list[UI] = []
@@ -120,7 +121,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
                 filler.center = (x_position-LINE_WIDTH*2.3,  # type: ignore
                                  y_position-LINE_WIDTH*2.3)
                 fillers.append(filler)
-                
+
                 if i != size[0]:
                     if (i, j, 't') in owned_segments:
                         color: str = PLAYER_COLORS[owned_segments[(i, j,'t')]]
@@ -184,10 +185,12 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
     board_elements, fillers = update_board()
     while True:
         if started:
+
             board_elements, fillers = update_board()
             labels["timer"] = get_timer_label(start_time_in_seconds, game_font)
-            labels["player1_score"] = get_score_label(0, game_font, True)
-            labels["player2_score"] = get_score_label(5, game_font, False)
+            score: list[int] = gameplay.get_score()
+            labels["player1_score"] = get_score_label(score[0], game_font, True)
+            labels["player2_score"] = get_score_label(score[1], game_font, False)
         print(int(clock.get_fps()), end=" FPS    \r")
         screen.blit(background, (0, 0))
         for surface, rect in labels.values():

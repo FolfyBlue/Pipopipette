@@ -81,19 +81,20 @@ class Pipopipette():
             match side:
                 case 'l':
                     square.left = owner_ID
-                    if (neighbor := self.get_square_by_ID(square_ID-1)) != None:
+                    if ((neighbor := self.get_square_by_ID(square_ID-1)) != None and square_ID%self.__WIDTH):
+                        print("set R", self.__WIDTH, neighbor.ID, neighbor.ID%self.__WIDTH)
                         neighbor.right = owner_ID
                 case 'r':
                     square.right = owner_ID
-                    if (neighbor := self.get_square_by_ID(square_ID+1)) != None:
+                    if ((neighbor := self.get_square_by_ID(square_ID+1)) != None and neighbor.ID%(self.__WIDTH)):
                         neighbor.left = owner_ID
                 case 't':
                     square.top = owner_ID
-                    if (neighbor := self.get_square_by_ID(square_ID-self.__HEIGHT)) != None:
+                    if (neighbor := self.get_square_by_ID(square_ID-self.__WIDTH)) != None:
                         neighbor.down = owner_ID
                 case 'd':
                     square.down = owner_ID
-                    if (neighbor := self.get_square_by_ID(square_ID+self.__HEIGHT)) != None:
+                    if (neighbor := self.get_square_by_ID(square_ID+self.__WIDTH)) != None:
                         neighbor.top = owner_ID
 
     def get_side(self: Pipopipette, square_ID: int, side: str, owner_ID: int) ->  Segment|None:
