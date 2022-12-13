@@ -22,7 +22,11 @@ def login_screen(screen: pygame.surface.Surface):
         """Action ran when the login button is clicked
         """
         print(f"Login! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
-        login_popup.active = False
+        player = SaveSystem.load_player(username_textbox.text, password_textbox.text) # Contain a Player or None
+        if(player):
+            # Send this player to game
+            login_popup.active = False
+        # else : Incorrect password
 
     def register_handler():
         """Action ran when the register button is clicked
