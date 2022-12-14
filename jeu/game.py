@@ -103,10 +103,14 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
         print(square_id, side, i, j)
         nonlocal owned_segments
         if gameplay.pipopipette.valid_target(square_id, side):
+            old_score: list[int] = gameplay.get_score()
             gameplay.set_player_target(square_id, side)
             owned_segments[(i, j, side)] = gameplay.current_player_ID
-            gameplay.next_player()
+            new_score: list[int] = gameplay.get_score()
+            if old_score[gameplay.current_player_ID] >= new_score[gameplay.current_player_ID]:
+                gameplay.next_player()
         else:
+            # Screen shake / Red tint?
             print(square_id, side, (i, j), "is not a valid target!")
 
     def update_board():

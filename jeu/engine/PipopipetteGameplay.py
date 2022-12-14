@@ -63,7 +63,7 @@ class PipopipetteGameplay():
             side: Wich side to manage ? 'l'; 'r', 't', or 'd'.
         """
         if self.__pipopipette.valid_target(square_ID, side):
-            self.__pipopipette.set_side(square_ID ,side, self.current_player_ID)
+            self.__pipopipette.set_side(square_ID, side, self.current_player_ID)
     
     def get_score(self: PipopipetteGameplay) -> list[int]:
         result: list[int] = [0]*len(self.__LIST_PLAYER)
