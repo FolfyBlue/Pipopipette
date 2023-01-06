@@ -33,10 +33,14 @@ class Button(UI):
         self.action = action
         self.enforced_size = enforced_size
         self.detection_offset = detection_offset
-        if not self.image: self.image = self.text_render
-        if self.enforced_size:  self.image = pygame.transform.scale(self.image, self.enforced_size)
-        self.text_rect = self.text_render.get_rect(center = self.position)
-        self.rect = self.image.get_rect(center = self.position)
+        if not self.image:
+            self.image = self.text_render
+        self.rect = self.image.get_rect(center=self.position)
+        if self.enforced_size:
+            self.rect.width = self.enforced_size[0]
+            self.rect.height =  self.enforced_size[1]
+            self.image = pygame.transform.scale(self.image, self.enforced_size)
+        self.text_rect = self.text_render.get_rect(center=self.position)
 
     def update_render(self: Button) -> None:
         """Updates the button's render
