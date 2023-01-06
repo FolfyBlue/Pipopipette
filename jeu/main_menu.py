@@ -5,6 +5,7 @@ from jeu.login_screen import login_screen
 from jeu.options_screen import options_screen
 from jeu.game import game
 from jeu.ui.button import Button
+from jeu.ui.popup import Popup
 from jeu.ui.ui import UI
 from jeu.utils.font_manager import FontManager
 from jeu.utils.assets_import import resource_path
@@ -26,6 +27,63 @@ def main_menu(screen: pygame.surface.Surface):
         pygame.quit()
         sys.exit()
 
+    def play_button_handler(screen): 
+
+        """
+        Popup:
+        +-------------------------+
+        |          Size           |
+        |   (   Custom Size   )   |
+        | [ 3x3 ] [ 5x5 ] [ 7x7 ] |
+        +-------------------------+
+        """
+        # 3x3, 5x5, 7x7
+        size_popup = Popup(
+            screen=screen,
+            title="Size",
+            size=(1280//2, 720//3),
+            color="#0575BB"
+        )
+
+        size_popup_3x3_button = Button(
+            screen=size_popup.surface,
+            image=None,
+            position=(size_popup.surface.get_size()[0]//2*0.5, size_popup.surface.get_size()[1]//1.5),
+            text="3x3",
+            font=menu_font.get_font(56),
+            color="white",
+            hover_color="black",
+            action = lambda: game(screen, size=(3, 3))
+        )
+
+        size_popup_5x5_button = Button(
+            screen=size_popup.surface,
+            image=None,
+            position=(size_popup.surface.get_size()[0]//2, size_popup.surface.get_size()[1]//1.5),
+            text="5x5",
+            font=menu_font.get_font(56),
+            color="white",
+            hover_color="black",
+            action = lambda: game(screen, size=(5, 5))
+        )
+
+        size_popup_7x7_button = Button(
+            screen=size_popup.surface,
+            image=None,
+            position=(size_popup.surface.get_size()[0]//2*1.5, size_popup.surface.get_size()[1]//1.5),
+            text="7x7",
+            font=menu_font.get_font(56),
+            color="white",
+            hover_color="black",
+            action = lambda: game(screen, size=(7, 7))
+        )
+
+        size_popup.add_ui_element(size_popup_3x3_button)
+        size_popup.add_ui_element(size_popup_5x5_button)
+        size_popup.add_ui_element(size_popup_7x7_button)
+
+        size_popup.run()
+
     # Initializing on-screen elements #
     background: pygame.surface.Surface = pygame.image.load(resource_path("jeu/assets/images/menu_background.png"))
 
@@ -41,7 +99,7 @@ def main_menu(screen: pygame.surface.Surface):
         font=menu_font.get_font(75),
         color="#FFFFFF",
         hover_color="#d7fcd4",
-        action=lambda: game(screen)
+        action=lambda: play_button_handler(screen)
     )
     options_button = Button(
         screen=screen,
