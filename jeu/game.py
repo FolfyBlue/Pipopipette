@@ -8,6 +8,7 @@ from jeu.ui.button import Button
 from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
+from jeu.ui.popup import Popup
 
 LINE_WIDTH = 9
 HEIGHT_OFFSET = 250
@@ -50,7 +51,7 @@ def get_score_label(score: int, font: FontManager, player1: bool):
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), players: tuple[str, str]=("Playername00", "Playername01")):
+def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players: tuple[str, str]=("Playername00", "Playername01")):
     """Game screen
 
     Args:
@@ -81,6 +82,30 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
         33).render("Playername02", True, "#EEEEEE")
     player2_rect: pygame.rect.Rect = player2_label.get_rect(
         center=(1280-100, 593))
+    
+    end_popup = Popup(
+        screen=screen,
+        title="Game Over",
+        size=(1280//1.9, 720//1.5),
+        color="#0575BB"
+    )
+
+    def restart_button_handler():
+        end_popup.active = False
+        game(screen, size)
+
+    end_popup_restart_button = Button(
+        screen=end_popup.surface,
+        image=None,
+        position=(end_popup.surface.get_size()[0]//2, end_popup.surface.get_size()[1]//1.2),
+        text="Try Again",
+        font=game_font.get_font(48),
+        color="white",
+        hover_color="black",
+        action = restart_button_handler,
+    )
+
+    end_popup.add_ui_element(end_popup_restart_button)
 
     labels["timer"] = get_timer_label(time.time(), game_font)
     labels["player1"] = (player1_label, player1_rect)
@@ -187,12 +212,12 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
         return board_elements, fillers
 
     board_elements, fillers = update_board()
+    end_update_counter: int = 0
     while True:
         if started:
-
+            score: list[int] = gameplay.get_score()
             board_elements, fillers = update_board()
             labels["timer"] = get_timer_label(start_time_in_seconds, game_font)
-            score: list[int] = gameplay.get_score()
             labels["player1_score"] = get_score_label(score[0], game_font, True)
             labels["player2_score"] = get_score_label(score[1], game_font, False)
         print(int(clock.get_fps()), end=" FPS    \r")
@@ -218,3 +243,25 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (10, 5), player
             element.update_render()
         pygame.display.update()
         clock.tick()
+        if started:
+            if gameplay.game_over():
+                end_update_counter += 1
+            if end_update_counter == 10:
+                score: list[int] = gameplay.get_score()
+                player1_score_label: pygame.surface.Surface = game_font.get_font(75).render(f"{score[0]:03d}", True, PLAYER1_COLOR)
+                player2_score_label: pygame.surface.Surface = game_font.get_font(75).render(f"{score[1]:03d}", True, PLAYER2_COLOR)
+                player1_score_rect: pygame.rect.Rect = player1_score_label.get_rect(center=(end_popup.surface.get_size()[0]//2*0.5, end_popup.surface.get_size()[1]//2*1.3))
+                player2_score_rect: pygame.rect.Rect = player1_score_label.get_rect(center=(end_popup.surface.get_size()[0]//2*1.5, end_popup.surface.get_size()[1]//2*1.3))
+                winner_str: str = "Draw!"
+                print(score)
+                if score[0] > score[1]:
+                    winner_str = f"{players[0]} wins!"
+                elif score[1] < score[0]:
+                    winner_str = f"{players[1]} wins!"
+                winner_label: pygame.surface.Surface = game_font.get_font(75).render(winner_str, True, "white")
+                winner_rect: pygame.rect.Rect = winner_label.get_rect(center=(end_popup.surface.get_size()[0]//2, end_popup.surface.get_size()[1]//2*0.8))
+                end_popup.add_rect(player1_score_label, player1_score_rect)
+                end_popup.add_rect(player2_score_label, player2_score_rect)
+                end_popup.add_rect(winner_label, winner_rect)
+                end_popup.run()
+                return
