@@ -4,7 +4,8 @@ import json
 import bcrypt
 import os
 
-SAVE_FILE_PATH = os.path.dirname(__file__)+"/../gameData/players.json"
+SAVE_FILE_PATH = os.path.dirname(__file__) + "/../gameData/players.json"
+
 
 class SaveSystem():
     """
@@ -131,10 +132,9 @@ class SaveSystem():
         idAvailable = 0
 
         for player in json_object:
-            idAvailable = player.ID
+            if int(player["id"]) > idAvailable: idAvailable = int(player["id"])
 
-        return idAvailable+1
-
+        return int(idAvailable) + 1
 
 
 if __name__ == '__main__':
@@ -144,5 +144,5 @@ if __name__ == '__main__':
 
     player: Player = SaveSystem.loadPlayer('test', '1234')
     print(player)
-    SaveSystem.savePlayer(player)
-    #SaveSystem.createNewUser("TEST1234", "9876", 7326576, 8)
+    SaveSystem.save_player(player)
+    # SaveSystem.create_user("TEST1234", "9876", 7326576, 8)
