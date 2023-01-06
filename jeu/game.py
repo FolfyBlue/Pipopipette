@@ -76,10 +76,10 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
     start_time_in_seconds: float = time.time()
 
     player1_label: pygame.surface.Surface = game_font.get_font(
-        33).render("Playername01", True, "#EEEEEE")
+        33).render(players[0], True, "#EEEEEE")
     player1_rect: pygame.rect.Rect = player1_label.get_rect(center=(100, 593))
     player2_label: pygame.surface.Surface = game_font.get_font(
-        33).render("Playername02", True, "#EEEEEE")
+        33).render(players[1], True, "#EEEEEE")
     player2_rect: pygame.rect.Rect = player2_label.get_rect(
         center=(1280-100, 593))
     
