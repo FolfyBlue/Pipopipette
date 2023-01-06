@@ -35,7 +35,7 @@ def login_screen(screen: pygame.surface.Surface):
         """
         print(f"Register! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
         if(not SaveSystem.is_login_already_taken(username_textbox.text)):
-         SaveSystem.create_user(username_textbox.text, password_textbox.text, random.randint(0, 100000))# TODO : change the way we generate an unique ID
+         SaveSystem.create_user(username_textbox.text, password_textbox.text, SaveSystem.get_first_available_ID())
          login_popup.active = False
         else:
             # Error : Login already registered !

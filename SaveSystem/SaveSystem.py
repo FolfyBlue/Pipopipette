@@ -62,6 +62,7 @@ class SaveSystem():
                     return Player(username, element['id'], element['points'])
                 else:
                     # User found, but wrong password. We don't need to continue looking for the right user
+                    print("Wrong password !")
                     return None
         return None  # Don't found this user
 
@@ -116,6 +117,24 @@ class SaveSystem():
             file.close()
 
         return Player(username, id, points)
+
+    @staticmethod
+    def get_first_available_ID():
+        """
+        Method used to get the first available ID in the local account database
+        Returns: Int
+        """
+        with open(SAVE_FILE_PATH) as json_file:
+            json_object = json.load(json_file)
+            json_file.close()
+
+        idAvailable = 0
+
+        for player in json_object:
+            idAvailable = player.ID
+
+        return idAvailable+1
+
 
 
 if __name__ == '__main__':
