@@ -6,7 +6,7 @@ from jeu.ui.ui import UI
 
 
 class Textbox(UI):
-    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4", replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0)) -> None:
+    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4", replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0), max_char: int = 0, accepted_chars: list[str] = []) -> None:
         """Textbox UI element
 
         Args:
@@ -16,6 +16,8 @@ class Textbox(UI):
             font (pygame.font.Font): Font to use for the text
             color (str): Color of the text
             detection_offset (tuple[float, float]): Offset for the mouse/textbox interaction
+            max_char (int): Maximum accepted amount of characters
+            accepted_chars (list[str]): List of accepted characters
         """
         super().__init__(screen, detection_offset)
         self.focused: bool = False
@@ -38,6 +40,8 @@ class Textbox(UI):
         self.rect = self.surface.get_rect(center=self.position)
         self.placeholder_text_rect = self.placeholder_text_render.get_rect(
             center=self.center)
+        self.max_char: int = max_char
+        self.accepted_chars: list[str] = accepted_chars
 
     def update_render(self: Textbox) -> None:
         """Updates the button
@@ -64,13 +68,18 @@ class Textbox(UI):
         Args:
             event (pygame.event.Event): Keydown event to process
         """
+            
         match (event.key):
             case pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
             case pygame.K_ESCAPE:
                 self.focused = False
             case _:
-                self.text += event.unicode
+                # If we haven't hit the max char limit/there isn't one,
+                # and if the character is in the list of accepted chars/there isn't one, append to the string
+                if (self.max_char == 0 or len(self.text) < self.max_char):
+                    if (not self.accepted_chars or event.unicode in self.accepted_chars):
+                        self.text += event.unicode
 
     def update(self: Textbox, event: pygame.event.Event):
         """Updates the textbox according to a give event.
