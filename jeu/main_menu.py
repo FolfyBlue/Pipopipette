@@ -6,6 +6,7 @@ from jeu.options_screen import options_screen
 from jeu.game import game
 from jeu.ui.button import Button
 from jeu.ui.popup import Popup
+from jeu.ui.textbox import Textbox
 from jeu.ui.ui import UI
 from jeu.utils.font_manager import FontManager
 from jeu.utils.assets_import import resource_path
@@ -41,14 +42,14 @@ def main_menu(screen: pygame.surface.Surface):
         size_popup = Popup(
             screen=screen,
             title="Size",
-            size=(1280//2, 720//3),
+            size=(1280//2, 720//2.5),
             color="#0575BB"
         )
 
         size_popup_3x3_button = Button(
             screen=size_popup.surface,
             image=None,
-            position=(size_popup.surface.get_size()[0]//2*0.5, size_popup.surface.get_size()[1]//1.5),
+            position=(size_popup.surface.get_size()[0]//2*0.5, size_popup.surface.get_size()[1]//1.25),
             text="3x3",
             font=menu_font.get_font(56),
             color="white",
@@ -59,7 +60,7 @@ def main_menu(screen: pygame.surface.Surface):
         size_popup_5x5_button = Button(
             screen=size_popup.surface,
             image=None,
-            position=(size_popup.surface.get_size()[0]//2, size_popup.surface.get_size()[1]//1.5),
+            position=(size_popup.surface.get_size()[0]//2, size_popup.surface.get_size()[1]//1.25),
             text="5x5",
             font=menu_font.get_font(56),
             color="white",
@@ -70,7 +71,7 @@ def main_menu(screen: pygame.surface.Surface):
         size_popup_7x7_button = Button(
             screen=size_popup.surface,
             image=None,
-            position=(size_popup.surface.get_size()[0]//2*1.5, size_popup.surface.get_size()[1]//1.5),
+            position=(size_popup.surface.get_size()[0]//2*1.5, size_popup.surface.get_size()[1]//1.25),
             text="7x7",
             font=menu_font.get_font(56),
             color="white",
@@ -78,9 +79,24 @@ def main_menu(screen: pygame.surface.Surface):
             action = lambda: game(screen, size=(7, 7))
         )
 
+
+        size_popup_custom_size_x_textbox = Textbox(
+            screen=size_popup.surface,
+            position=(size_popup.surface.get_size()[0]//2, size_popup.surface.get_size()[1]//2),
+            placeholder_text="a",
+            placeholder_color="#424242",
+            size=(75,75),
+            font=menu_font.get_font(56),
+            text_color="black",
+            background_color="white",
+            max_char = 2,
+            accepted_chars = ["0","1","2","3","4","5","6","7","8","9"]
+        )
+
         size_popup.add_ui_element(size_popup_3x3_button)
         size_popup.add_ui_element(size_popup_5x5_button)
         size_popup.add_ui_element(size_popup_7x7_button)
+        size_popup.add_ui_element(size_popup_custom_size_x_textbox)
 
         size_popup.run()
 
