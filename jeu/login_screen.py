@@ -21,12 +21,14 @@ def login_screen(screen: pygame.surface.Surface):
     def login_handler():
         """Action ran when the login button is clicked
         """
-        print(f"Login! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
+        print(f"Login attempt from '{username_textbox.text}'")
         player = SaveSystem.load_player(username_textbox.text, password_textbox.text) # Contain a Player or None
         if(player):
+            print(f"{username_textbox.text} logged in!")
             # Send this player to game
             login_popup.active = False
         else:
+            print(f"{username_textbox.text} failed to log in!")
             # Error : Wrong login/password
             pass
 
