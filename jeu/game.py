@@ -5,10 +5,10 @@ import pygame
 from jeu.engine.Pipopipette import Pipopipette
 from jeu.engine.PipopipetteGameplay import PipopipetteGameplay
 from jeu.ui.button import Button
+from jeu.ui.popup import Popup
 from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
-from jeu.ui.popup import Popup
 
 LINE_WIDTH = 9
 HEIGHT_OFFSET = 250

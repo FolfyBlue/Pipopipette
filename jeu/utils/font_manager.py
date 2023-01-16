@@ -1,5 +1,6 @@
 import pygame
 
+
 class FontManager:
     def __init__(self, font: str) -> None:
         """

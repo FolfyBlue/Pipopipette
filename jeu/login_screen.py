@@ -1,11 +1,12 @@
 import pygame
+
 from jeu.ui.button import Button
 from jeu.ui.popup import Popup
 from jeu.ui.textbox import Textbox
-from jeu.utils.font_manager import FontManager
 from jeu.utils.assets_import import resource_path
+from jeu.utils.font_manager import FontManager
 from SaveSystem.SaveSystem import SaveSystem
-import random
+
 
 def login_screen(screen: pygame.surface.Surface):
     """Login screen
