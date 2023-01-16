@@ -5,8 +5,9 @@ import pygame
 from jeu.ui.ui import UI
 
 
+DEFAULT_ACCEPTED_CHARACTERS = [chr(i) for i in range(32, 255) if i != 127]
 class Textbox(UI):
-    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4", replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0), max_char: int = 0, accepted_chars: list[str] = []) -> None:
+    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = "Black", background_color: str = "White", placeholder_color: str = "#E4E4E4", replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0), max_char: int = 0, accepted_chars: list[str] = DEFAULT_ACCEPTED_CHARACTERS) -> None:
         """Textbox UI element
 
         Args:
