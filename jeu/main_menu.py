@@ -1,15 +1,16 @@
 import sys
 
 import pygame
+
+from jeu.game import game
 from jeu.login_screen import login_screen
 from jeu.options_screen import options_screen
-from jeu.game import game
 from jeu.ui.button import Button
 from jeu.ui.popup import Popup
 from jeu.ui.textbox import Textbox
 from jeu.ui.ui import UI
-from jeu.utils.font_manager import FontManager
 from jeu.utils.assets_import import resource_path
+from jeu.utils.font_manager import FontManager
 
 MAX_SIZE = 25
 MIN_SIZE = 2

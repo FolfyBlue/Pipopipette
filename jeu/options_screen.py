@@ -1,8 +1,8 @@
 import pygame
 
 from jeu.ui.popup import Popup
-from jeu.utils.font_manager import FontManager
 from jeu.utils.assets_import import resource_path
+from jeu.utils.font_manager import FontManager
 
 
 def options_screen(screen: pygame.surface.Surface):

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import pygame
-from jeu.ui.ui import UI
-from jeu.utils.font_manager import FontManager
+
 from jeu.ui.button import Button
+from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
+from jeu.utils.font_manager import FontManager
 
 
 class Popup(UI):

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Callable
 
 import pygame
+
 from jeu.ui.ui import UI
 
 
