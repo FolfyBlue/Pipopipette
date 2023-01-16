@@ -4,6 +4,8 @@ from jeu.ui.popup import Popup
 from jeu.ui.textbox import Textbox
 from jeu.utils.font_manager import FontManager
 from jeu.utils.assets_import import resource_path
+from SaveSystem.SaveSystem import SaveSystem
+import random
 
 def login_screen(screen: pygame.surface.Surface):
     """Login screen
@@ -20,13 +22,24 @@ def login_screen(screen: pygame.surface.Surface):
         """Action ran when the login button is clicked
         """
         print(f"Login! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
-        login_popup.active = False
+        player = SaveSystem.load_player(username_textbox.text, password_textbox.text) # Contain a Player or None
+        if(player):
+            # Send this player to game
+            login_popup.active = False
+        else:
+            # Error : Wrong login/password
+            pass
 
     def register_handler():
         """Action ran when the register button is clicked
         """
         print(f"Register! User:'{username_textbox.text}', Password:'{password_textbox.text}'")
-        login_popup.active = False
+        if(not SaveSystem.is_login_already_taken(username_textbox.text)):
+         SaveSystem.create_user(username_textbox.text, password_textbox.text, SaveSystem.get_first_available_ID())
+         login_popup.active = False
+        else:
+            # Error : Login already registered !
+            pass
 
     username_textbox = Textbox(
         screen=login_popup.surface,

@@ -2,8 +2,10 @@ from jeu.engine.Player.Player import Player
 
 import json
 import bcrypt
+import os
 
-SAVE_FILE_PATH = "../gameData/players.json"
+SAVE_FILE_PATH = os.path.dirname(__file__) + "/../gameData/players.json"
+
 
 class SaveSystem():
     """
@@ -61,8 +63,30 @@ class SaveSystem():
                     return Player(username, element['id'], element['points'])
                 else:
                     # User found, but wrong password. We don't need to continue looking for the right user
+                    print("Wrong password !")
                     return None
         return None  # Don't found this user
+
+    @staticmethod
+    def is_login_already_taken(username: str) -> bool:
+        """
+        Check if a login is still available
+        Args:
+            username: The username of this user
+
+        Returns: True of False. False = Login can be registered
+
+        """
+        with open(SAVE_FILE_PATH) as json_file:
+            json_object = json.load(json_file)
+            json_file.close()
+
+        taken = False
+
+        for element in json_object:
+            if element['username'] == username:
+                taken = True
+        return taken  # Don't found this username
 
     @staticmethod
     def create_user(username: str, password: str, id: int, points: int = 0) -> Player:
@@ -95,6 +119,23 @@ class SaveSystem():
 
         return Player(username, id, points)
 
+    @staticmethod
+    def get_first_available_ID():
+        """
+        Method used to get the first available ID in the local account database
+        Returns: Int
+        """
+        with open(SAVE_FILE_PATH) as json_file:
+            json_object = json.load(json_file)
+            json_file.close()
+
+        idAvailable = 0
+
+        for player in json_object:
+            if int(player["id"]) > idAvailable: idAvailable = int(player["id"])
+
+        return int(idAvailable) + 1
+
 
 if __name__ == '__main__':
     # Unit test
@@ -104,4 +145,4 @@ if __name__ == '__main__':
     player: Player = SaveSystem.load_player('test', '1234')
     print(player)
     SaveSystem.save_player(player)
-    #SaveSystem.create_user("TEST1234", "9876", 7326576, 8)
+    # SaveSystem.create_user("TEST1234", "9876", 7326576, 8)
