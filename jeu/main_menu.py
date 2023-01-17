@@ -27,6 +27,8 @@ def main_menu(screen: pygame.surface.Surface):
 
     menu_font: FontManager = FontManager(resource_path("jeu/assets/fonts/Truculenta.ttf"))
 
+    uninteraction_timer = 0
+
     def quit():
         """Quits the program
         """
@@ -123,6 +125,7 @@ def main_menu(screen: pygame.surface.Surface):
             Will only allow sizes between MAX_SIZE and MIN_SIZE,
             and fall back to them if they're exceeded
             """
+            nonlocal uninteraction_timer
             x_size: int = 0
             y_size: int = 0
             x_size_text: str = size_popup_custom_size_x_textbox.text
@@ -176,6 +179,7 @@ def main_menu(screen: pygame.surface.Surface):
         size_popup.add_rect(x_label, x_rect)
 
         size_popup.run()
+        uninteraction_timer = 10
 
     # Initializing on-screen elements #
     background: pygame.surface.Surface = pygame.image.load(resource_path("jeu/assets/images/menu_background.png"))
@@ -215,18 +219,25 @@ def main_menu(screen: pygame.surface.Surface):
         action=quit
     )
 
+    def account_button_handler():
+        nonlocal uninteraction_timer
+        login_screen(screen)
+        uninteraction_timer = 10
+
     account_button = Button(screen=screen, image=pygame.image.load(resource_path("jeu/assets/images/User.png")),
                             position=(1280-75, 75),
                             text=" ",
                             font=menu_font.get_font(75),
                             color="#FFFFFF",
                             hover_color="#FFFFFF",
-                            action=lambda: login_screen(screen)
+                            action=account_button_handler
                             )
     # Store all UI elements in a list for easy access
     menu_buttons: tuple[UI, ...] = (account_button, play_button, options_button, quit_button)
 
     while True:
+        if uninteraction_timer > 0:
+            uninteraction_timer -= 1
         print(int(clock.get_fps()), end=" FPS    \r")
         # Blit the background to screen first /!\
         screen.blit(background, (0, 0))
@@ -242,7 +253,8 @@ def main_menu(screen: pygame.surface.Surface):
                     print("            ", end="\r")
             # Update all UI elements
             for button in menu_buttons:
-                button.update(event)
+                if uninteraction_timer <= 0:
+                    button.update(event)
         # Update all UI elements
         for button in menu_buttons:
             button.update_render()
