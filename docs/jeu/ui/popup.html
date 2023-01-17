@@ -29,9 +29,11 @@
 <pre><code class="python">from __future__ import annotations
 
 import pygame
-from jeu.ui.ui import UI
-from jeu.utils.font_manager import FontManager
+
 from jeu.ui.button import Button
+from jeu.ui.ui import UI
+from jeu.utils.assets_import import resource_path
+from jeu.utils.font_manager import FontManager
 
 
 class Popup(UI):
@@ -47,13 +49,14 @@ class Popup(UI):
         super().__init__(screen)
         self.active = True  
         self.color = color
-        self.font: FontManager = FontManager(&#34;jeu/assets/fonts/Truculenta.ttf&#34;)
+        self.font: FontManager = FontManager(resource_path(&#34;jeu/assets/fonts/Truculenta.ttf&#34;))
         self.surface = pygame.Surface(size)
         self.title: pygame.surface.Surface = self.font.get_font(100).render(title, True, &#34;#EEEEEE&#34;)
         self.title_rect: pygame.rect.Rect = self.title.get_rect(center=(self.surface.get_rect().center[0], 50))
         self.elements: list[UI] = []
+        self.rects: dict[pygame.surface.Surface, pygame.rect.Rect] = {}
 
-        close_button_img = pygame.image.load(&#34;jeu/assets/images/close.png&#34;)
+        close_button_img = pygame.image.load(resource_path(&#34;jeu/assets/images/close.png&#34;))
         self.offset = (
             (screen.get_width()-size[0])/2,
             (screen.get_height()-size[1])/2,
@@ -83,6 +86,9 @@ class Popup(UI):
         if not self.active: return
         self.surface.fill(self.color)
         
+        for s, r in self.rects.items():
+            self.surface.blit(s, r)
+
         for e in self.elements:
             e.update_render()
         self.surface.blit(self.title, self.title_rect)
@@ -109,6 +115,9 @@ class Popup(UI):
         element.detection_offset = self.offset
         self.elements.append(element)
     
+    def add_rect(self, surface, rect: pygame.rect.Rect):
+        self.rects[surface] = rect
+
     def run(self):
         self.active = True
         while self.active:
@@ -162,13 +171,14 @@ class Popup(UI):
         super().__init__(screen)
         self.active = True  
         self.color = color
-        self.font: FontManager = FontManager(&#34;jeu/assets/fonts/Truculenta.ttf&#34;)
+        self.font: FontManager = FontManager(resource_path(&#34;jeu/assets/fonts/Truculenta.ttf&#34;))
         self.surface = pygame.Surface(size)
         self.title: pygame.surface.Surface = self.font.get_font(100).render(title, True, &#34;#EEEEEE&#34;)
         self.title_rect: pygame.rect.Rect = self.title.get_rect(center=(self.surface.get_rect().center[0], 50))
         self.elements: list[UI] = []
+        self.rects: dict[pygame.surface.Surface, pygame.rect.Rect] = {}
 
-        close_button_img = pygame.image.load(&#34;jeu/assets/images/close.png&#34;)
+        close_button_img = pygame.image.load(resource_path(&#34;jeu/assets/images/close.png&#34;))
         self.offset = (
             (screen.get_width()-size[0])/2,
             (screen.get_height()-size[1])/2,
@@ -198,6 +208,9 @@ class Popup(UI):
         if not self.active: return
         self.surface.fill(self.color)
         
+        for s, r in self.rects.items():
+            self.surface.blit(s, r)
+
         for e in self.elements:
             e.update_render()
         self.surface.blit(self.title, self.title_rect)
@@ -224,6 +237,9 @@ class Popup(UI):
         element.detection_offset = self.offset
         self.elements.append(element)
     
+    def add_rect(self, surface, rect: pygame.rect.Rect):
+        self.rects[surface] = rect
+
     def run(self):
         self.active = True
         while self.active:
@@ -239,6 +255,19 @@ class Popup(UI):
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="jeu.ui.popup.Popup.add_rect"><code class="name flex">
+<span>def <span class="ident">add_rect</span></span>(<span>self, surface, rect: pygame.rect.Rect)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_rect(self, surface, rect: pygame.rect.Rect):
+    self.rects[surface] = rect</code></pre>
+</details>
+</dd>
 <dt id="jeu.ui.popup.Popup.add_ui_element"><code class="name flex">
 <span>def <span class="ident">add_ui_element</span></span>(<span>self, element: UI)</span>
 </code></dt>
@@ -336,6 +365,9 @@ class Popup(UI):
     if not self.active: return
     self.surface.fill(self.color)
     
+    for s, r in self.rects.items():
+        self.surface.blit(s, r)
+
     for e in self.elements:
         e.update_render()
     self.surface.blit(self.title, self.title_rect)
@@ -364,7 +396,8 @@ class Popup(UI):
 <ul>
 <li>
 <h4><code><a title="jeu.ui.popup.Popup" href="#jeu.ui.popup.Popup">Popup</a></code></h4>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="jeu.ui.popup.Popup.add_rect" href="#jeu.ui.popup.Popup.add_rect">add_rect</a></code></li>
 <li><code><a title="jeu.ui.popup.Popup.add_ui_element" href="#jeu.ui.popup.Popup.add_ui_element">add_ui_element</a></code></li>
 <li><code><a title="jeu.ui.popup.Popup.close" href="#jeu.ui.popup.Popup.close">close</a></code></li>
 <li><code><a title="jeu.ui.popup.Popup.run" href="#jeu.ui.popup.Popup.run">run</a></code></li>
