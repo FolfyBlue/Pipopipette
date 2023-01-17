@@ -28,20 +28,23 @@ def main_menu(screen: pygame.surface.Surface):
     menu_font: FontManager = FontManager(resource_path("jeu/assets/fonts/Truculenta.ttf"))
 
     def quit():
+        """Quits the program
+        """
         pygame.quit()
         sys.exit()
 
     def play_button_handler(screen): 
-
-        """
-        Popup:
+        """ Popup that lets you select a size in this format:
         +-------------------------+
         |          Size           |
-        |   (   Custom Size   )   |
+        | (Size) X (Size)  [OK]   |
         | [ 3x3 ] [ 5x5 ] [ 7x7 ] |
         +-------------------------+
+
+        Args:
+            screen (_type_): Screen to display the popup on
         """
-        # 3x3, 5x5, 7x7
+        # Create the popup
         size_popup = Popup(
             screen=screen,
             title="Size",
@@ -49,6 +52,7 @@ def main_menu(screen: pygame.surface.Surface):
             color="#0575BB"
         )
 
+        # Create the rightmost size select button
         size_popup_3x3_button = Button(
             screen=size_popup.surface,
             image=None,
@@ -60,6 +64,7 @@ def main_menu(screen: pygame.surface.Surface):
             action = lambda: game(screen, size=(3, 3))
         )
 
+        # Create the center size select button
         size_popup_5x5_button = Button(
             screen=size_popup.surface,
             image=None,
@@ -71,6 +76,8 @@ def main_menu(screen: pygame.surface.Surface):
             action = lambda: game(screen, size=(5, 5))
         )
 
+
+        # Create the leftmost size select button
         size_popup_7x7_button = Button(
             screen=size_popup.surface,
             image=None,
@@ -83,6 +90,7 @@ def main_menu(screen: pygame.surface.Surface):
         )
 
 
+        # Create the x-size select textbox
         size_popup_custom_size_x_textbox = Textbox(
             screen=size_popup.surface,
             position=(size_popup.surface.get_size()[0]//2*0.55, size_popup.surface.get_size()[1]//2),
@@ -96,6 +104,7 @@ def main_menu(screen: pygame.surface.Surface):
             accepted_chars = ["0","1","2","3","4","5","6","7","8","9"]
         )
 
+        # Create the y-size select textbox
         size_popup_custom_size_y_textbox = Textbox(
             screen=size_popup.surface,
             position=(size_popup.surface.get_size()[0]//2*1.15, size_popup.surface.get_size()[1]//2),
@@ -110,6 +119,10 @@ def main_menu(screen: pygame.surface.Surface):
         )
 
         def confirm_custom_size_button_handler():
+            """Handler for the custom size confirm button
+            Will only allow sizes between MAX_SIZE and MIN_SIZE,
+            and fall back to them if they're exceeded
+            """
             x_size: int = 0
             y_size: int = 0
             x_size_text: str = size_popup_custom_size_x_textbox.text
@@ -137,6 +150,7 @@ def main_menu(screen: pygame.surface.Surface):
             size_popup.close()
             game(screen, size=(x_size, y_size))
 
+        # Create the custom size confirm button
         size_popup_confirm_custom_size_button = Button(
             screen=size_popup.surface,
             image=None,
@@ -148,10 +162,11 @@ def main_menu(screen: pygame.surface.Surface):
             action=confirm_custom_size_button_handler
         )
 
-        
+        # Creates the "X" to be displayed between the two textboxes
         x_label: pygame.surface.Surface = menu_font.get_font(96).render(f"x", True, "white")
         x_rect: pygame.rect.Rect = x_label.get_rect(center=(size_popup.surface.get_size()[0]//2*0.85, size_popup.surface.get_size()[1]//2*0.95))
 
+        # Add all the created elements to the popup and run it
         size_popup.add_ui_element(size_popup_3x3_button)
         size_popup.add_ui_element(size_popup_5x5_button)
         size_popup.add_ui_element(size_popup_7x7_button)
@@ -208,12 +223,14 @@ def main_menu(screen: pygame.surface.Surface):
                             hover_color="#FFFFFF",
                             action=lambda: login_screen(screen)
                             )
-
+    # Store all UI elements in a list for easy access
     menu_buttons: tuple[UI, ...] = (account_button, play_button, options_button, quit_button)
 
     while True:
         print(int(clock.get_fps()), end=" FPS    \r")
+        # Blit the background to screen first /!\
         screen.blit(background, (0, 0))
+        # Display all text on screen
         screen.blit(menu_text, menu_rect)
 
         for event in pygame.event.get():
@@ -223,9 +240,13 @@ def main_menu(screen: pygame.surface.Surface):
                 case pygame.MOUSEBUTTONDOWN:
                     # Clear FPS counter from console
                     print("            ", end="\r")
+            # Update all UI elements
             for button in menu_buttons:
                 button.update(event)
+        # Update all UI elements
         for button in menu_buttons:
             button.update_render()
+        # Update the display
         pygame.display.update()
+        # Tick the clock used to calculate the FPS
         clock.tick()

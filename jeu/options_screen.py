@@ -17,3 +17,5 @@ def options_screen(screen: pygame.surface.Surface):
     options_popup: Popup = Popup(screen, "Options", (screen.get_width()*0.85, screen.get_height()*0.8), "#0575BB")
 
     options_popup.run()
+
+    # TBD, will be used for networking options

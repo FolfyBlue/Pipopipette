@@ -2,6 +2,9 @@ import pygame
 
 
 class FontManager:
+    """This class has the purpose of simplifying the manipulation of fonts in pygames,
+    since a new Font object needs to be created for each font size, this simplifies it by a lot.
+    """
     def __init__(self, font: str) -> None:
         """
 
