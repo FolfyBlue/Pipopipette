@@ -91,10 +91,15 @@ class PipopipetteGameplay():
             side: Wich side to manage ? &#39;l&#39;; &#39;r&#39;, &#39;t&#39;, or &#39;d&#39;.
         &#34;&#34;&#34;
         if self.__pipopipette.valid_target(square_ID, side):
-            self.__pipopipette.set_side(square_ID ,side, self.current_player_ID)
-            if (square := self.__pipopipette.get_square_by_ID(square_ID)) and (square.square_owner == self.current_player_ID):
-                self.__LIST_PLAYER[self.__current_player_ID].score += 1  # type: ignore
+            self.__pipopipette.set_side(square_ID, side, self.current_player_ID)
     
+    def get_score(self: PipopipetteGameplay) -&gt; list[int]:
+        result: list[int] = [0]*len(self.__LIST_PLAYER)
+        for square in self.__pipopipette.list_square:
+            if square.square_owner &gt;= 0:
+                result[square.square_owner] += 1
+        return result
+
     # &lt;----- gameOver -----&gt;
     
     def game_over(self: PipopipetteGameplay) -&gt; bool:
@@ -104,9 +109,11 @@ class PipopipetteGameplay():
             Boolean - True if game finished, False of not
 
         &#34;&#34;&#34;
-        for square in self.__pipopipette.list_square:
-            if square.square_owner == -1: return False
-        return True</code></pre>
+        total_score: int = sum(self.get_score())
+            
+        if total_score &lt; self.pipopipette.HEIGHT * self.pipopipette.WIDTH: return False
+        return True
+        </code></pre>
 </details>
 </section>
 <section>
@@ -191,10 +198,15 @@ class PipopipetteGameplay():
             side: Wich side to manage ? &#39;l&#39;; &#39;r&#39;, &#39;t&#39;, or &#39;d&#39;.
         &#34;&#34;&#34;
         if self.__pipopipette.valid_target(square_ID, side):
-            self.__pipopipette.set_side(square_ID ,side, self.current_player_ID)
-            if (square := self.__pipopipette.get_square_by_ID(square_ID)) and (square.square_owner == self.current_player_ID):
-                self.__LIST_PLAYER[self.__current_player_ID].score += 1  # type: ignore
+            self.__pipopipette.set_side(square_ID, side, self.current_player_ID)
     
+    def get_score(self: PipopipetteGameplay) -&gt; list[int]:
+        result: list[int] = [0]*len(self.__LIST_PLAYER)
+        for square in self.__pipopipette.list_square:
+            if square.square_owner &gt;= 0:
+                result[square.square_owner] += 1
+        return result
+
     # &lt;----- gameOver -----&gt;
     
     def game_over(self: PipopipetteGameplay) -&gt; bool:
@@ -204,8 +216,9 @@ class PipopipetteGameplay():
             Boolean - True if game finished, False of not
 
         &#34;&#34;&#34;
-        for square in self.__pipopipette.list_square:
-            if square.square_owner == -1: return False
+        total_score: int = sum(self.get_score())
+            
+        if total_score &lt; self.pipopipette.HEIGHT * self.pipopipette.WIDTH: return False
         return True</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -264,9 +277,27 @@ def pipopipette(self: PipopipetteGameplay) -&gt; Pipopipette: return self.__pipo
         Boolean - True if game finished, False of not
 
     &#34;&#34;&#34;
-    for square in self.__pipopipette.list_square:
-        if square.square_owner == -1: return False
+    total_score: int = sum(self.get_score())
+        
+    if total_score &lt; self.pipopipette.HEIGHT * self.pipopipette.WIDTH: return False
     return True</code></pre>
+</details>
+</dd>
+<dt id="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.get_score"><code class="name flex">
+<span>def <span class="ident">get_score</span></span>(<span>self: <a title="jeu.engine.PipopipetteGameplay.PipopipetteGameplay" href="#jeu.engine.PipopipetteGameplay.PipopipetteGameplay">PipopipetteGameplay</a>) ‑> list[int]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_score(self: PipopipetteGameplay) -&gt; list[int]:
+    result: list[int] = [0]*len(self.__LIST_PLAYER)
+    for square in self.__pipopipette.list_square:
+        if square.square_owner &gt;= 0:
+            result[square.square_owner] += 1
+    return result</code></pre>
 </details>
 </dd>
 <dt id="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.next_player"><code class="name flex">
@@ -310,9 +341,7 @@ def pipopipette(self: PipopipetteGameplay) -&gt; Pipopipette: return self.__pipo
         side: Wich side to manage ? &#39;l&#39;; &#39;r&#39;, &#39;t&#39;, or &#39;d&#39;.
     &#34;&#34;&#34;
     if self.__pipopipette.valid_target(square_ID, side):
-        self.__pipopipette.set_side(square_ID ,side, self.current_player_ID)
-        if (square := self.__pipopipette.get_square_by_ID(square_ID)) and (square.square_owner == self.current_player_ID):
-            self.__LIST_PLAYER[self.__current_player_ID].score += 1  # type: ignore</code></pre>
+        self.__pipopipette.set_side(square_ID, side, self.current_player_ID)</code></pre>
 </details>
 </dd>
 </dl>
@@ -339,6 +368,7 @@ def pipopipette(self: PipopipetteGameplay) -&gt; Pipopipette: return self.__pipo
 <li><code><a title="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.LIST_PLAYER" href="#jeu.engine.PipopipetteGameplay.PipopipetteGameplay.LIST_PLAYER">LIST_PLAYER</a></code></li>
 <li><code><a title="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.current_player_ID" href="#jeu.engine.PipopipetteGameplay.PipopipetteGameplay.current_player_ID">current_player_ID</a></code></li>
 <li><code><a title="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.game_over" href="#jeu.engine.PipopipetteGameplay.PipopipetteGameplay.game_over">game_over</a></code></li>
+<li><code><a title="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.get_score" href="#jeu.engine.PipopipetteGameplay.PipopipetteGameplay.get_score">get_score</a></code></li>
 <li><code><a title="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.next_player" href="#jeu.engine.PipopipetteGameplay.PipopipetteGameplay.next_player">next_player</a></code></li>
 <li><code><a title="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.pipopipette" href="#jeu.engine.PipopipetteGameplay.PipopipetteGameplay.pipopipette">pipopipette</a></code></li>
 <li><code><a title="jeu.engine.PipopipetteGameplay.PipopipetteGameplay.set_player_target" href="#jeu.engine.PipopipetteGameplay.PipopipetteGameplay.set_player_target">set_player_target</a></code></li>

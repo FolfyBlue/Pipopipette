@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>jeu.options_screen API documentation</title>
+<title>jeu.utils.font_manager API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,7 +19,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>jeu.options_screen</code></h1>
+<h1 class="title">Module <code>jeu.utils.font_manager</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -28,22 +28,29 @@
 </summary>
 <pre><code class="python">import pygame
 
-from jeu.ui.popup import Popup
-from jeu.utils.font_manager import FontManager
 
-
-def options_screen(screen: pygame.surface.Surface):
-    &#34;&#34;&#34;Options screen
-
-    Args:
-        screen (pygame.surface.Surface): Screen to display the menu on
+class FontManager:
+    &#34;&#34;&#34;This class has the purpose of simplifying the manipulation of fonts in pygames,
+    since a new Font object needs to be created for each font size, this simplifies it by a lot.
     &#34;&#34;&#34;
-    options_font: FontManager = FontManager(&#34;jeu/assets/fonts/Truculenta.ttf&#34;)
+    def __init__(self, font: str) -&gt; None:
+        &#34;&#34;&#34;
 
-    # Initializing on-screen elements #
-    options_popup: Popup = Popup(screen, &#34;Options&#34;, (screen.get_width()*0.85, screen.get_height()*0.8), &#34;#0575BB&#34;)
+        Args:
+            font (str): Path of the font
+        &#34;&#34;&#34;
+        self.font = font
+    
+    def get_font(self, size: int) -&gt; pygame.font.Font:  # Returns Press-Start-2P in the desired size
+        &#34;&#34;&#34;Returns the desired font in the desired size
 
-    options_popup.run()</code></pre>
+        Args:
+            size (int): Size of the font
+
+        Returns:
+            pygame.font.Font: Font
+        &#34;&#34;&#34;
+        return pygame.font.Font(self.font, size)</code></pre>
 </details>
 </section>
 <section>
@@ -51,39 +58,85 @@ def options_screen(screen: pygame.surface.Surface):
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="jeu.options_screen.options_screen"><code class="name flex">
-<span>def <span class="ident">options_screen</span></span>(<span>screen: pygame.Surface)</span>
+<dt id="jeu.utils.font_manager.FontManager"><code class="flex name class">
+<span>class <span class="ident">FontManager</span></span>
+<span>(</span><span>font: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Options screen</p>
+<div class="desc"><p>This class has the purpose of simplifying the manipulation of fonts in pygames,
+since a new Font object needs to be created for each font size, this simplifies it by a lot.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>screen</code></strong> :&ensp;<code>pygame.surface.Surface</code></dt>
-<dd>Screen to display the menu on</dd>
+<dt><strong><code>font</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path of the font</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def options_screen(screen: pygame.surface.Surface):
-    &#34;&#34;&#34;Options screen
+<pre><code class="python">class FontManager:
+    &#34;&#34;&#34;This class has the purpose of simplifying the manipulation of fonts in pygames,
+    since a new Font object needs to be created for each font size, this simplifies it by a lot.
+    &#34;&#34;&#34;
+    def __init__(self, font: str) -&gt; None:
+        &#34;&#34;&#34;
+
+        Args:
+            font (str): Path of the font
+        &#34;&#34;&#34;
+        self.font = font
+    
+    def get_font(self, size: int) -&gt; pygame.font.Font:  # Returns Press-Start-2P in the desired size
+        &#34;&#34;&#34;Returns the desired font in the desired size
+
+        Args:
+            size (int): Size of the font
+
+        Returns:
+            pygame.font.Font: Font
+        &#34;&#34;&#34;
+        return pygame.font.Font(self.font, size)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="jeu.utils.font_manager.FontManager.get_font"><code class="name flex">
+<span>def <span class="ident">get_font</span></span>(<span>self, size: int) ‑> pygame.font.Font</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the desired font in the desired size</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>size</code></strong> :&ensp;<code>int</code></dt>
+<dd>Size of the font</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pygame.font.Font</code></dt>
+<dd>Font</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_font(self, size: int) -&gt; pygame.font.Font:  # Returns Press-Start-2P in the desired size
+    &#34;&#34;&#34;Returns the desired font in the desired size
 
     Args:
-        screen (pygame.surface.Surface): Screen to display the menu on
+        size (int): Size of the font
+
+    Returns:
+        pygame.font.Font: Font
     &#34;&#34;&#34;
-    options_font: FontManager = FontManager(&#34;jeu/assets/fonts/Truculenta.ttf&#34;)
-
-    # Initializing on-screen elements #
-    options_popup: Popup = Popup(screen, &#34;Options&#34;, (screen.get_width()*0.85, screen.get_height()*0.8), &#34;#0575BB&#34;)
-
-    options_popup.run()</code></pre>
+    return pygame.font.Font(self.font, size)</code></pre>
 </details>
 </dd>
 </dl>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -94,12 +147,17 @@ def options_screen(screen: pygame.surface.Surface):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="jeu" href="index.html">jeu</a></code></li>
+<li><code><a title="jeu.utils" href="index.html">jeu.utils</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="jeu.utils.font_manager.FontManager" href="#jeu.utils.font_manager.FontManager">FontManager</a></code></h4>
 <ul class="">
-<li><code><a title="jeu.options_screen.options_screen" href="#jeu.options_screen.options_screen">options_screen</a></code></li>
+<li><code><a title="jeu.utils.font_manager.FontManager.get_font" href="#jeu.utils.font_manager.FontManager.get_font">get_font</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

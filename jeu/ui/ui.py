@@ -9,7 +9,7 @@ class UI(ABC):
     """
 
     def __init__(self: Self, screen: pygame.surface.Surface, detection_offset: tuple[float, float] = (0, 0)) -> None:
-        """Button UI elements
+        """Initialize UI elements
 
         Args:
             screen (pygame.surface.Surface): Screen to update the element on

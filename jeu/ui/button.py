@@ -19,9 +19,9 @@ class Button(UI):
             font (pygame.font.Font): Font to use for the text
             color (str): Color of the text
             hover_color (str): Color of the text when hovering
-            action (Callable): Function to call upon button click
-            enforced_size (tuple[int, int]): Enforced size of the button
-            detection_offset (tuple[float, float]): Offset for the mouse/button interaction
+            action (Callable): Function to call upon button click. Defaults to lambda:None.
+            enforced_size (tuple[int, int]): Enforced size of the button _description_. Defaults to None.
+            detection_offset (tuple[float, float]): Offset for the mouse/button interaction. Defaults to (0, 0).
         """
         super().__init__(screen)
         self.image = image

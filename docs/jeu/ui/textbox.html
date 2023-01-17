@@ -32,9 +32,9 @@ import pygame
 
 from jeu.ui.ui import UI
 
-
+DEFAULT_ACCEPTED_CHARACTERS = [chr(i) for i in range(32, 255) if i != 127]
 class Textbox(UI):
-    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = &#34;Black&#34;, background_color: str = &#34;White&#34;, placeholder_color: str = &#34;#E4E4E4&#34;, replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0)) -&gt; None:
+    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = &#34;Black&#34;, background_color: str = &#34;White&#34;, placeholder_color: str = &#34;#E4E4E4&#34;, replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0), max_char: int = 0, accepted_chars: list[str] = DEFAULT_ACCEPTED_CHARACTERS) -&gt; None:
         &#34;&#34;&#34;Textbox UI element
 
         Args:
@@ -44,6 +44,8 @@ class Textbox(UI):
             font (pygame.font.Font): Font to use for the text
             color (str): Color of the text
             detection_offset (tuple[float, float]): Offset for the mouse/textbox interaction
+            max_char (int): Maximum accepted amount of characters
+            accepted_chars (list[str]): List of accepted characters
         &#34;&#34;&#34;
         super().__init__(screen, detection_offset)
         self.focused: bool = False
@@ -66,6 +68,8 @@ class Textbox(UI):
         self.rect = self.surface.get_rect(center=self.position)
         self.placeholder_text_rect = self.placeholder_text_render.get_rect(
             center=self.center)
+        self.max_char: int = max_char
+        self.accepted_chars: list[str] = accepted_chars
 
     def update_render(self: Textbox) -&gt; None:
         &#34;&#34;&#34;Updates the button
@@ -92,13 +96,18 @@ class Textbox(UI):
         Args:
             event (pygame.event.Event): Keydown event to process
         &#34;&#34;&#34;
+            
         match (event.key):
             case pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
             case pygame.K_ESCAPE:
                 self.focused = False
             case _:
-                self.text += event.unicode
+                # If we haven&#39;t hit the max char limit/there isn&#39;t one,
+                # and if the character is in the list of accepted chars/there isn&#39;t one, append to the string
+                if (self.max_char == 0 or len(self.text) &lt; self.max_char):
+                    if (not self.accepted_chars or event.unicode in self.accepted_chars):
+                        self.text += event.unicode
 
     def update(self: Textbox, event: pygame.event.Event):
         &#34;&#34;&#34;Updates the textbox according to a give event.
@@ -135,7 +144,7 @@ class Textbox(UI):
 <dl>
 <dt id="jeu.ui.textbox.Textbox"><code class="flex name class">
 <span>class <span class="ident">Textbox</span></span>
-<span>(</span><span>screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = 'Black', background_color: str = 'White', placeholder_color: str = '#E4E4E4', replacement_char: str | None = None, detection_offset: tuple[float, float] = (0, 0))</span>
+<span>(</span><span>screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = 'Black', background_color: str = 'White', placeholder_color: str = '#E4E4E4', replacement_char: str | None = None, detection_offset: tuple[float, float] = (0, 0), max_char: int = 0, accepted_chars: list[str] = [&#x27; &#x27;, &#x27;!&#x27;, &#x27;&quot;&#x27;, &#x27;#&#x27;, &#x27;$&#x27;, &#x27;%&#x27;, &#x27;&amp;&#x27;, &quot;&#x27;&quot;, &#x27;(&#x27;, &#x27;)&#x27;, &#x27;*&#x27;, &#x27;+&#x27;, &#x27;,&#x27;, &#x27;-&#x27;, &#x27;.&#x27;, &#x27;/&#x27;, &#x27;0&#x27;, &#x27;1&#x27;, &#x27;2&#x27;, &#x27;3&#x27;, &#x27;4&#x27;, &#x27;5&#x27;, &#x27;6&#x27;, &#x27;7&#x27;, &#x27;8&#x27;, &#x27;9&#x27;, &#x27;:&#x27;, &#x27;;&#x27;, &#x27;&lt;&#x27;, &#x27;=&#x27;, &#x27;&gt;&#x27;, &#x27;?&#x27;, &#x27;@&#x27;, &#x27;A&#x27;, &#x27;B&#x27;, &#x27;C&#x27;, &#x27;D&#x27;, &#x27;E&#x27;, &#x27;F&#x27;, &#x27;G&#x27;, &#x27;H&#x27;, &#x27;I&#x27;, &#x27;J&#x27;, &#x27;K&#x27;, &#x27;L&#x27;, &#x27;M&#x27;, &#x27;N&#x27;, &#x27;O&#x27;, &#x27;P&#x27;, &#x27;Q&#x27;, &#x27;R&#x27;, &#x27;S&#x27;, &#x27;T&#x27;, &#x27;U&#x27;, &#x27;V&#x27;, &#x27;W&#x27;, &#x27;X&#x27;, &#x27;Y&#x27;, &#x27;Z&#x27;, &#x27;[&#x27;, &#x27;\\&#x27;, &#x27;]&#x27;, &#x27;^&#x27;, &#x27;_&#x27;, &#x27;`&#x27;, &#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;e&#x27;, &#x27;f&#x27;, &#x27;g&#x27;, &#x27;h&#x27;, &#x27;i&#x27;, &#x27;j&#x27;, &#x27;k&#x27;, &#x27;l&#x27;, &#x27;m&#x27;, &#x27;n&#x27;, &#x27;o&#x27;, &#x27;p&#x27;, &#x27;q&#x27;, &#x27;r&#x27;, &#x27;s&#x27;, &#x27;t&#x27;, &#x27;u&#x27;, &#x27;v&#x27;, &#x27;w&#x27;, &#x27;x&#x27;, &#x27;y&#x27;, &#x27;z&#x27;, &#x27;{&#x27;, &#x27;|&#x27;, &#x27;}&#x27;, &#x27;~&#x27;, &#x27;\x80&#x27;, &#x27;\x81&#x27;, &#x27;\x82&#x27;, &#x27;\x83&#x27;, &#x27;\x84&#x27;, &#x27;\x85&#x27;, &#x27;\x86&#x27;, &#x27;\x87&#x27;, &#x27;\x88&#x27;, &#x27;\x89&#x27;, &#x27;\x8a&#x27;, &#x27;\x8b&#x27;, &#x27;\x8c&#x27;, &#x27;\x8d&#x27;, &#x27;\x8e&#x27;, &#x27;\x8f&#x27;, &#x27;\x90&#x27;, &#x27;\x91&#x27;, &#x27;\x92&#x27;, &#x27;\x93&#x27;, &#x27;\x94&#x27;, &#x27;\x95&#x27;, &#x27;\x96&#x27;, &#x27;\x97&#x27;, &#x27;\x98&#x27;, &#x27;\x99&#x27;, &#x27;\x9a&#x27;, &#x27;\x9b&#x27;, &#x27;\x9c&#x27;, &#x27;\x9d&#x27;, &#x27;\x9e&#x27;, &#x27;\x9f&#x27;, &#x27;\xa0&#x27;, &#x27;¡&#x27;, &#x27;¢&#x27;, &#x27;£&#x27;, &#x27;¤&#x27;, &#x27;¥&#x27;, &#x27;¦&#x27;, &#x27;§&#x27;, &#x27;¨&#x27;, &#x27;©&#x27;, &#x27;ª&#x27;, &#x27;«&#x27;, &#x27;¬&#x27;, &#x27;\xad&#x27;, &#x27;®&#x27;, &#x27;¯&#x27;, &#x27;°&#x27;, &#x27;±&#x27;, &#x27;²&#x27;, &#x27;³&#x27;, &#x27;´&#x27;, &#x27;µ&#x27;, &#x27;¶&#x27;, &#x27;·&#x27;, &#x27;¸&#x27;, &#x27;¹&#x27;, &#x27;º&#x27;, &#x27;»&#x27;, &#x27;¼&#x27;, &#x27;½&#x27;, &#x27;¾&#x27;, &#x27;¿&#x27;, &#x27;À&#x27;, &#x27;Á&#x27;, &#x27;Â&#x27;, &#x27;Ã&#x27;, &#x27;Ä&#x27;, &#x27;Å&#x27;, &#x27;Æ&#x27;, &#x27;Ç&#x27;, &#x27;È&#x27;, &#x27;É&#x27;, &#x27;Ê&#x27;, &#x27;Ë&#x27;, &#x27;Ì&#x27;, &#x27;Í&#x27;, &#x27;Î&#x27;, &#x27;Ï&#x27;, &#x27;Ð&#x27;, &#x27;Ñ&#x27;, &#x27;Ò&#x27;, &#x27;Ó&#x27;, &#x27;Ô&#x27;, &#x27;Õ&#x27;, &#x27;Ö&#x27;, &#x27;×&#x27;, &#x27;Ø&#x27;, &#x27;Ù&#x27;, &#x27;Ú&#x27;, &#x27;Û&#x27;, &#x27;Ü&#x27;, &#x27;Ý&#x27;, &#x27;Þ&#x27;, &#x27;ß&#x27;, &#x27;à&#x27;, &#x27;á&#x27;, &#x27;â&#x27;, &#x27;ã&#x27;, &#x27;ä&#x27;, &#x27;å&#x27;, &#x27;æ&#x27;, &#x27;ç&#x27;, &#x27;è&#x27;, &#x27;é&#x27;, &#x27;ê&#x27;, &#x27;ë&#x27;, &#x27;ì&#x27;, &#x27;í&#x27;, &#x27;î&#x27;, &#x27;ï&#x27;, &#x27;ð&#x27;, &#x27;ñ&#x27;, &#x27;ò&#x27;, &#x27;ó&#x27;, &#x27;ô&#x27;, &#x27;õ&#x27;, &#x27;ö&#x27;, &#x27;÷&#x27;, &#x27;ø&#x27;, &#x27;ù&#x27;, &#x27;ú&#x27;, &#x27;û&#x27;, &#x27;ü&#x27;, &#x27;ý&#x27;, &#x27;þ&#x27;])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Abstract class for UI elements </p>
@@ -154,13 +163,17 @@ class Textbox(UI):
 <dd>Color of the text</dd>
 <dt><strong><code>detection_offset</code></strong> :&ensp;<code>tuple[float, float]</code></dt>
 <dd>Offset for the mouse/textbox interaction</dd>
+<dt><strong><code>max_char</code></strong> :&ensp;<code>int</code></dt>
+<dd>Maximum accepted amount of characters</dd>
+<dt><strong><code>accepted_chars</code></strong> :&ensp;<code>list[str]</code></dt>
+<dd>List of accepted characters</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Textbox(UI):
-    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = &#34;Black&#34;, background_color: str = &#34;White&#34;, placeholder_color: str = &#34;#E4E4E4&#34;, replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0)) -&gt; None:
+    def __init__(self: Textbox, screen: pygame.surface.Surface, position: tuple[float, float], placeholder_text: str, font: pygame.font.Font, size: tuple[float, float], text_color: str = &#34;Black&#34;, background_color: str = &#34;White&#34;, placeholder_color: str = &#34;#E4E4E4&#34;, replacement_char: str|None = None, detection_offset: tuple[float, float] = (0, 0), max_char: int = 0, accepted_chars: list[str] = DEFAULT_ACCEPTED_CHARACTERS) -&gt; None:
         &#34;&#34;&#34;Textbox UI element
 
         Args:
@@ -170,6 +183,8 @@ class Textbox(UI):
             font (pygame.font.Font): Font to use for the text
             color (str): Color of the text
             detection_offset (tuple[float, float]): Offset for the mouse/textbox interaction
+            max_char (int): Maximum accepted amount of characters
+            accepted_chars (list[str]): List of accepted characters
         &#34;&#34;&#34;
         super().__init__(screen, detection_offset)
         self.focused: bool = False
@@ -192,6 +207,8 @@ class Textbox(UI):
         self.rect = self.surface.get_rect(center=self.position)
         self.placeholder_text_rect = self.placeholder_text_render.get_rect(
             center=self.center)
+        self.max_char: int = max_char
+        self.accepted_chars: list[str] = accepted_chars
 
     def update_render(self: Textbox) -&gt; None:
         &#34;&#34;&#34;Updates the button
@@ -218,13 +235,18 @@ class Textbox(UI):
         Args:
             event (pygame.event.Event): Keydown event to process
         &#34;&#34;&#34;
+            
         match (event.key):
             case pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
             case pygame.K_ESCAPE:
                 self.focused = False
             case _:
-                self.text += event.unicode
+                # If we haven&#39;t hit the max char limit/there isn&#39;t one,
+                # and if the character is in the list of accepted chars/there isn&#39;t one, append to the string
+                if (self.max_char == 0 or len(self.text) &lt; self.max_char):
+                    if (not self.accepted_chars or event.unicode in self.accepted_chars):
+                        self.text += event.unicode
 
     def update(self: Textbox, event: pygame.event.Event):
         &#34;&#34;&#34;Updates the textbox according to a give event.
