@@ -44,6 +44,7 @@ def login_screen(screen: pygame.surface.Surface):
             # Error : Login already registered !
             pass
 
+    # Create a textbox for the username
     username_textbox = Textbox(
         screen=login_popup.surface,
         position=(login_popup.surface.get_size()[0]//2, 225),
@@ -51,6 +52,7 @@ def login_screen(screen: pygame.surface.Surface):
         font=login_font.get_font(75),
         size=(370, 100)
     )
+    # Create a textbox for the password, which won't display the characters typed in
     password_textbox = Textbox(
         screen=login_popup.surface,
         position=(login_popup.surface.get_size()[0]//2, 350),
@@ -59,6 +61,7 @@ def login_screen(screen: pygame.surface.Surface):
         size=(370, 100),
         replacement_char="*"
     )
+    # Create a login button>
     login_button = Button(
         screen=login_popup.surface,
         image=pygame.image.load(resource_path("jeu/assets/images/Login Rect.png")),
@@ -69,6 +72,7 @@ def login_screen(screen: pygame.surface.Surface):
         hover_color="#555555",
         action=login_handler
     )
+    # Create a register button
     register_button = Button(
         screen=login_popup.surface,
         image=pygame.image.load(resource_path("jeu/assets/images/Login Rect.png")),
@@ -80,6 +84,7 @@ def login_screen(screen: pygame.surface.Surface):
         action=register_handler
     )
 
+    # Add all the previously created element to the popup and run it
     login_popup.add_ui_element(username_textbox)
     login_popup.add_ui_element(password_textbox)
     login_popup.add_ui_element(register_button)
