@@ -1,11 +1,13 @@
+import json
+from pathlib import Path
+
+import bcrypt
+from time import time
+
 from jeu.engine.Player.Player import Player
 
-import json
-import bcrypt
-import os
-
-SAVE_FILE_PATH = os.path.dirname(__file__) + "/../gameData/players.json"
-
+SAVE_FOLDER_PATH = str(Path.home()) + "/Pipopipette"
+SAVE_FILE_PATH = SAVE_FOLDER_PATH + "/players.json"
 
 class SaveSystem():
     """
@@ -22,9 +24,10 @@ class SaveSystem():
         Args:
             player: The Player to save
         """
-        with open(SAVE_FILE_PATH) as jsonFile:  # File loaded
-            jsonObject = json.load(jsonFile)
-            jsonFile.close()
+        SaveSystem.__ensure_exists()
+        with open(SAVE_FILE_PATH) as json_file:  # File loaded
+            json_object = json.load(json_file)
+            json_file.close()
 
         for i in range(len(jsonObject)):  # Loop to get the right entry for this user
             if jsonObject[i]['username'] == player.NAME:
@@ -53,6 +56,7 @@ class SaveSystem():
         Returns: Player if found someone with this username and password, None if something went wrong
 
         """
+        SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:
             json_object = json.load(json_file)
             json_file.close()
@@ -77,6 +81,7 @@ class SaveSystem():
         Returns: True of False. False = Login can be registered
 
         """
+        SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:
             json_object = json.load(json_file)
             json_file.close()
@@ -100,6 +105,7 @@ class SaveSystem():
 
         Returns: A Player object
         """
+        SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:
             json_object = json.load(json_file)
             json_file.close()
@@ -125,6 +131,7 @@ class SaveSystem():
         Method used to get the first available ID in the local account database
         Returns: Int
         """
+        SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:
             json_object = json.load(json_file)
             json_file.close()
@@ -135,6 +142,29 @@ class SaveSystem():
             if int(player["id"]) > idAvailable: idAvailable = int(player["id"])
 
         return int(idAvailable) + 1
+    
+    @staticmethod
+    def __ensure_exists():
+        """Ensures the save folder path and file exists, and are not corrupted.
+        """
+        # Create the folder
+        Path(SAVE_FOLDER_PATH).mkdir(parents=True, exist_ok=True)
+        # Create the save file if it doesn't exist
+        if not Path(SAVE_FILE_PATH).is_file():
+            with open(SAVE_FILE_PATH, 'w') as f:
+                f.write("[]")
+
+        # Try and read the save file to see if it's corrupted,
+        # if it is, make a backup of the old one and create a new one 
+        with open(SAVE_FILE_PATH) as json_file:
+            try:
+                json.load(json_file)
+            except json.JSONDecodeError:
+                print("The players file is corrupted! Creating a new one..")
+                corrupted_file = Path(SAVE_FOLDER_PATH)
+                corrupted_file.rename(Path(SAVE_FOLDER_PATH+f"/{time()}.json"))
+                with open(SAVE_FILE_PATH, 'w') as f:
+                    f.write("[]")
 
 
 if __name__ == '__main__':
