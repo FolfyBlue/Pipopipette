@@ -1,3 +1,4 @@
+import sys
 import time
 
 import pygame
@@ -18,6 +19,11 @@ PLAYER2_COLOR = "red"
 PLAYER_COLORS = (PLAYER1_COLOR, PLAYER2_COLOR)
 PLAYER_COUNT = 2
 
+def quit():
+    """Quits the program
+    """
+    pygame.quit()
+    sys.exit()
 
 def formatted_score(score: int) -> str:
     """Returns an integer into a formatted string
