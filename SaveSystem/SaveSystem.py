@@ -19,10 +19,10 @@ class SaveSystem():
 
     @staticmethod
     def save_player(player: Player) -> None:
-        """
-        Save a player object in storage. Will not update the password for this player
+        """Save a player object in storage. Will not update the password for this player
+
         Args:
-            player: The Player to save
+            player (Player): Player to save.
         """
         SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:  # File loaded
@@ -47,14 +47,14 @@ class SaveSystem():
 
     @staticmethod
     def load_player(username: str, password: str) -> Player | None:
-        """
-        Get the saved data of someone, with his username and password
+        """Get the saved data of someone, with his username and password
+
         Args:
-            username: The username of this user
-            password: The password of this user
+            username (str): The username of this user
+            password (str): The password of this user
 
-        Returns: Player if found someone with this username and password, None if something went wrong
-
+        Returns:
+            Player | None: Player if found someone with this username and password, None if something went wrong
         """
         SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:
@@ -75,11 +75,12 @@ class SaveSystem():
     def is_login_already_taken(username: str) -> bool:
         """
         Check if a login is still available
+
         Args:
-            username: The username of this user
+            username (str): The username of this user
 
-        Returns: True of False. False = Login can be registered
-
+        Returns:
+            bool: True of False. False = Login can be registered
         """
         SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:
@@ -94,17 +95,20 @@ class SaveSystem():
         return taken  # Don't found this username
 
     @staticmethod
-    def create_user(username: str, password: str, id: int, points: int = 0) -> Player:
-        """
-        Register a new user in the save system
-        Args:
-            username: The username of this user
-            password: A password
-            id: An unique ID for this user
-            points: The number of points for this player
+    def create_user(username: str, password: str, id: int, points: int = 0) -> Player|None:
+        """Register a new user in the save system
 
-        Returns: A Player object
+        Args:
+            username (str): The username of this user
+            password (str): The password of this user
+            id (int): The unique identifier of the user
+            points (int, optional): The number of points this player has. Defaults to 0.
+
+        Returns:
+            Player|None: A player object, or None if it couldn't be created.
         """
+        if (not username) or (not password) or (SaveSystem.is_login_already_taken(username)):
+            return None
         SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:
             json_object = json.load(json_file)
@@ -126,10 +130,11 @@ class SaveSystem():
         return Player(username, id, points)
 
     @staticmethod
-    def get_first_available_ID():
-        """
-        Method used to get the first available ID in the local account database
-        Returns: Int
+    def get_first_available_ID() -> int:
+        """Method used to get the first available ID in the local account database
+
+        Returns:
+            int: Available ID
         """
         SaveSystem.__ensure_exists()
         with open(SAVE_FILE_PATH) as json_file:
@@ -172,7 +177,8 @@ if __name__ == '__main__':
     print(bcrypt.hashpw(b'1234', bcrypt.gensalt()))
     print(bcrypt.checkpw(b'1234', b'$2b$12$Fz6ZG4GIm0jRkN35acYaXeoDMPlPQGcclnChced.W.ivZnI5YWv16'))
 
-    player: Player = SaveSystem.load_player('test', '1234')
+    player: Player|None = SaveSystem.load_player('test', '1234')
     print(player)
-    SaveSystem.save_player(player)
+    if isinstance(player, Player):
+        SaveSystem.save_player(player)
     # SaveSystem.create_user("TEST1234", "9876", 7326576, 8)
