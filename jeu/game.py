@@ -348,7 +348,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
                 # If a player has more score than the other, he wins, otherwise it's a draw
                 if score[0] > score[1]:
                     winner_str = f"{players[0]} wins!"
-                elif score[1] < score[0]:
+                elif score[1] > score[0]:
                     winner_str = f"{players[1]} wins!"
                 # Create the winner text
                 winner_label: pygame.surface.Surface = game_font.get_font(75).render(winner_str, True, "white")
