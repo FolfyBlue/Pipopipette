@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import sys
+
 import pygame
 
 from jeu.ui.button import Button
@@ -7,6 +9,12 @@ from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
 
+
+def quit():
+    """Quits the program
+    """
+    pygame.quit()
+    sys.exit()
 
 class Popup(UI):
     def __init__(self: Popup, screen: pygame.surface.Surface, title: str, size: tuple[float, float], color: str = "white") -> None:
@@ -94,6 +102,8 @@ class Popup(UI):
         self.active = True
         while self.active:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quit()
                 self.update(event)
             self.update_render()
             pygame.display.update()
