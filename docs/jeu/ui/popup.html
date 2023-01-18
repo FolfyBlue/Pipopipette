@@ -28,6 +28,8 @@
 </summary>
 <pre><code class="python">from __future__ import annotations
 
+import sys
+
 import pygame
 
 from jeu.ui.button import Button
@@ -35,6 +37,12 @@ from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
 
+
+def quit():
+    &#34;&#34;&#34;Quits the program
+    &#34;&#34;&#34;
+    pygame.quit()
+    sys.exit()
 
 class Popup(UI):
     def __init__(self: Popup, screen: pygame.surface.Surface, title: str, size: tuple[float, float], color: str = &#34;white&#34;) -&gt; None:
@@ -122,6 +130,8 @@ class Popup(UI):
         self.active = True
         while self.active:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quit()
                 self.update(event)
             self.update_render()
             pygame.display.update()</code></pre>
@@ -132,6 +142,25 @@ class Popup(UI):
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="jeu.ui.popup.quit"><code class="name flex">
+<span>def <span class="ident">quit</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Quits the program</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def quit():
+    &#34;&#34;&#34;Quits the program
+    &#34;&#34;&#34;
+    pygame.quit()
+    sys.exit()</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
@@ -244,6 +273,8 @@ class Popup(UI):
         self.active = True
         while self.active:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quit()
                 self.update(event)
             self.update_render()
             pygame.display.update()</code></pre>
@@ -320,6 +351,8 @@ class Popup(UI):
     self.active = True
     while self.active:
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
             self.update(event)
         self.update_render()
         pygame.display.update()</code></pre>
@@ -390,6 +423,11 @@ class Popup(UI):
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="jeu.ui" href="index.html">jeu.ui</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="jeu.ui.popup.quit" href="#jeu.ui.popup.quit">quit</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
