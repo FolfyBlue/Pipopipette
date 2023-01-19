@@ -137,7 +137,7 @@ def main_menu(screen: pygame.surface.Surface):
                 x_size = 5
             
             if y_size_text:
-                y_size = int(x_size_text)
+                y_size = int(y_size_text)
             else:
                 y_size = 5
             
