@@ -11,6 +11,7 @@ from jeu.ui.popup import Popup
 from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
+from jeu.utils.settings import DEFAULT_SETTINGS
 
 LINE_WIDTH = 9
 HEIGHT_OFFSET = 250
@@ -94,7 +95,7 @@ def get_score_label(score: int, font: FontManager, player1: bool) -> tuple[pygam
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players: tuple[str, str]=("Playername00", "Playername01"), config: dict[str, Any] = {}):
+def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players: tuple[str, str]=("Playername00", "Playername01"), config: dict[str, Any] = DEFAULT_SETTINGS):
     """Game screen, to play the game of Pipopipette
 
     Args:
