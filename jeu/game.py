@@ -141,7 +141,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
 
     def restart_button_handler():
         end_popup.active = False
-        game(screen, size)
+        game(screen, size, players, config)
     # Add a vertically centered restart button
     end_popup_restart_button = Button(
         screen=end_popup.surface,
