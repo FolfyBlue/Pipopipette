@@ -1,5 +1,6 @@
 import sys
 import time
+from typing import Any
 
 import pygame
 
@@ -51,8 +52,8 @@ def formatted_time(time_in_seconds: int) -> str:
     return f"{minutes:02d}:{seconds:02d}"
 
 
-def get_timer_label(start_time_in_seconds: float, font: FontManager) -> tuple[pygame.surface.Surface, pygame.rect.Rect]:
-    """Returns a new timer rect and label for the current time
+def get_stopwatch_label(start_time_in_seconds: float, font: FontManager) -> tuple[pygame.surface.Surface, pygame.rect.Rect]:
+    """Returns a new timer rect and label for the current elapsed time
 
     Args:
         start_time_in_seconds (float): Time in seconds since the timer has started
@@ -93,7 +94,7 @@ def get_score_label(score: int, font: FontManager, player1: bool) -> tuple[pygam
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players: tuple[str, str]=("Playername00", "Playername01")):
+def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players: tuple[str, str]=("Playername00", "Playername01"), config: dict[str, Any] = {}):
     """Game screen, to play the game of Pipopipette
 
     Args:
@@ -156,7 +157,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
     end_popup.add_ui_element(end_popup_restart_button)
 
     # Initialise text on screen
-    labels["timer"] = get_timer_label(time.time(), game_font)
+    labels["timer"] = get_stopwatch_label(time.time(), game_font)
     labels["player1"] = (player1_label, player1_rect)
     labels["player2"] = (player2_label, player2_rect)
     labels["player1_score"] = get_score_label(0, game_font, True)
@@ -185,6 +186,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
         """
         print(square_id, side, i, j)
         nonlocal owned_segments
+        nonlocal start_time_in_seconds
         if gameplay.pipopipette.valid_target(square_id, side):
             old_score: list[int] = gameplay.get_score()
             gameplay.set_player_target(square_id, side)
@@ -192,6 +194,8 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
             new_score: list[int] = gameplay.get_score()
             if old_score[gameplay.current_player_ID] >= new_score[gameplay.current_player_ID]:
                 gameplay.next_player()
+                if "timer" in config and config["timer"] > 0:
+                    start_time_in_seconds = time.time()
         else:
             # Screen shake / Red tint?
             print(square_id, side, (i, j), "is not a valid target!")
@@ -292,15 +296,20 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
 
     board_elements, fillers = update_board()
     end_update_counter: int = 0
+    end_flag = 0
     # Game loop
     while True:
         # Update the relevant elements only once the game has started
         if started:
             score: list[int] = gameplay.get_score()
             board_elements, fillers = update_board()
-            labels["timer"] = get_timer_label(start_time_in_seconds, game_font)
+            labels["timer"] = get_stopwatch_label(start_time_in_seconds, game_font)
             labels["player1_score"] = get_score_label(score[0], game_font, True)
             labels["player2_score"] = get_score_label(score[1], game_font, False)
+            if "timer" in config and config["timer"] > 0:
+                if (time.time()-start_time_in_seconds > config["timer"]) and (end_update_counter == 0):
+                    end_update_counter = 1
+                    end_flag = 1
         # Display the FPS counter in console
         print(int(clock.get_fps()), end=" FPS    \r")
         # Display the background to the screen first /!\
@@ -335,7 +344,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
         clock.tick()
         if started:
             # If the game is over, wait 10 frames before displaying the end popup
-            if gameplay.game_over():
+            if end_update_counter > 0 or gameplay.game_over():
                 end_update_counter += 1
             if end_update_counter == 10:
                 score: list[int] = gameplay.get_score()
@@ -344,19 +353,29 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
                 player2_score_label: pygame.surface.Surface = game_font.get_font(75).render(f"{score[1]:03d}", True, PLAYER2_COLOR)
                 player1_score_rect: pygame.rect.Rect = player1_score_label.get_rect(center=(end_popup.surface.get_size()[0]//2*0.5, end_popup.surface.get_size()[1]//2*1.3))
                 player2_score_rect: pygame.rect.Rect = player1_score_label.get_rect(center=(end_popup.surface.get_size()[0]//2*1.5, end_popup.surface.get_size()[1]//2*1.3))
-                winner_str: str = "Draw!"
-                # If a player has more score than the other, he wins, otherwise it's a draw
-                if score[0] > score[1]:
-                    winner_str = f"{players[0]} wins!"
-                elif score[1] > score[0]:
-                    winner_str = f"{players[1]} wins!"
-                # Create the winner text
-                winner_label: pygame.surface.Surface = game_font.get_font(75).render(winner_str, True, "white")
-                winner_rect: pygame.rect.Rect = winner_label.get_rect(center=(end_popup.surface.get_size()[0]//2, end_popup.surface.get_size()[1]//2*0.8))
+                winner_str: str = "default_winner_str"
+                match end_flag:
+                    case 1: # Time out
+                        # If a player has more score than the other, he wins, otherwise it's a draw
+                        winner_str = f"{players[gameplay.current_player_ID]} timed out"
+                        # Create the winner text
+                        winner_label: pygame.surface.Surface = game_font.get_font(75).render(winner_str, True, "white")
+                        winner_rect: pygame.rect.Rect = winner_label.get_rect(center=(end_popup.surface.get_size()[0]//2, end_popup.surface.get_size()[1]//2*0.8))
+                        end_popup.add_rect(winner_label, winner_rect)
+                    case _: # The game is over
+                        winner_str = "Draw!"
+                        # If a player has more score than the other, he wins, otherwise it's a draw
+                        if score[0] > score[1]:
+                            winner_str = f"{players[0]} wins!"
+                        elif score[1] > score[0]:
+                            winner_str = f"{players[1]} wins!"
+                        # Create the winner text
+                        winner_label: pygame.surface.Surface = game_font.get_font(75).render(winner_str, True, "white")
+                        winner_rect: pygame.rect.Rect = winner_label.get_rect(center=(end_popup.surface.get_size()[0]//2, end_popup.surface.get_size()[1]//2*0.8))
+                        end_popup.add_rect(winner_label, winner_rect)
                 # Add all the previously created texts and display the popup
                 end_popup.add_rect(player1_score_label, player1_score_rect)
                 end_popup.add_rect(player2_score_label, player2_score_rect)
-                end_popup.add_rect(winner_label, winner_rect)
                 end_popup.run()
                 # Exit game loop
                 return
