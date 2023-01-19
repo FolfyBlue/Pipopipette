@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>jeu.options_screen API documentation</title>
+<title>jeu.utils.settings API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,81 +19,94 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>jeu.options_screen</code></h1>
+<h1 class="title">Module <code>jeu.utils.settings</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import pygame
+<pre><code class="python">from typing import Any
+import json
+from time import time
 
-from jeu.ui.button import Button
-from jeu.ui.popup import Popup
-from jeu.ui.textbox import Textbox
-from jeu.utils import settings
-from jeu.utils.assets_import import resource_path
-from jeu.utils.font_manager import FontManager
+from pathlib import Path
 
-MARGIN = 32
+SAVE_FOLDER_PATH = str(Path.home()) + &#34;/Pipopipette&#34;
+SAVE_FILE_PATH = SAVE_FOLDER_PATH + &#34;/settings.json&#34;
 
-def options_screen(screen: pygame.surface.Surface):
-    &#34;&#34;&#34;Options screen
+DEFAULT_SETTINGS = {
+    &#34;timer&#34;: 60
+}
+
+def integrity_check(settings: dict[str, Any]) -&gt; dict[str, Any]:
+    &#34;&#34;&#34;Ensures the integrity of the save data
 
     Args:
-        screen (pygame.surface.Surface): Screen to display the menu on
+        settings (dict[str, Any]): Settings to check for
+
+    Returns:
+        dict[str, Any]: Settings with checked integrity
     &#34;&#34;&#34;
-    current_settings = settings.get_settings()
-    options_font: FontManager = FontManager(resource_path(&#34;jeu/assets/fonts/Truculenta.ttf&#34;))
+    for setting_name, setting_value in settings.items():
+        if setting_name not in DEFAULT_SETTINGS:
+            settings.pop(setting_name)
 
-    # Initializing on-screen elements #
-    options_popup: Popup = Popup(screen, &#34;Options&#34;, (screen.get_width()*0.85, screen.get_height()*0.8), &#34;#0575BB&#34;)
+    if &#34;timer&#34; in settings:
+        if  (type(settings[&#34;timer&#34;]) != int
+            ) or (settings[&#34;timer&#34;] &lt; 0
+        ):
+            settings.pop(&#34;timer&#34;)
+    return settings
 
-    def close_popup():
-        &#34;&#34;&#34;Overwritten close button handler for the popup that saves the settings upon clicking it
-        &#34;&#34;&#34;
-        config = {}
-        if timer := timer_textbox.text:
-            config[&#34;timer&#34;] = int(timer)
-        settings.save(config)
-        options_popup.close()
+def __ensure_exists():
+    &#34;&#34;&#34;Ensures the save folder path and file exists, and are not corrupted.
+    &#34;&#34;&#34;
+    # Create the folder
+    Path(SAVE_FOLDER_PATH).mkdir(parents=True, exist_ok=True)
+    # Create the save file if it doesn&#39;t exist
+    if not Path(SAVE_FILE_PATH).is_file():
+        with open(SAVE_FILE_PATH, &#39;w&#39;) as f:
+            f.write(&#34;{}&#34;)
 
-    # Edit close button to make it save
-    options_popup.elements[0] = Button(
-            screen=options_popup.surface,
-            image=pygame.image.load(resource_path(&#34;jeu/assets/images/close.png&#34;)),
-            position=(options_popup.surface.get_width()-25, 25),
-            text=&#34; &#34;,
-            font=options_popup.font.get_font(50),
-            color=&#34;#000000&#34;,
-            hover_color=&#34;#555555&#34;,
-            action=close_popup,
-            detection_offset=options_popup.offset
-        )
+    # Try and read the save file to see if it&#39;s corrupted,
+    # if it is, make a backup of the old one and create a new one 
+    with open(SAVE_FILE_PATH) as json_file:
+        try:
+            json.load(json_file)
+        except json.JSONDecodeError as e:
+            print(&#34;The settings file is corrupted! Creating a new one..&#34;)
+            print(f&#34;(Error: {e})&#34;)
+            corrupted_file = Path(SAVE_FOLDER_PATH)
+            corrupted_file.rename(Path(SAVE_FOLDER_PATH+f&#34;/{time()}.json&#34;))
+            with open(SAVE_FILE_PATH, &#39;w&#39;) as f:
+                f.write(&#34;{}&#34;)
 
-    timer_label: pygame.surface.Surface = options_font.get_font(56).render(&#34;Timer&#34;, True, &#34;white&#34;)
-    timer_label_rect: pygame.rect.Rect = timer_label.get_rect(center=(200//2+MARGIN, options_popup.surface.get_size()[1]//2*0.45))
-    
-    default_timer: int = settings.DEFAULT_SETTINGS[&#34;timer&#34;]
-    timer_textbox: Textbox = Textbox(
-            screen=options_popup.surface,
-            position=(200//2+MARGIN, options_popup.surface.get_size()[1]//2*0.7),
-            placeholder_text=f&#34;{default_timer} seconds&#34;,
-            placeholder_color=&#34;#424242&#34;,
-            size=(200, 75),
-            font=options_font.get_font(40),
-            text_color=&#34;black&#34;,
-            background_color=&#34;white&#34;,
-            max_char = 3,
-            accepted_chars = [&#34;0&#34;,&#34;1&#34;,&#34;2&#34;,&#34;3&#34;,&#34;4&#34;,&#34;5&#34;,&#34;6&#34;,&#34;7&#34;,&#34;8&#34;,&#34;9&#34;]
-        )
-    
-    if &#34;timer&#34; in current_settings and current_settings[&#34;timer&#34;] != default_timer:
-        timer_textbox.text = str(current_settings[&#34;timer&#34;])
+def save(settings: dict[str, Any]):
+    &#34;&#34;&#34;Saves the data to the save location
 
-    options_popup.add_rect(timer_label, timer_label_rect)
-    options_popup.add_ui_element(timer_textbox)
-    options_popup.run()</code></pre>
+    Args:
+        settings (dict[str, Any]): Settings to save
+    &#34;&#34;&#34;
+    __ensure_exists()
+    settings = integrity_check(settings)
+    with open(SAVE_FILE_PATH, &#39;w&#39;) as f:
+        json.dump(settings, f)
+
+def get_settings() -&gt; dict[str, Any]:
+    &#34;&#34;&#34;Obtains the settings from the save file
+
+    Returns:
+        dict[str, Any]: Settings
+    &#34;&#34;&#34;
+    __ensure_exists()
+    with open(SAVE_FILE_PATH, &#39;r&#39;) as f:
+        settings: dict[str, Any] = json.load(f)
+    for setting, default_value in DEFAULT_SETTINGS.items():
+        if setting not in settings:
+            settings[setting] = default_value
+    settings = integrity_check(settings)
+    return settings</code></pre>
 </details>
 </section>
 <section>
@@ -103,77 +116,100 @@ def options_screen(screen: pygame.surface.Surface):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="jeu.options_screen.options_screen"><code class="name flex">
-<span>def <span class="ident">options_screen</span></span>(<span>screen: pygame.Surface)</span>
+<dt id="jeu.utils.settings.get_settings"><code class="name flex">
+<span>def <span class="ident">get_settings</span></span>(<span>) ‑> dict[str, typing.Any]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Options screen</p>
-<h2 id="args">Args</h2>
+<div class="desc"><p>Obtains the settings from the save file</p>
+<h2 id="returns">Returns</h2>
 <dl>
-<dt><strong><code>screen</code></strong> :&ensp;<code>pygame.surface.Surface</code></dt>
-<dd>Screen to display the menu on</dd>
+<dt><code>dict[str, Any]</code></dt>
+<dd>Settings</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def options_screen(screen: pygame.surface.Surface):
-    &#34;&#34;&#34;Options screen
+<pre><code class="python">def get_settings() -&gt; dict[str, Any]:
+    &#34;&#34;&#34;Obtains the settings from the save file
+
+    Returns:
+        dict[str, Any]: Settings
+    &#34;&#34;&#34;
+    __ensure_exists()
+    with open(SAVE_FILE_PATH, &#39;r&#39;) as f:
+        settings: dict[str, Any] = json.load(f)
+    for setting, default_value in DEFAULT_SETTINGS.items():
+        if setting not in settings:
+            settings[setting] = default_value
+    settings = integrity_check(settings)
+    return settings</code></pre>
+</details>
+</dd>
+<dt id="jeu.utils.settings.integrity_check"><code class="name flex">
+<span>def <span class="ident">integrity_check</span></span>(<span>settings: dict[str, typing.Any]) ‑> dict[str, typing.Any]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Ensures the integrity of the save data</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>settings</code></strong> :&ensp;<code>dict[str, Any]</code></dt>
+<dd>Settings to check for</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict[str, Any]</code></dt>
+<dd>Settings with checked integrity</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def integrity_check(settings: dict[str, Any]) -&gt; dict[str, Any]:
+    &#34;&#34;&#34;Ensures the integrity of the save data
 
     Args:
-        screen (pygame.surface.Surface): Screen to display the menu on
+        settings (dict[str, Any]): Settings to check for
+
+    Returns:
+        dict[str, Any]: Settings with checked integrity
     &#34;&#34;&#34;
-    current_settings = settings.get_settings()
-    options_font: FontManager = FontManager(resource_path(&#34;jeu/assets/fonts/Truculenta.ttf&#34;))
+    for setting_name, setting_value in settings.items():
+        if setting_name not in DEFAULT_SETTINGS:
+            settings.pop(setting_name)
 
-    # Initializing on-screen elements #
-    options_popup: Popup = Popup(screen, &#34;Options&#34;, (screen.get_width()*0.85, screen.get_height()*0.8), &#34;#0575BB&#34;)
+    if &#34;timer&#34; in settings:
+        if  (type(settings[&#34;timer&#34;]) != int
+            ) or (settings[&#34;timer&#34;] &lt; 0
+        ):
+            settings.pop(&#34;timer&#34;)
+    return settings</code></pre>
+</details>
+</dd>
+<dt id="jeu.utils.settings.save"><code class="name flex">
+<span>def <span class="ident">save</span></span>(<span>settings: dict[str, typing.Any])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Saves the data to the save location</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>settings</code></strong> :&ensp;<code>dict[str, Any]</code></dt>
+<dd>Settings to save</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save(settings: dict[str, Any]):
+    &#34;&#34;&#34;Saves the data to the save location
 
-    def close_popup():
-        &#34;&#34;&#34;Overwritten close button handler for the popup that saves the settings upon clicking it
-        &#34;&#34;&#34;
-        config = {}
-        if timer := timer_textbox.text:
-            config[&#34;timer&#34;] = int(timer)
-        settings.save(config)
-        options_popup.close()
-
-    # Edit close button to make it save
-    options_popup.elements[0] = Button(
-            screen=options_popup.surface,
-            image=pygame.image.load(resource_path(&#34;jeu/assets/images/close.png&#34;)),
-            position=(options_popup.surface.get_width()-25, 25),
-            text=&#34; &#34;,
-            font=options_popup.font.get_font(50),
-            color=&#34;#000000&#34;,
-            hover_color=&#34;#555555&#34;,
-            action=close_popup,
-            detection_offset=options_popup.offset
-        )
-
-    timer_label: pygame.surface.Surface = options_font.get_font(56).render(&#34;Timer&#34;, True, &#34;white&#34;)
-    timer_label_rect: pygame.rect.Rect = timer_label.get_rect(center=(200//2+MARGIN, options_popup.surface.get_size()[1]//2*0.45))
-    
-    default_timer: int = settings.DEFAULT_SETTINGS[&#34;timer&#34;]
-    timer_textbox: Textbox = Textbox(
-            screen=options_popup.surface,
-            position=(200//2+MARGIN, options_popup.surface.get_size()[1]//2*0.7),
-            placeholder_text=f&#34;{default_timer} seconds&#34;,
-            placeholder_color=&#34;#424242&#34;,
-            size=(200, 75),
-            font=options_font.get_font(40),
-            text_color=&#34;black&#34;,
-            background_color=&#34;white&#34;,
-            max_char = 3,
-            accepted_chars = [&#34;0&#34;,&#34;1&#34;,&#34;2&#34;,&#34;3&#34;,&#34;4&#34;,&#34;5&#34;,&#34;6&#34;,&#34;7&#34;,&#34;8&#34;,&#34;9&#34;]
-        )
-    
-    if &#34;timer&#34; in current_settings and current_settings[&#34;timer&#34;] != default_timer:
-        timer_textbox.text = str(current_settings[&#34;timer&#34;])
-
-    options_popup.add_rect(timer_label, timer_label_rect)
-    options_popup.add_ui_element(timer_textbox)
-    options_popup.run()</code></pre>
+    Args:
+        settings (dict[str, Any]): Settings to save
+    &#34;&#34;&#34;
+    __ensure_exists()
+    settings = integrity_check(settings)
+    with open(SAVE_FILE_PATH, &#39;w&#39;) as f:
+        json.dump(settings, f)</code></pre>
 </details>
 </dd>
 </dl>
@@ -189,12 +225,14 @@ def options_screen(screen: pygame.surface.Surface):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="jeu" href="index.html">jeu</a></code></li>
+<li><code><a title="jeu.utils" href="index.html">jeu.utils</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="jeu.options_screen.options_screen" href="#jeu.options_screen.options_screen">options_screen</a></code></li>
+<li><code><a title="jeu.utils.settings.get_settings" href="#jeu.utils.settings.get_settings">get_settings</a></code></li>
+<li><code><a title="jeu.utils.settings.integrity_check" href="#jeu.utils.settings.integrity_check">integrity_check</a></code></li>
+<li><code><a title="jeu.utils.settings.save" href="#jeu.utils.settings.save">save</a></code></li>
 </ul>
 </li>
 </ul>
