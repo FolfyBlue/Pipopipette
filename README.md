@@ -1,5 +1,5 @@
 # SAE Pipopipette
-## Contributeur
+## Contributeurs
 - Vandaele Joshua
 
 - Bodart Jérémy
