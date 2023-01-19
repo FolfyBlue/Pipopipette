@@ -8,7 +8,7 @@
 
 - Vasseur Camille
 
-- Fermond Romain
+- Fermon Romain
 ## S3
 ### Introduction
 Dans le cadre de la SAE S3, nous avons pour but de créer un jeu Pipopipette jouable à 2 joueurs.
