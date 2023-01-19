@@ -11,6 +11,7 @@ from jeu.ui.textbox import Textbox
 from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
+from jeu.utils import settings
 
 MAX_SIZE = 25
 MIN_SIZE = 2
@@ -63,7 +64,7 @@ def main_menu(screen: pygame.surface.Surface):
             font=menu_font.get_font(56),
             color="white",
             hover_color="black",
-            action = lambda: game(screen, size=(3, 3))
+            action = lambda: game(screen, size=(3, 3), config=settings.get_settings())
         )
 
         # Create the center size select button
@@ -75,7 +76,7 @@ def main_menu(screen: pygame.surface.Surface):
             font=menu_font.get_font(56),
             color="white",
             hover_color="black",
-            action = lambda: game(screen, size=(5, 5))
+            action = lambda: game(screen, size=(5, 5), config=settings.get_settings())
         )
 
 
@@ -88,7 +89,7 @@ def main_menu(screen: pygame.surface.Surface):
             font=menu_font.get_font(56),
             color="white",
             hover_color="black",
-            action = lambda: game(screen, size=(7, 7))
+            action = lambda: game(screen, size=(7, 7), config=settings.get_settings())
         )
 
 
@@ -151,7 +152,7 @@ def main_menu(screen: pygame.surface.Surface):
                 y_size = MIN_SIZE
             
             size_popup.close()
-            game(screen, size=(x_size, y_size))
+            game(screen, size=(x_size, y_size), config=settings.get_settings())
 
         # Create the custom size confirm button
         size_popup_confirm_custom_size_button = Button(
@@ -185,7 +186,7 @@ def main_menu(screen: pygame.surface.Surface):
     background: pygame.surface.Surface = pygame.image.load(resource_path("jeu/assets/images/menu_background.png"))
 
     menu_text: pygame.surface.Surface = menu_font.get_font(
-        100).render("MAIN MENU", True, "#EEEEEE")
+        100).render("PIPOPIPETTE", True, "#EEEEEE")
     menu_rect: pygame.rect.Rect = menu_text.get_rect(center=(640, 75))
 
     play_button = Button(
