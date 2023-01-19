@@ -180,6 +180,7 @@ def main_menu(screen: pygame.surface.Surface):
         size_popup.add_rect(x_label, x_rect)
 
         size_popup.run()
+        size_popup.close()
         uninteraction_timer = 10
 
     # Initializing on-screen elements #
