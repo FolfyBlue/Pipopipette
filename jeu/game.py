@@ -176,22 +176,31 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
     fillers: list[pygame.Rect] = []
     owned_segments: dict[tuple[int, int, str], int] = {}
 
-    def segment_handler(square_id: int, side: str, i: int, j: int):
+    def segment_handler(square_id: int, side: str):
         """Handles the clicking of a square's segment
 
         Args:
             square_id (int): id of the clicked square
             side (str): side which was clicked on the square
-            i (int): horizontal position of the square
-            j (int): vertical position of the square
         """
-        print(square_id, side, i, j)
+        if side in ('t', 'd'):
+            gi: int = square_id%gameplay.pipopipette.WIDTH
+            gj: int = square_id//gameplay.pipopipette.WIDTH
+            if side == 'd':
+                gj+=1
+        else:
+            gj: int = square_id//gameplay.pipopipette.WIDTH
+            gi: int = square_id%gameplay.pipopipette.WIDTH
+            if side == 'r' and gi == gameplay.pipopipette.WIDTH-1:
+                gi += 1
+        
+        print(square_id, side, gi, gj)
         nonlocal owned_segments
         nonlocal start_time_in_seconds
         if gameplay.pipopipette.valid_target(square_id, side):
             old_score: list[int] = gameplay.get_score()
             gameplay.set_player_target(square_id, side)
-            owned_segments[(i, j, side)] = gameplay.current_player_ID
+            owned_segments[(gi, gj, side)] = gameplay.current_player_ID
             new_score: list[int] = gameplay.get_score()
             if old_score[gameplay.current_player_ID] >= new_score[gameplay.current_player_ID]:
                 gameplay.next_player()
@@ -199,7 +208,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
                     start_time_in_seconds = time.time()
         else:
             # Screen shake / Red tint?
-            print(square_id, side, (i, j), "is not a valid target!")
+            print(square_id, side, (gi, gj), "is not a valid target!")
 
     def update_board() -> tuple[list[UI], list[pygame.Rect]]:
         """Updates the board
@@ -242,7 +251,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
                             side = 'd'
                             square_id = square_id-size[0]
 
-                        segment_handler(square_id, side, i, j)         
+                        segment_handler(square_id, side)
                     # Create a vertical segment
                     x_segment: Button = Button(
                         screen=screen,
@@ -278,7 +287,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
                             side = "r"
                         square_id = newi+size[0]*j
 
-                        segment_handler(square_id, side, i, j)
+                        segment_handler(square_id, side)
                     # Creates a horizontal segment 
                     y_segment: Button = Button(
                         screen=screen,
