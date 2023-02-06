@@ -12,6 +12,7 @@ from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
 from jeu.utils.settings import DEFAULT_SETTINGS
+from jeu.engine.PipopipetteAI import PipopipetteAI
 
 LINE_WIDTH = 9
 HEIGHT_OFFSET = 250
@@ -95,13 +96,14 @@ def get_score_label(score: int, font: FontManager, player1: bool) -> tuple[pygam
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players: tuple[str, str]=("Playername00", "Playername01"), config: dict[str, Any] = DEFAULT_SETTINGS):
+def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players: tuple[str, str]=("Playername00", "Playername01"), config: dict[str, Any] = DEFAULT_SETTINGS, mode: int=1):
     """Game screen, to play the game of Pipopipette
 
     Args:
         screen (pygame.surface.Surface): Screen to display the game onto
         size (tuple[int, int]): Size of the grid to play on
         players (tuple[str, str]): Tuple of usernames to display for the players
+        mode (int): Game mode. 0 -> Player vs Player (local), 1 -> Player vs AI, 2 -> Player vs Player (online)
     """
     # Initialize game
     pipo: Pipopipette = Pipopipette(*size)
@@ -175,14 +177,8 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
     board_elements: list[UI] = []
     fillers: list[pygame.Rect] = []
     owned_segments: dict[tuple[int, int, str], int] = {}
-
-    def segment_handler(square_id: int, side: str):
-        """Handles the clicking of a square's segment
-
-        Args:
-            square_id (int): id of the clicked square
-            side (str): side which was clicked on the square
-        """
+    
+    def ij_from_square_id(square_id: int, side: str) -> tuple[int, int]:
         if side in ('t', 'd'):
             gi: int = square_id%gameplay.pipopipette.WIDTH
             gj: int = square_id//gameplay.pipopipette.WIDTH
@@ -193,6 +189,16 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
             gi: int = square_id%gameplay.pipopipette.WIDTH
             if side == 'r' and gi == gameplay.pipopipette.WIDTH-1:
                 gi += 1
+        return gi, gj
+
+    def segment_handler(square_id: int, side: str):
+        """Handles the clicking of a square's segment
+
+        Args:
+            square_id (int): id of the clicked square
+            side (str): side which was clicked on the square
+        """
+        gi, gj = ij_from_square_id(square_id, side)
         
         print(square_id, side, gi, gj)
         nonlocal owned_segments
@@ -204,6 +210,17 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
             new_score: list[int] = gameplay.get_score()
             if old_score[gameplay.current_player_ID] >= new_score[gameplay.current_player_ID]:
                 gameplay.next_player()
+                if mode == 1:
+                    while True:
+                        old_score: list[int] = gameplay.get_score()
+                        a_square, a_side = PipopipetteAI.move_random(gameplay)
+                        ai, aj = ij_from_square_id(a_square, a_side)
+                        gameplay.set_player_target(a_square, a_side)
+                        owned_segments[(ai, aj, a_side)] = gameplay.current_player_ID
+                        new_score: list[int] = gameplay.get_score()
+                        if old_score == new_score:
+                            break
+                    gameplay.next_player()
                 if "timer" in config and config["timer"] > 0:
                     start_time_in_seconds = time.time()
         else:
