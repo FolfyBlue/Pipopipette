@@ -211,15 +211,18 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
             if old_score[gameplay.current_player_ID] >= new_score[gameplay.current_player_ID]:
                 gameplay.next_player()
                 if mode == 1:
-                    while True:
+                    old_score = []
+                    while old_score != new_score:
                         old_score: list[int] = gameplay.get_score()
+                        print(gameplay.game_over())
                         a_square, a_side = PipopipetteAI.move_random(gameplay)
-                        ai, aj = ij_from_square_id(a_square, a_side)
-                        gameplay.set_player_target(a_square, a_side)
+                        if not a_side:
+                            print('Not',a_side)
+                            break
+                        ai, aj = ij_from_square_id(a_square, a_side) # type: ignore
+                        gameplay.set_player_target(a_square, a_side) # type: ignore
                         owned_segments[(ai, aj, a_side)] = gameplay.current_player_ID
                         new_score: list[int] = gameplay.get_score()
-                        if old_score == new_score:
-                            break
                     gameplay.next_player()
                 if "timer" in config and config["timer"] > 0:
                     start_time_in_seconds = time.time()
@@ -249,12 +252,10 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
 
                 if i != size[0]:
                     # Select the color based on who owns the segment
-                    if (i, j, 't') in owned_segments:
-                        color: str = PLAYER_COLORS[owned_segments[(i, j,'t')]]
-                    elif (i, j, 'd') in owned_segments:
-                        color: str = PLAYER_COLORS[owned_segments[(i, j,'d')]]
-                    else:
-                        color: str = "white"
+                    color: str = "white"
+                    for side in ('t', 'd'):
+                        if (i, j, side) in owned_segments:
+                            color = PLAYER_COLORS[owned_segments[(i, j, side)]]
                     def vertical_segment_handler(i: int, j: int):
                         """Calculates the square's ID and segment clicked and calls `segment_handler`
 
@@ -285,12 +286,10 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
                     board_elements.append(x_segment)
                 if j != size[1]:
                     # Select the color based on who owns the segment
-                    if (i, j, 'l') in owned_segments:
-                        color: str = PLAYER_COLORS[owned_segments[(i, j,'l')]]
-                    elif (i, j, 'r') in owned_segments:
-                        color: str = PLAYER_COLORS[owned_segments[(i, j,'r')]]
-                    else:
-                        color: str = "white"
+                    color: str = "white"
+                    for side in ('r', 'l'):
+                        if (i, j, side) in owned_segments:
+                            color = PLAYER_COLORS[owned_segments[(i, j, side)]]
                     def horizontal_segment_handler(i: int, j: int):
                         """Calculates the square's ID and segment clicked and calls `segment_handler`
 
