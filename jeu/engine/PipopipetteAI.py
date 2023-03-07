@@ -3,12 +3,27 @@ from random import randint, choice
 class PipopipetteAI:
     """Class which will be used to control the AI's logic.
     """
-    @staticmethod
-    def move_random(gameplay: PipopipetteGameplay) -> tuple[int, str]:
-        move_square: int = -1
-        move_side: str = ''
-        while not gameplay.pipopipette.valid_target(move_square, move_side):
-            move_square = randint(0, len(gameplay.pipopipette.list_square))
-            move_side = choice(('l','r','t','d'))
 
-        return move_square, move_side
+    @staticmethod
+    def __list_moves(gameplay: PipopipetteGameplay) -> list[tuple[int, str]]:
+        results: list[tuple[int, str]] = []
+        for square in gameplay.pipopipette.list_square:
+            if square.square_owner == -1:
+                if square.left.owner_ID == -1:
+                    results.append((square.ID, 'l'))
+                if square.top.owner_ID == -1:
+                        results.append((square.ID, 't'))
+                if square.right.owner_ID == -1:
+                        results.append((square.ID, 'r'))
+                if square.down.owner_ID == -1:
+                        results.append((square.ID, 'd'))
+        return results
+
+
+    @staticmethod
+    def move_random(gameplay: PipopipetteGameplay) -> tuple[None, None]|tuple[int, str]:
+        moves = PipopipetteAI.__list_moves(gameplay)
+        if moves:
+            return choice(moves)
+        else:
+             return (None, None)
