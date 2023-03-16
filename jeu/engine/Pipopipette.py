@@ -82,7 +82,6 @@ class Pipopipette():
                 case 'l':
                     square.left = owner_ID
                     if ((neighbor := self.get_square_by_ID(square_ID-1)) != None and square_ID%self.__WIDTH):
-                        print("set R", self.__WIDTH, neighbor.ID, neighbor.ID%self.__WIDTH)
                         neighbor.right = owner_ID
                 case 'r':
                     square.right = owner_ID
@@ -141,3 +140,8 @@ class Pipopipette():
                 case 'd':
                     return square.down.owner_ID == -1
         return False
+
+    def copy(self):
+        copied_instance = Pipopipette(self.__WIDTH, self.__HEIGHT)
+        copied_instance.list_square = [square.copy() for square in self.list_square]
+        return copied_instance

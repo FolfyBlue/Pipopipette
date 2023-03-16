@@ -215,7 +215,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5,5), players:
                     while old_score != new_score:
                         old_score: list[int] = gameplay.get_score()
                         print(gameplay.game_over())
-                        a_square, a_side = PipopipetteAI.move_random(gameplay)
+                        a_square, a_side = PipopipetteAI.move_minmax(gameplay, depth=3)
                         if not a_side:
                             print('Not',a_side)
                             break
