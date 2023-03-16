@@ -1,7 +1,10 @@
-from typing import Generator
-from jeu.engine.PipopipetteGameplay import PipopipetteGameplay
-from random import choice
 import time
+from random import choice
+from typing import Generator
+
+from jeu.engine.PipopipetteGameplay import PipopipetteGameplay
+
+
 class PipopipetteAI:
     """Class which will be used to control the AI's logic.
     """
@@ -27,9 +30,8 @@ class PipopipetteAI:
                 if square.down.owner_ID == -1:
                     yield square.ID, 'd'
 
-
     @staticmethod
-    def move_random(gameplay: PipopipetteGameplay) -> tuple[None, None]|tuple[int, str]:
+    def move_random(gameplay: PipopipetteGameplay) -> tuple[None, None] | tuple[int, str]:
         """Pick a random move for the AI to play
 
         Args:
@@ -42,10 +44,10 @@ class PipopipetteAI:
         if moves:
             return choice(moves)
         else:
-             return (None, None)
+            return (None, None)
 
     @staticmethod
-    def move_minmax(gameplay: PipopipetteGameplay, depth: int = 2, time_limit: float = 5.0) -> tuple[None, None]|tuple[int, str]:
+    def move_minmax(gameplay: PipopipetteGameplay, depth: int = 2, time_limit: float = 5.0) -> tuple[None, None] | tuple[int, str]:
         """Pick a move for the AI to play by simulating the next moves
 
         Args:
@@ -63,7 +65,8 @@ class PipopipetteAI:
             value = float('-inf')
             for move in PipopipetteAI.__list_moves(gameplay):
                 next_state = PipopipetteAI.get_next_state(gameplay, *move)
-                value = max(value, min_value(next_state, depth - 1, alpha, beta))
+                value = max(value, min_value(
+                    next_state, depth - 1, alpha, beta))
                 alpha = max(alpha, value)
                 if alpha >= beta:
                     break
@@ -113,13 +116,13 @@ class PipopipetteAI:
         """
         opponent_score, ai_score = gameplay.get_score()
         potential_squares = len(PipopipetteAI.get_potential_squares(gameplay))
-        
+
         # Compute the evaluation score based on the above factors
         score = (ai_score*2) - opponent_score + potential_squares
-        
+
         return score
-    
-    @staticmethod    
+
+    @staticmethod
     def get_potential_squares(gameplay: PipopipetteGameplay) -> list[int]:
         """Get the IDs of the squares that could potentially be completed
         by filling a side of the specified square.
@@ -131,14 +134,14 @@ class PipopipetteAI:
             list[int]: IDs of the potential squares that could be completed
         """
         potential_squares = []
-        
+
         for square in gameplay.pipopipette.list_square:
             if square.square_owner == -1:
                 # One side is open
                 if [square.left.owner_ID, square.right.owner_ID, square.top.owner_ID, square.down.owner_ID].count(-1) == 1:
                     potential_squares.append(0)
         return potential_squares
-    
+
     @staticmethod
     def get_next_state(gameplay: PipopipetteGameplay, square_id: int, side: str) -> 'PipopipetteGameplay':
         """Return the next game state after applying a move
@@ -152,7 +155,7 @@ class PipopipetteAI:
         """
         # Create a copy of the game board
         new_gameplay = gameplay.copy()
-        
+
         new_gameplay.pipopipette.set_side(square_id, side, new_gameplay.current_player_ID)
         new_gameplay.next_player()
 
