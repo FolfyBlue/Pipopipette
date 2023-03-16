@@ -96,13 +96,12 @@ class Pipopipette():
                     if (neighbor := self.get_square_by_ID(square_ID+self.__WIDTH)) != None:
                         neighbor.top = owner_ID
 
-    def get_side(self: Pipopipette, square_ID: int, side: str, owner_ID: int) ->  Segment|None:
+    def get_side(self: Pipopipette, square_ID: int, side: str) ->  Segment|None:
         """Gets the owner of a side.
         
         Args:
             square_ID (int): ID of the Squre to edit.
             side (str): 'l'; 'r', 't', or 'd'. Side to edit.
-            owner_ID (int): ID of the player who placed this side
 
         """
         if (square := self.get_square_by_ID(square_ID)) != None:
