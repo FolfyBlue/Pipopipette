@@ -8,6 +8,14 @@ class PipopipetteAI:
 
     @staticmethod
     def __list_moves(gameplay: PipopipetteGameplay) -> Generator[tuple[int, str], None, None]:
+        """Iterator to go through the valid moves the player can go through
+
+        Args:
+            gameplay (PipopipetteGameplay): Game to check for
+
+        Yields:
+            Generator[tuple[int, str], None, None]: Generator
+        """
         for square in gameplay.pipopipette.list_square:
             if square.square_owner == -1:
                 if square.left.owner_ID == -1:
