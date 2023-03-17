@@ -229,6 +229,17 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5), players
             # Screen shake / Red tint?
             print(square_id, side, (gi, gj), "is not a valid target!")
 
+    def square_id_from_ij(gi: int, gj: int, side: str) -> int:
+        if side in ('t', 'd'):
+            square_id: int = gj * gameplay.pipopipette.WIDTH + gi
+            if side == 'd':
+                square_id += gameplay.pipopipette.WIDTH
+        else:
+            square_id: int = gj * gameplay.pipopipette.WIDTH + gi
+            if side == 'r' and gi == gameplay.pipopipette.WIDTH-1:
+                square_id += 1
+        return square_id
+
     def update_board() -> tuple[list[UI], list[pygame.Rect]]:
         """Updates the board
 
@@ -237,6 +248,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5), players
         """
         board_elements: list[UI] = []
         fillers: list[pygame.Rect] = []
+        counter = {}
         for i in range(size[0]+1):
             for j in range(size[1]+1):
                 # Calculates the position of the segment
@@ -287,10 +299,22 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5), players
                 if j != size[1]:
                     # Select the color based on who owns the segment
                     color: str = "white"
-                    for side in ('r', 'l'):
-                        if (i, j, side) in owned_segments:
-                            color = PLAYER_COLORS[owned_segments[(i, j, side)]]
-
+                    
+                    for key in counter.keys():
+                        counter[key] -= 1
+                        if counter[key] == 0:
+                            color = PLAYER_COLORS[owned_segments[key]]
+                             
+                    
+                    if (i, j, 'l') in owned_segments:
+                        color = PLAYER_COLORS[owned_segments[(i, j, 'l')]]
+                    
+                    if (i, j, 'r') in owned_segments:
+                        if i == gameplay.pipopipette.WIDTH:
+                            color = PLAYER_COLORS[owned_segments[(i, j, 'r')]]
+                        else:
+                            counter[(i,j,'r')] = gameplay.pipopipette.WIDTH
+                    
                     def horizontal_segment_handler(i: int, j: int):
                         """Calculates the square's ID and segment clicked and calls `segment_handler`
 

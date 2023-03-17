@@ -1,5 +1,5 @@
 import time
-from random import choice
+from random import choice, shuffle
 from typing import Generator
 
 from jeu.engine.PipopipetteGameplay import PipopipetteGameplay
@@ -25,8 +25,8 @@ class PipopipetteAI:
                     yield square.ID, 'l'
                 if square.top.owner_ID == -1:
                     yield square.ID, 't'
-                # if square.right.owner_ID == -1:
-                #     yield square.ID, 'r'
+                if square.right.owner_ID == -1:
+                    yield square.ID, 'r'
                 if square.down.owner_ID == -1:
                     yield square.ID, 'd'
 
@@ -93,7 +93,7 @@ class PipopipetteAI:
         for move in PipopipetteAI.__list_moves(gameplay):
             next_state = PipopipetteAI.get_next_state(gameplay, *move)
             value = min_value(next_state, depth - 1, alpha, beta)
-            if value > best_value:
+            if best_value == float('-inf') or value > best_value:
                 best_value = value
                 best_move = move
             alpha = max(alpha, best_value)
@@ -101,7 +101,6 @@ class PipopipetteAI:
             elapsed_time = time.monotonic() - start_time
             if elapsed_time >= time_limit:
                 break
-
         return best_move
 
     @staticmethod
