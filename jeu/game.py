@@ -13,6 +13,7 @@ from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
 from jeu.utils.settings import DEFAULT_SETTINGS
+from jeu.utils.tools import gamemode
 
 LINE_WIDTH = 9
 HEIGHT_OFFSET = 250
@@ -98,7 +99,7 @@ def get_score_label(score: int, font: FontManager, player1: bool) -> tuple[pygam
     return (player_score_label, player_score_rect)
 
 
-def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5), players: tuple[str, str] = ("Playername00", "Playername01"), config: dict[str, Any] = DEFAULT_SETTINGS, mode: int = 1):
+def game(screen: pygame.surface.Surface, mode: gamemode, size: tuple[int, int] = (5, 5), players: tuple[str, str] = ("Playername00", "Playername01"), config: dict[str, Any] = DEFAULT_SETTINGS):
     """Game screen, to play the game of Pipopipette
 
     Args:
@@ -143,7 +144,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5), players
 
     def restart_button_handler():
         end_popup.active = False
-        game(screen, size, players, config)
+        game(screen, mode, size, players, config)
     # Add a vertically centered restart button
     end_popup_restart_button = Button(
         screen=end_popup.surface,
@@ -209,7 +210,7 @@ def game(screen: pygame.surface.Surface, size: tuple[int, int] = (5, 5), players
             new_score: list[int] = gameplay.get_score()
             if old_score[gameplay.current_player_ID] >= new_score[gameplay.current_player_ID]:
                 gameplay.next_player()
-                if mode == 1:
+                if mode == gamemode.AI:
                     old_score = []
                     while old_score != new_score:
                         old_score: list[int] = gameplay.get_score()

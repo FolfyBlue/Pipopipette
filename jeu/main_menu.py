@@ -12,6 +12,7 @@ from jeu.ui.ui import UI
 from jeu.utils.assets_import import resource_path
 from jeu.utils.font_manager import FontManager
 from jeu.utils import settings
+from jeu.utils.tools import gamemode
 
 MAX_SIZE = 25
 MIN_SIZE = 2
@@ -43,11 +44,19 @@ def main_menu(screen: pygame.surface.Surface):
         | (Size) X (Size)  [OK]   |
         | [ 3x3 ] [ 5x5 ] [ 7x7 ] |
         +-------------------------+
+        
+        And the gamemode in this one:
+        +-------------------------+
+        |        Game mode        |
+        |        [ local ]        |
+        |     [ multiplayer ]     |
+        |       [ vs. AI ]        |
+        +-------------------------+
 
         Args:
             screen (_type_): Screen to display the popup on
         """
-        # Create the popup
+        # Create the size popup
         size_popup = Popup(
             screen=screen,
             title="Size",
@@ -56,7 +65,61 @@ def main_menu(screen: pygame.surface.Surface):
         )
         
         def play(size: tuple[int, int]):
-            game(screen, size=size, config=settings.get_settings()) 
+            
+            gamemode_popup = Popup(
+                screen=screen,
+                title="Game mode",
+                size=(1280//2, 720//2.5),
+                color="#0575BB"
+            )
+            
+            mode: gamemode
+            
+            def change_gamemode(new_mode: gamemode):
+                nonlocal mode
+                mode = new_mode
+                gamemode_popup.close()
+            
+            gammode_popup_local_button = Button(
+                screen=gamemode_popup.surface,
+                image=None,
+                position=(gamemode_popup.surface.get_size()[0]//2*0.5, gamemode_popup.surface.get_size()[1]//2),
+                text="LOCAL",
+                font=menu_font.get_font(56),
+                color="white",
+                hover_color="black",
+                action = lambda: change_gamemode(gamemode.LOCAL)
+            )
+            
+            gammode_popup_ai_button = Button(
+                screen=gamemode_popup.surface,
+                image=None,
+                position=(gamemode_popup.surface.get_size()[0]//2*1, gamemode_popup.surface.get_size()[1]//2),
+                text="AI",
+                font=menu_font.get_font(56),
+                color="white",
+                hover_color="black",
+                action = lambda: change_gamemode(gamemode.AI)
+            )
+            
+            gammode_popup_online_button = Button(
+                screen=gamemode_popup.surface,
+                image=None,
+                position=(gamemode_popup.surface.get_size()[0]//2*1.5, gamemode_popup.surface.get_size()[1]//2),
+                text="ONLINE",
+                font=menu_font.get_font(56),
+                color="white",
+                hover_color="black",
+                action = lambda: change_gamemode(gamemode.ONLINE)
+            )
+            
+            gamemode_popup.add_ui_element(gammode_popup_ai_button)
+            gamemode_popup.add_ui_element(gammode_popup_local_button)
+            gamemode_popup.add_ui_element(gammode_popup_online_button)
+            
+            gamemode_popup.run()
+            game(screen, mode=mode, size=size, config=settings.get_settings()) #type: ignore
+            gamemode_popup.close() 
             size_popup.close()
 
         # Create the rightmost size select button
