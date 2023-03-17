@@ -54,6 +54,10 @@ def main_menu(screen: pygame.surface.Surface):
             size=(1280//2, 720//2.5),
             color="#0575BB"
         )
+        
+        def play(size: tuple[int, int]):
+            game(screen, size=size, config=settings.get_settings()) 
+            size_popup.close()
 
         # Create the rightmost size select button
         size_popup_3x3_button = Button(
@@ -64,7 +68,7 @@ def main_menu(screen: pygame.surface.Surface):
             font=menu_font.get_font(56),
             color="white",
             hover_color="black",
-            action = lambda: game(screen, size=(3, 3), config=settings.get_settings())
+            action = lambda: play((3, 3)) 
         )
 
         # Create the center size select button
@@ -76,7 +80,7 @@ def main_menu(screen: pygame.surface.Surface):
             font=menu_font.get_font(56),
             color="white",
             hover_color="black",
-            action = lambda: game(screen, size=(5, 5), config=settings.get_settings())
+            action = lambda: play((5, 5)) 
         )
 
 
@@ -89,7 +93,7 @@ def main_menu(screen: pygame.surface.Surface):
             font=menu_font.get_font(56),
             color="white",
             hover_color="black",
-            action = lambda: game(screen, size=(7, 7), config=settings.get_settings())
+            action = lambda: play((7, 7)) 
         )
 
 
@@ -151,8 +155,7 @@ def main_menu(screen: pygame.surface.Surface):
             elif y_size < MIN_SIZE:
                 y_size = MIN_SIZE
             
-            size_popup.close()
-            game(screen, size=(x_size, y_size), config=settings.get_settings())
+            play((x_size, y_size)) 
 
         # Create the custom size confirm button
         size_popup_confirm_custom_size_button = Button(
