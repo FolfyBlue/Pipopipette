@@ -1,6 +1,7 @@
 # <========== Import ==========>
 
 from __future__ import annotations
+from random import shuffle
 from typing import Final
 from jeu.engine.Square.Square import Square
 from typing import TYPE_CHECKING
@@ -27,6 +28,7 @@ class Pipopipette():
         self.__WIDTH: Final[int] = width
         self.__HEIGHT: Final[int] = height
         self.__list_square: list[Square] = [Square(i) for i in range(width * height)]
+        shuffle(self.__list_square)
     
     # <----- getter ----->
     
